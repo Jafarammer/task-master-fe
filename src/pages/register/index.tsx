@@ -9,7 +9,7 @@ import {
   Button,
 } from "@mui/material";
 
-const Login = () => {
+const Register = () => {
   return (
     <React.Fragment>
       <Box
@@ -23,24 +23,29 @@ const Login = () => {
         }}
       >
         <Typography variant="h4" fontWeight="bold">
-          Welcome back
+          Create your account
         </Typography>
-
         <Typography variant="body1" color="text.secondary">
-          Don’t have an account?{" "}
+          Already have an account?{" "}
           <Link
             component={RouterLink}
-            to="/register"
+            to="/login"
             underline="none"
             sx={{ color: "#08CB00", fontWeight: 500 }}
           >
-            Sign up
+            Sign in
           </Link>
         </Typography>
         <Container maxWidth="xs" sx={{ mt: 2 }}>
           <TextField
             fullWidth
-            placeholder="Username or Email"
+            placeholder="Name"
+            sx={{ my: 1.5 }}
+            size="small"
+          />
+          <TextField
+            fullWidth
+            placeholder="Email address"
             sx={{ my: 1.5 }}
             size="small"
           />
@@ -50,32 +55,20 @@ const Login = () => {
             sx={{ my: 1.5 }}
             size="small"
           />
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              mt: 1,
-            }}
-          >
-            <Link
-              href="/forgot-password"
-              underline="none"
-              sx={{
-                color: "text.secondary",
-                fontSize: "0.9rem",
-                fontWeight: 500,
-              }}
-            >
-              Forgot your password?
-            </Link>
-          </Box>
+          <TextField
+            fullWidth
+            placeholder="Confirm password"
+            sx={{ my: 1.5 }}
+            size="small"
+          />
+
           <Button
             variant="contained"
             fullWidth
             sx={{ fontWeight: "bold", mt: 2 }}
             color="primary"
           >
-            Log In
+            Register
           </Button>
         </Container>
       </Box>
@@ -83,4 +76,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
