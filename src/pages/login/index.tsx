@@ -1,5 +1,5 @@
 import React from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import {
   Container,
   Box,
@@ -10,6 +10,12 @@ import {
 } from "@mui/material";
 
 const Login = () => {
+  // react router dom
+  const navigate = useNavigate();
+  // function event
+  const onGo = () => {
+    navigate("/my-task", { replace: true });
+  };
   return (
     <React.Fragment>
       <Box
@@ -74,6 +80,7 @@ const Login = () => {
             fullWidth
             sx={{ fontWeight: "bold", mt: 2 }}
             color="primary"
+            onClick={onGo}
           >
             Log In
           </Button>
