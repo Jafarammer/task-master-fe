@@ -1,5 +1,6 @@
 // taskFilter.styles.ts
-import type { Theme } from "@mui/material";
+import { alpha } from "@mui/material/styles";
+import type { Theme } from "@mui/material/styles";
 
 export const toggleGroupSx = (theme: Theme) => ({
   width: { xs: "100%", sm: "auto" },
@@ -31,4 +32,26 @@ export const toggleGroupSx = (theme: Theme) => ({
     ),
     fontWeight: 700,
   },
+});
+
+export const getTaskItemSx = (
+  theme: Theme,
+  index: number,
+  tasksLength: number
+) => ({
+  borderBottomLeftRadius: index === tasksLength - 1 ? "8px" : 0,
+  borderBottomRightRadius: index === tasksLength - 1 ? "8px" : 0,
+  borderTopLeftRadius: index === 0 ? "8px" : 0,
+  borderTopRightRadius: index === 0 ? "8px" : 0,
+
+  // border sesuai theme
+  borderTop: index === 0 ? `1px solid ${theme.palette.divider}` : 0,
+  borderBottom: `1px solid ${theme.palette.divider}`,
+  borderLeft: `1px solid ${theme.palette.divider}`,
+  borderRight: `1px solid ${theme.palette.divider}`,
+
+  backgroundColor:
+    theme.palette.mode === "dark"
+      ? alpha(theme.palette.background.paper, 0.6)
+      : theme.palette.background.paper,
 });

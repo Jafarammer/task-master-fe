@@ -73,7 +73,7 @@ const MyTask = () => {
           </ToggleButton>
         </ToggleButtonGroup>
       </Stack>
-      <Box sx={{ border: "1px solid blue", mt: 4 }}>
+      <Box sx={{ mt: 4 }}>
         {filter === "all" && <AllTask />}
         {filter === "completed" && <CompletedTask />}
         {filter === "pending" && <PendingTask />}
