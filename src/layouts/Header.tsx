@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   AppBar,
   Box,
@@ -15,6 +16,8 @@ import {
 const settings = ["Profile", "Account", "Logout"];
 
 const Header = () => {
+  // react router dom
+  const navigate = useNavigate();
   // useState
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   // function event
@@ -23,6 +26,9 @@ const Header = () => {
   };
   const onCloseMenuUser = () => {
     setAnchorElUser(null);
+  };
+  const onGo = () => {
+    navigate("/login", { replace: true });
   };
   return (
     <AppBar
@@ -85,7 +91,15 @@ const Header = () => {
               onClose={onCloseMenuUser}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting}>
+                <MenuItem
+                  key={setting}
+                  onClick={() => {
+                    if (setting === "Logout") {
+                      onGo();
+                    }
+                    onCloseMenuUser();
+                  }}
+                >
                   <Typography sx={{ textAlign: "center" }}>
                     {setting}
                   </Typography>

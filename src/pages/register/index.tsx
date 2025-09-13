@@ -39,10 +39,17 @@ const Register = () => {
         <Container maxWidth="xs" sx={{ mt: 2 }}>
           <TextField
             fullWidth
-            placeholder="Name"
+            placeholder="First Name"
             sx={{ my: 1.5 }}
             size="small"
           />
+          <TextField
+            fullWidth
+            placeholder="Last Name"
+            sx={{ my: 1.5 }}
+            size="small"
+          />
+
           <TextField
             fullWidth
             placeholder="Email address"
