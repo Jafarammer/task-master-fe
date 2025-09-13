@@ -26,7 +26,7 @@ const Header = () => {
   };
   return (
     <AppBar
-      position="static"
+      position="sticky"
       color="default"
       sx={{
         boxShadow: "none",
