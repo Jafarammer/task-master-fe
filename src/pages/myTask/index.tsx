@@ -7,7 +7,9 @@ import {
   ToggleButtonGroup,
   ToggleButton,
   Box,
+  InputAdornment,
 } from "@mui/material";
+import { Search } from "@mui/icons-material";
 import { toggleGroupSx } from "./styles";
 import AllTask from "./AllTask";
 import CompletedTask from "./CompletedTask";
@@ -53,7 +55,18 @@ const MyTask = () => {
           width: "100%",
         }}
       >
-        <TextField placeholder="Search tasks..." size="small" fullWidth />
+        <TextField
+          placeholder="Search tasks..."
+          size="small"
+          fullWidth
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Search />
+              </InputAdornment>
+            ),
+          }}
+        />
         <ToggleButtonGroup
           value={filter}
           exclusive

@@ -7,6 +7,8 @@ import {
   Checkbox,
   Typography,
   IconButton,
+  Stack,
+  Pagination,
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { getTaskItemSx } from "./styles";
@@ -78,6 +80,9 @@ const AllTask = () => {
           </ListItem>
         ))}
       </List>
+      <Stack direction={"row"} justifyContent={"center"} my={3}>
+        <Pagination count={10} shape="rounded" color="primary" />
+      </Stack>
     </React.Fragment>
   );
 };
