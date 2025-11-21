@@ -7,6 +7,7 @@ import {
   Typography,
   Link,
   Button,
+  Stack,
 } from "@mui/material";
 import { useFormik } from "formik";
 import { registerSchema } from "../../utils/validationSchema";

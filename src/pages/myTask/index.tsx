@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Typography,
   Stack,
@@ -16,6 +17,8 @@ import CompletedTask from "./CompletedTask";
 import PendingTask from "./PendingTask";
 
 const MyTask = () => {
+  // react router
+  const navigate = useNavigate();
   // useState
   const [filter, setFilter] = useState<"all" | "pending" | "completed">("all");
   // function event
@@ -41,7 +44,11 @@ const MyTask = () => {
         <Typography variant="h4" fontWeight={"bold"} letterSpacing={1}>
           My Tasks
         </Typography>
-        <Button variant="contained" sx={{ fontWeight: "bold" }}>
+        <Button
+          variant="contained"
+          sx={{ fontWeight: "bold" }}
+          onClick={() => navigate("/task/create")}
+        >
           + Add New Task{" "}
         </Button>
       </Stack>

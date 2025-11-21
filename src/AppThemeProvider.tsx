@@ -36,7 +36,9 @@ const AppThemeProvider = ({ children }: AppThemeProviderProps) => {
           MuiTextField: {
             styleOverrides: {
               root: {
-                borderRadius: "8px",
+                "& textarea": {
+                  resize: "both", // bisa di-drag untuk perbesar area
+                },
               },
             },
           },
