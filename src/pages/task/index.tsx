@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 // type declaration
 import { IFormValuesTask } from "../../types/task";
@@ -19,6 +19,7 @@ import { IFormValuesTask } from "../../types/task";
 const Task = () => {
   // react router
   const { mode } = useParams();
+  const navigate = useNavigate();
   // formik
   const formik = useFormik<IFormValuesTask>({
     initialValues: {
@@ -126,16 +127,14 @@ const Task = () => {
           <Stack direction={"row"} gap={2} justifyContent={"end"} mt={5}>
             <Button
               variant="contained"
-              // fullWidth
               sx={{ fontWeight: "bold", mt: 2, width: 92 }}
               color="inherit"
-              type="submit"
+              onClick={() => navigate("/my-task")}
             >
               Cancel
             </Button>
             <Button
               variant="contained"
-              // fullWidth
               sx={{ fontWeight: "bold", mt: 2, width: 92 }}
               color="primary"
               type="submit"
