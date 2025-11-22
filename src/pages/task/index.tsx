@@ -14,14 +14,14 @@ import dayjs from "dayjs";
 import { useParams, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 // type declaration
-import { IFormValuesTask } from "../../types/task";
+import { TaskFormValues } from "../../types/task";
 
 const Task = () => {
   // react router
   const { mode } = useParams();
   const navigate = useNavigate();
   // formik
-  const formik = useFormik<IFormValuesTask>({
+  const formik = useFormik<TaskFormValues>({
     initialValues: {
       title: "",
       description: "",
@@ -40,6 +40,7 @@ const Task = () => {
       </Typography>
       <Typography variant="body1" color="text.secondary">
         {mode === "create" && "Fill in the details below to create a new task."}
+        {mode === "update" && "Update the task details below."}
       </Typography>
       {/* form */}
       <Box sx={{ mt: 3 }}>
