@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   List,
   ListItem,
@@ -12,6 +13,10 @@ import {
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { getTaskItemSx } from "./styles";
+// reusable components
+import { MenuOptions } from "../../components";
+// type declaration
+import { MenuState } from "../../types/myTask";
 
 type Task = {
   id: number;
@@ -43,8 +48,11 @@ const initialTask: Task[] = [
 ];
 
 const PendingTask = () => {
+  // router
+  const navigate = useNavigate();
   // useState
   const [tasks, setTasks] = useState<Task[]>(initialTask);
+  const [menu, setMenu] = useState<MenuState>({ anchorEl: null, open: false });
   // function event
   const onChecked = (id: number) => {
     setTasks((prev) =>
@@ -52,6 +60,18 @@ const PendingTask = () => {
         task.id === id ? { ...task, completed: !task.completed } : task
       )
     );
+  };
+  const onOpenMenu = (event: React.MouseEvent<HTMLButtonElement>): void => {
+    setMenu({
+      anchorEl: event.currentTarget,
+      open: true,
+    });
+  };
+  const onCloseMenu = (): void => {
+    setMenu({
+      anchorEl: null,
+      open: false,
+    });
   };
   return (
     <React.Fragment>
@@ -61,9 +81,17 @@ const PendingTask = () => {
             key={task.id}
             sx={(theme) => getTaskItemSx(theme, index, tasks.length)}
             secondaryAction={
-              <IconButton edge="end" aria-label="more">
-                <MoreVertIcon />
-              </IconButton>
+              <React.Fragment>
+                <IconButton edge="end" aria-label="more" onClick={onOpenMenu}>
+                  <MoreVertIcon />
+                </IconButton>
+                <MenuOptions
+                  anchorEl={menu.anchorEl}
+                  open={menu.open}
+                  onClose={onCloseMenu}
+                  onEdit={() => navigate("/task/update")}
+                />
+              </React.Fragment>
             }
           >
             <ListItemIcon>
