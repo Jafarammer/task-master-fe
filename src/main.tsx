@@ -8,20 +8,23 @@ import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./app/store";
 import App from "./App";
 import AppThemeProvider from "./AppThemeProvider";
+import { CookiesProvider } from "react-cookie";
 import "./index.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <AppThemeProvider>
-          <BrowserRouter>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <App />
-            </LocalizationProvider>
-          </BrowserRouter>
-        </AppThemeProvider>
-      </PersistGate>
-    </Provider>
+    <CookiesProvider>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <AppThemeProvider>
+            <BrowserRouter>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <App />
+              </LocalizationProvider>
+            </BrowserRouter>
+          </AppThemeProvider>
+        </PersistGate>
+      </Provider>
+    </CookiesProvider>
   </StrictMode>
 );

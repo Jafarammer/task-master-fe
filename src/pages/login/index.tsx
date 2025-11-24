@@ -7,11 +7,16 @@ import {
   Typography,
   Link,
   Button,
+  FormControl,
+  FormHelperText,
 } from "@mui/material";
+import useLogin from "../../hooks/useLogin";
 
 const Login = () => {
   // react router dom
   const navigate = useNavigate();
+  // hooks
+  const { formik, loading } = useLogin();
   // function event
   const onGo = () => {
     navigate("/my-task", { replace: true });
@@ -44,46 +49,66 @@ const Login = () => {
           </Link>
         </Typography>
         <Container maxWidth="xs" sx={{ mt: 2 }}>
-          <TextField
-            fullWidth
-            placeholder="Username or Email"
-            sx={{ my: 1.5 }}
-            size="small"
-          />
-          <TextField
-            fullWidth
-            placeholder="Password"
-            sx={{ my: 1.5 }}
-            size="small"
-          />
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              mt: 1,
-            }}
-          >
-            <Link
-              href="/forgot-password"
-              underline="none"
+          <form onSubmit={formik.handleSubmit}>
+            <FormControl fullWidth sx={{ my: 1.5 }}>
+              <TextField
+                placeholder="Username or Email"
+                size="small"
+                name="email"
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={!!formik.touched.email && !!formik.errors.email}
+              />
+              {formik.touched.email && formik.errors.email && (
+                <FormHelperText error>{formik.errors.email}</FormHelperText>
+              )}
+            </FormControl>
+            <FormControl fullWidth sx={{ my: 1.5 }}>
+              <TextField
+                placeholder="Password"
+                size="small"
+                name="password"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={!!formik.touched.password && !!formik.errors.password}
+              />
+              {formik.touched.password && formik.errors.password && (
+                <FormHelperText error>{formik.errors.password}</FormHelperText>
+              )}
+            </FormControl>
+            <Box
               sx={{
-                color: "text.secondary",
-                fontSize: "0.9rem",
-                fontWeight: 500,
+                display: "flex",
+                justifyContent: "flex-end",
+                mt: 1,
               }}
             >
-              Forgot your password?
-            </Link>
-          </Box>
-          <Button
-            variant="contained"
-            fullWidth
-            sx={{ fontWeight: "bold", mt: 2 }}
-            color="primary"
-            onClick={onGo}
-          >
-            Log In
-          </Button>
+              <Link
+                href="/forgot-password"
+                underline="none"
+                sx={{
+                  color: "text.secondary",
+                  fontSize: "0.9rem",
+                  fontWeight: 500,
+                }}
+              >
+                Forgot your password?
+              </Link>
+            </Box>
+            <Button
+              variant="contained"
+              fullWidth
+              sx={{ fontWeight: "bold", mt: 2 }}
+              color="primary"
+              // onClick={onGo}
+              loading={loading}
+              type="submit"
+            >
+              Log In
+            </Button>
+          </form>
         </Container>
       </Box>
     </React.Fragment>
