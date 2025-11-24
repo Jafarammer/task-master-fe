@@ -12,12 +12,15 @@ import {
   Tooltip,
   IconButton,
 } from "@mui/material";
+import useLogout from "../hooks/useLogout";
 
 const settings = ["Profile", "Account", "Logout"];
 
 const Header = () => {
   // react router dom
   const navigate = useNavigate();
+  // hooks
+  const { onLogout } = useLogout();
   // useState
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   // function event
@@ -95,7 +98,8 @@ const Header = () => {
                   key={setting}
                   onClick={() => {
                     if (setting === "Logout") {
-                      onGo();
+                      // onGo();
+                      onLogout();
                     }
                     onCloseMenuUser();
                   }}
