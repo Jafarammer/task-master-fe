@@ -122,6 +122,7 @@ const Login = () => {
               sx={{ fontWeight: "bold", mt: 2 }}
               color="primary"
               loading={loading}
+              disabled={loading}
               type="submit"
             >
               Log In

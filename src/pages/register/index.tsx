@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import {
   Container,
@@ -7,57 +7,75 @@ import {
   Typography,
   Link,
   Button,
-  Stack,
+  FormControl,
+  FormHelperText,
+  Alert,
+  Snackbar,
+  IconButton,
+  InputAdornment,
 } from "@mui/material";
-import { useFormik } from "formik";
-import { registerSchema } from "../../utils/validationSchema";
-import { useAppDispatch } from "../../app/hooks";
-import { registerUser } from "../../features/auth/authThunk";
-
-interface FormValues {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { ButtonCloseSnackbar } from "../../components";
+import useRegister from "../../hooks/useRegister";
+import { containerSx } from "./styles";
 
 const Register = () => {
-  // redux
-  const dispatch = useAppDispatch();
-  // function event
-  const formik = useFormik<FormValues>({
-    initialValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    },
-    validationSchema: registerSchema,
-    onSubmit: (values) => {
-      dispatch(
-        registerUser({
-          firstName: values.firstName,
-          lastName: values.lastName,
-          email: values.email,
-          password: values.password,
-        })
-      );
-    },
-  });
+  // hooks
+  const { formik, loading, onCloseSnackbar, openSnackbar } = useRegister();
+  // useState
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState<boolean>(false);
+  // fnction event
+  const onClickShowPassword: React.MouseEventHandler<
+    HTMLButtonElement
+  > = () => {
+    setShowPassword((prev) => !prev);
+  };
+  const onMouseDownPassword: React.MouseEventHandler<HTMLButtonElement> = (
+    event
+  ) => {
+    event.preventDefault();
+  };
+  const onMouseUpPassword: React.MouseEventHandler<HTMLButtonElement> = (
+    event
+  ) => {
+    event.preventDefault();
+  };
+  const onClickShowConfirmPassword: React.MouseEventHandler<
+    HTMLButtonElement
+  > = () => {
+    setShowConfirmPassword((prev) => !prev);
+  };
+  const onMouseDownConfirmPassword: React.MouseEventHandler<
+    HTMLButtonElement
+  > = (event) => {
+    event.preventDefault();
+  };
+  const onMouseUpConfirmPassword: React.MouseEventHandler<HTMLButtonElement> = (
+    event
+  ) => {
+    event.preventDefault();
+  };
+
   return (
     <React.Fragment>
-      <Box
-        component={"div"}
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
+      <Snackbar
+        open={openSnackbar.open}
+        autoHideDuration={1500}
+        onClose={onCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
+        <Alert
+          severity={openSnackbar.color}
+          variant="filled"
+          sx={{ width: "100%", color: "white" }}
+          action={<ButtonCloseSnackbar onClose={onCloseSnackbar} />}
+        >
+          {openSnackbar.message}
+        </Alert>
+      </Snackbar>
+      <Box component={"div"} sx={containerSx()}>
         <Typography variant="h4" fontWeight="bold">
           Create your account
         </Typography>
@@ -74,76 +92,135 @@ const Register = () => {
         </Typography>
         <Container maxWidth="xs" sx={{ mt: 2 }}>
           <form onSubmit={formik.handleSubmit}>
-            <TextField
-              fullWidth
-              placeholder="First Name"
-              sx={{ my: 1.5 }}
-              size="small"
-              name="firstName"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={
-                formik.touched.firstName && Boolean(formik.errors.firstName)
-              }
-              helperText={formik.touched.firstName && formik.errors.firstName}
-            />
-            <TextField
-              fullWidth
-              placeholder="Last Name"
-              sx={{ my: 1.5 }}
-              size="small"
-              name="lastName"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.lastName && Boolean(formik.errors.lastName)}
-              helperText={formik.touched.lastName && formik.errors.lastName}
-            />
-
-            <TextField
-              fullWidth
-              placeholder="Email address"
-              sx={{ my: 1.5 }}
-              size="small"
-              name="email"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.email && Boolean(formik.errors.email)}
-              helperText={formik.touched.email && formik.errors.email}
-            />
-            <TextField
-              fullWidth
-              placeholder="Password"
-              sx={{ my: 1.5 }}
-              size="small"
-              name="password"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.password && Boolean(formik.errors.password)}
-              helperText={formik.touched.password && formik.errors.password}
-            />
-            <TextField
-              fullWidth
-              placeholder="Confirm password"
-              sx={{ my: 1.5 }}
-              size="small"
-              name="confirmPassword"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={
-                formik.touched.confirmPassword &&
-                Boolean(formik.errors.confirmPassword)
-              }
-              helperText={
-                formik.touched.confirmPassword && formik.errors.confirmPassword
-              }
-            />
-
+            <FormControl fullWidth sx={{ my: 1.5 }}>
+              <TextField
+                placeholder="First Name"
+                size="small"
+                name="firstName"
+                type="text"
+                value={formik.values.firstName}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={!!formik.touched.firstName && !!formik.errors.firstName}
+              />
+              {formik.touched.firstName && formik.errors.firstName && (
+                <FormHelperText error>{formik.errors.firstName}</FormHelperText>
+              )}
+            </FormControl>
+            <FormControl fullWidth sx={{ my: 1.5 }}>
+              <TextField
+                placeholder="Last Name"
+                size="small"
+                name="lastName"
+                type="text"
+                value={formik.values.lastName}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={!!formik.touched.lastName && !!formik.errors.lastName}
+              />
+              {formik.touched.lastName && formik.errors.lastName && (
+                <FormHelperText error>{formik.errors.lastName}</FormHelperText>
+              )}
+            </FormControl>
+            <FormControl fullWidth sx={{ my: 1.5 }}>
+              <TextField
+                placeholder="Email address"
+                size="small"
+                name="email"
+                type="email"
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={!!formik.touched.email && !!formik.errors.email}
+              />
+              {formik.touched.email && formik.errors.email && (
+                <FormHelperText error>{formik.errors.email}</FormHelperText>
+              )}
+            </FormControl>
+            <FormControl fullWidth sx={{ my: 1.5 }}>
+              <TextField
+                placeholder="Password"
+                size="small"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={!!formik.touched.password && !!formik.errors.password}
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          edge="end"
+                          onClick={onClickShowPassword}
+                          onMouseDown={onMouseDownPassword}
+                          onMouseUp={onMouseUpPassword}
+                        >
+                          {showPassword ? (
+                            <VisibilityOff fontSize="small" />
+                          ) : (
+                            <Visibility fontSize="small" />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+              />
+              {formik.touched.password && formik.errors.password && (
+                <FormHelperText error>{formik.errors.password}</FormHelperText>
+              )}
+            </FormControl>
+            <FormControl fullWidth sx={{ my: 1.5 }}>
+              <TextField
+                placeholder="Confirm password"
+                size="small"
+                name="confirmPassword"
+                type={showConfirmPassword ? "text" : "password"}
+                value={formik.values.confirmPassword}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  !!formik.touched.confirmPassword &&
+                  !!formik.errors.confirmPassword
+                }
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          edge="end"
+                          onClick={onClickShowConfirmPassword}
+                          onMouseDown={onMouseDownConfirmPassword}
+                          onMouseUp={onMouseUpConfirmPassword}
+                        >
+                          {showConfirmPassword ? (
+                            <VisibilityOff fontSize="small" />
+                          ) : (
+                            <Visibility fontSize="small" />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+              />
+              {formik.touched.confirmPassword &&
+                formik.errors.confirmPassword && (
+                  <FormHelperText error>
+                    {formik.errors.confirmPassword}
+                  </FormHelperText>
+                )}
+            </FormControl>
             <Button
               variant="contained"
               fullWidth
               sx={{ fontWeight: "bold", mt: 2 }}
               color="primary"
               type="submit"
+              loading={loading}
+              disabled={loading}
             >
               Register
             </Button>

@@ -4,18 +4,21 @@ import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../features/auth/authService";
 import { loginSchema } from "../utils/validationSchema";
-import { LoginPayload } from "../types/login";
+import { LoginPayload } from "../types/auth";
 
-interface UseLoginReturn {
+type UseLoginReturn = {
   formik: FormikProps<LoginPayload>;
   loading: boolean;
-}
+};
 
 const useLogin = (): UseLoginReturn => {
-  const [cookies, setCookie] = useCookies(["token"]);
+  // router
   const navigate = useNavigate();
+  // hooks
+  const [cookies, setCookie] = useCookies(["token"]);
+  // useState
   const [loading, setLoading] = useState<boolean>(false);
-
+  // function event
   const formik = useFormik<LoginPayload>({
     initialValues: {
       email: "",
