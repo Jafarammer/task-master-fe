@@ -26,7 +26,7 @@ const MenuOptions: React.FC<Props> = ({
   onLogout,
 }) => {
   return (
-    <Menu anchorEl={anchorEl} open={open} onClose={onClose}>
+    <Menu anchorEl={anchorEl} open={open} onClose={onClose} sx={{ mt: "12px" }}>
       <MenuList>
         {onEdit && (
           <MenuItem onClick={onEdit}>

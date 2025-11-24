@@ -14,7 +14,7 @@ import {
 import { MoreVert } from "@mui/icons-material";
 import { getTaskItemSx } from "./styles";
 // types declaration
-import { MenuState } from "../../types/myTask";
+import { MenuState } from "../../types/global";
 // reusable components
 import { MenuOptions } from "../../components";
 

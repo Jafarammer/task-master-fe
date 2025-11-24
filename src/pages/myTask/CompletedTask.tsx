@@ -16,7 +16,7 @@ import { getTaskItemSx } from "./styles";
 // reusable components
 import { MenuOptions } from "../../components";
 // type declaration
-import { MenuState } from "../../types/myTask";
+import { MenuState } from "../../types/global";
 
 type Task = {
   id: number;
