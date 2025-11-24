@@ -1,5 +1,5 @@
-import React from "react";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
 import {
   Container,
   Box,
@@ -9,30 +9,38 @@ import {
   Button,
   FormControl,
   FormHelperText,
+  IconButton,
+  InputAdornment,
 } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import useLogin from "../../hooks/useLogin";
+import { containerSx, linkContainerSx, linkForgotPasswordSx } from "./styles";
 
 const Login = () => {
-  // react router dom
-  const navigate = useNavigate();
   // hooks
   const { formik, loading } = useLogin();
+  // useState
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   // function event
-  const onGo = () => {
-    navigate("/my-task", { replace: true });
+  const onClickShowPassword: React.MouseEventHandler<
+    HTMLButtonElement
+  > = () => {
+    setShowPassword((prev) => !prev);
   };
+  const onMouseDownPassword: React.MouseEventHandler<HTMLButtonElement> = (
+    event
+  ) => {
+    event.preventDefault();
+  };
+  const onMouseUpPassword: React.MouseEventHandler<HTMLButtonElement> = (
+    event
+  ) => {
+    event.preventDefault();
+  };
+
   return (
     <React.Fragment>
-      <Box
-        component={"div"}
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
+      <Box component={"div"} sx={containerSx()}>
         <Typography variant="h4" fontWeight="bold">
           Welcome back
         </Typography>
@@ -69,30 +77,41 @@ const Login = () => {
                 placeholder="Password"
                 size="small"
                 name="password"
+                type={showPassword ? "text" : "password"}
                 value={formik.values.password}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 error={!!formik.touched.password && !!formik.errors.password}
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          edge="end"
+                          onClick={onClickShowPassword}
+                          onMouseDown={onMouseDownPassword}
+                          onMouseUp={onMouseUpPassword}
+                        >
+                          {showPassword ? (
+                            <VisibilityOff fontSize="small" />
+                          ) : (
+                            <Visibility fontSize="small" />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  },
+                }}
               />
               {formik.touched.password && formik.errors.password && (
                 <FormHelperText error>{formik.errors.password}</FormHelperText>
               )}
             </FormControl>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-                mt: 1,
-              }}
-            >
+            <Box sx={linkContainerSx()}>
               <Link
                 href="/forgot-password"
                 underline="none"
-                sx={{
-                  color: "text.secondary",
-                  fontSize: "0.9rem",
-                  fontWeight: 500,
-                }}
+                sx={linkForgotPasswordSx()}
               >
                 Forgot your password?
               </Link>
@@ -102,7 +121,6 @@ const Login = () => {
               fullWidth
               sx={{ fontWeight: "bold", mt: 2 }}
               color="primary"
-              // onClick={onGo}
               loading={loading}
               type="submit"
             >
