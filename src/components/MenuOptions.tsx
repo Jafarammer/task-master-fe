@@ -6,7 +6,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import { EditDocument, Delete } from "@mui/icons-material";
+import { EditDocument, Delete, Logout } from "@mui/icons-material";
 
 type Props = {
   anchorEl: HTMLElement | null;
@@ -14,6 +14,7 @@ type Props = {
   onClose: () => void;
   onEdit?: () => void;
   onDelete?: () => void;
+  onLogout?: () => void;
 };
 
 const MenuOptions: React.FC<Props> = ({
@@ -22,6 +23,7 @@ const MenuOptions: React.FC<Props> = ({
   onClose,
   onEdit,
   onDelete,
+  onLogout,
 }) => {
   return (
     <Menu anchorEl={anchorEl} open={open} onClose={onClose}>
@@ -40,6 +42,14 @@ const MenuOptions: React.FC<Props> = ({
               <Delete color="error" fontSize="small" />
             </ListItemIcon>
             <ListItemText>Delete</ListItemText>
+          </MenuItem>
+        )}
+        {onLogout && (
+          <MenuItem onClick={onLogout}>
+            <ListItemIcon>
+              <Logout color="primary" fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>Logout</ListItemText>
           </MenuItem>
         )}
       </MenuList>

@@ -22,7 +22,7 @@ function App() {
           </GuestRoute>
         }
       >
-        <Route path="/login" element={<Login />} />
+        <Route index path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Route>
       {/* Main layout */}
@@ -33,7 +33,7 @@ function App() {
           </ProtectedRoute>
         }
       >
-        <Route index path="/my-task" element={<MyTask />} />
+        <Route path="/my-task" element={<MyTask />} />
         <Route path="/task/:mode" element={<Task />} />
       </Route>
     </Routes>

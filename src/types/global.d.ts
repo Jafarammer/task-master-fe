@@ -3,3 +3,8 @@ export type SnackbarState = {
   color: "success" | "error" | "info" | "warning";
   message: string;
 };
+
+export type MenuState = {
+  anchorEl: HTMLElement | null;
+  open: boolean;
+};

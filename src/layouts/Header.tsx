@@ -13,6 +13,11 @@ import {
   IconButton,
 } from "@mui/material";
 import useLogout from "../hooks/useLogout";
+import { headerTitleSx, containerSx, toolbarSx } from "./styles";
+// custome components
+import { MenuOptions } from "../components";
+// type declaration
+import { MenuState } from "../types/global";
 
 const settings = ["Profile", "Account", "Logout"];
 
@@ -23,7 +28,22 @@ const Header = () => {
   const { onLogout } = useLogout();
   // useState
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [menu, setMenu] = useState<MenuState>({ anchorEl: null, open: false });
   // function event
+  const onOpenMenu: React.MouseEventHandler<HTMLButtonElement> = (
+    event
+  ): void => {
+    setMenu({
+      anchorEl: event.currentTarget,
+      open: true,
+    });
+  };
+  const onCloseMenu = (): void => {
+    setMenu({
+      anchorEl: null,
+      open: false,
+    });
+  };
   const onOpenMenuUser = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -41,44 +61,26 @@ const Header = () => {
         boxShadow: "none",
       }}
     >
-      <Container
-        sx={{
-          width: "100vw",
-          maxWidth: "100vw !important",
-          py: 0,
-          px: 8,
-        }}
-      >
-        <Toolbar
-          disableGutters
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            sx={{
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
+      <Container sx={containerSx()}>
+        <Toolbar disableGutters sx={toolbarSx()}>
+          <Typography variant="h6" noWrap component="a" sx={headerTitleSx()}>
             Task Master
           </Typography>
 
           <Box>
             <Tooltip title="Open Setting">
-              <IconButton onClick={onOpenMenuUser} sx={{ p: 0 }}>
+              <IconButton onClick={onOpenMenu} sx={{ p: 0 }}>
                 <Avatar>WJ</Avatar>
               </IconButton>
             </Tooltip>
-            <Menu
+            <MenuOptions
+              anchorEl={menu.anchorEl}
+              open={menu.open}
+              onClose={onCloseMenu}
+              onLogout={onLogout}
+              // onEdit={() => navigate("/task/update")}
+            />
+            {/* <Menu
               sx={{ mt: "45px" }}
               anchorEl={anchorElUser}
               anchorOrigin={{
@@ -109,7 +111,7 @@ const Header = () => {
                   </Typography>
                 </MenuItem>
               ))}
-            </Menu>
+            </Menu> */}
           </Box>
         </Toolbar>
       </Container>
