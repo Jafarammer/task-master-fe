@@ -5,10 +5,17 @@ import { useNavigate } from "react-router-dom";
 import { loginUser } from "../features/auth/authService";
 import { loginSchema } from "../utils/validationSchema";
 import { LoginPayload } from "../types/auth";
+import { SnackbarState } from "../types/global";
+import { SnackbarCloseReason } from "@mui/material";
 
 type UseLoginReturn = {
   formik: FormikProps<LoginPayload>;
   loading: boolean;
+  openSnackbar: SnackbarState;
+  onCloseSnackbar: (
+    event?: React.SyntheticEvent | Event,
+    reason?: SnackbarCloseReason
+  ) => void;
 };
 
 const useLogin = (): UseLoginReturn => {
@@ -18,7 +25,25 @@ const useLogin = (): UseLoginReturn => {
   const [cookies, setCookie] = useCookies(["token"]);
   // useState
   const [loading, setLoading] = useState<boolean>(false);
+  const [openSnackbar, setOpenSnackbar] = useState<SnackbarState>({
+    open: false,
+    color: "success",
+    message: "",
+  });
   // function event
+  const onCloseSnackbar = (
+    event?: React.SyntheticEvent | Event,
+    reason?: SnackbarCloseReason
+  ): void => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenSnackbar((prev) => ({
+      ...prev,
+      open: false,
+    }));
+  };
   const formik = useFormik<LoginPayload>({
     initialValues: {
       email: "",
@@ -46,29 +71,31 @@ const useLogin = (): UseLoginReturn => {
         });
         navigate("/my-task");
       } catch (error: any) {
-        const msg =
-          error?.response?.data?.message ?? error?.message ?? "Login gagal";
-
-        // jika backend pesan menunjukkan masalah password -> tampilkan hanya di field password
-        if (
-          /password|wrong password|incorrect password|invalid password/i.test(
-            msg
-          )
-        ) {
-          setFieldError("password", msg);
-          return;
+        if (error.status === 400) {
+          const msg: string = error?.response?.data?.message;
+          if (
+            /password|wrong password|incorrect password|invalid password/i.test(
+              msg
+            )
+          ) {
+            setFieldError("password", msg);
+            return;
+          }
+          if (
+            /email|not found|no account|user not found|not registered/i.test(
+              msg
+            )
+          ) {
+            setFieldError("email", msg);
+            return;
+          }
+        } else {
+          setOpenSnackbar({
+            open: true,
+            color: "error",
+            message: error?.response?.data?.message || "Login failed",
+          });
         }
-
-        // jika backend pesan menunjukkan masalah email -> tampilkan hanya di field email
-        if (
-          /email|not found|no account|user not found|not registered/i.test(msg)
-        ) {
-          setFieldError("email", msg);
-          return;
-        }
-
-        // fallback: tampilkan error umum di email
-        setFieldError("email", msg);
       } finally {
         setLoading(false);
       }
@@ -78,6 +105,8 @@ const useLogin = (): UseLoginReturn => {
   return {
     formik,
     loading,
+    openSnackbar,
+    onCloseSnackbar,
   };
 };
 

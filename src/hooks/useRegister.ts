@@ -74,7 +74,7 @@ const useRegister = (): useRegisterReturn => {
         setOpenSnackbar({
           open: true,
           color: "error",
-          message: error.response?.data?.error || "Registration failed",
+          message: error?.response?.data?.message || "Registration failed",
         });
       } finally {
         setLoading(false);
