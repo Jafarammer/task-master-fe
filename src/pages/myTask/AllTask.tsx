@@ -59,7 +59,7 @@ const AllTask = () => {
   // useEffect
   useEffect(() => {
     dispatch(fetchAllTask({ page: pagination.page, limit: pagination.limit }));
-  }, [dispatch]);
+  }, [dispatch, pagination]);
   return (
     <React.Fragment>
       <List sx={{ m: 0 }}>
@@ -116,7 +116,13 @@ const AllTask = () => {
         ))}
       </List>
       <Stack direction={"row"} justifyContent={"center"} my={3}>
-        <Pagination count={10} shape="rounded" color="primary" />
+        <Pagination
+          count={meta_data.total_pages}
+          page={pagination.page}
+          onChange={(_, value) => setPagination({ page: value, limit: 5 })}
+          shape="rounded"
+          color="primary"
+        />
       </Stack>
     </React.Fragment>
   );
