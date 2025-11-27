@@ -80,7 +80,7 @@ const MyTask = () => {
           onChange={onChangeToggle}
           aria-label="task filter"
           size="small"
-          sx={toggleGroupSx}
+          sx={toggleGroupSx()}
         >
           <ToggleButton value="all" aria-label="all">
             All

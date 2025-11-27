@@ -79,7 +79,7 @@ const PendingTask = () => {
         {tasks.map((task, index) => (
           <ListItem
             key={task.id}
-            sx={(theme) => getTaskItemSx(theme, index, tasks.length)}
+            sx={getTaskItemSx(index, tasks.length)}
             secondaryAction={
               <React.Fragment>
                 <IconButton edge="end" aria-label="more" onClick={onOpenMenu}>

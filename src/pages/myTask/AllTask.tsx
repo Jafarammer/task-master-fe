@@ -13,7 +13,7 @@ import {
   Chip,
 } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
-import { getTaskItemSx } from "./styles";
+import { getTaskItemSx, chipSx } from "./styles";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { fetchAllTask } from "../../features/myTask/myTaskThunk";
 // types declaration
@@ -29,8 +29,7 @@ const AllTask = () => {
   const { items, meta_data, loading, error } = useAppSelector(
     (state) => state.allTask
   );
-  console.log("response 1", items);
-  console.log("response 2", meta_data);
+
   // useState
   const [menu, setMenu] = useState<MenuState>({ anchorEl: null, open: false });
   const [pagination, setPagination] = useState<PaginationState>({
@@ -67,7 +66,7 @@ const AllTask = () => {
         {items?.map((task, index) => (
           <ListItem
             key={task._id}
-            sx={(theme) => getTaskItemSx(theme, index, items.length)}
+            sx={getTaskItemSx(index, items.length)}
             secondaryAction={
               <React.Fragment>
                 <IconButton edge="end" onClick={onOpenMenu}>
@@ -102,7 +101,7 @@ const AllTask = () => {
                     }
                     size="small"
                     variant="outlined"
-                    sx={{ width: "68px", borderRadius: "4px" }}
+                    sx={chipSx()}
                   />
                   <Typography variant="h6">{task.title}</Typography>
                 </Stack>
