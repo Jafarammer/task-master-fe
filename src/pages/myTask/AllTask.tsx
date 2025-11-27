@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   List,
@@ -10,58 +10,41 @@ import {
   IconButton,
   Stack,
   Pagination,
+  Chip,
 } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
 import { getTaskItemSx } from "./styles";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { fetchAllTask } from "../../features/myTask/myTaskThunk";
 // types declaration
-import { MenuState } from "../../types/global";
+import { MenuState, PaginationState } from "../../types/global";
 // reusable components
 import { MenuOptions } from "../../components";
-
-type Task = {
-  id: number;
-  title: string;
-  dueDate: string;
-  completed: boolean;
-};
-
-const initialTask: Task[] = [
-  { id: 1, title: "Grocery Shopping", dueDate: "2024-03-15", completed: false },
-  {
-    id: 2,
-    title: "Book Appointment with Dr. Smith",
-    dueDate: "2024-03-18",
-    completed: false,
-  },
-  { id: 3, title: "Pay Bills", dueDate: "2024-03-20", completed: true },
-  {
-    id: 4,
-    title: "Plan Weekend Trip",
-    dueDate: "2024-03-22",
-    completed: false,
-  },
-  {
-    id: 5,
-    title: "Submit Project Report",
-    dueDate: "2024-03-25",
-    completed: false,
-  },
-];
 
 const AllTask = () => {
   // router
   const navigate = useNavigate();
+  // redux
+  const dispatch = useAppDispatch();
+  const { items, meta_data, loading, error } = useAppSelector(
+    (state) => state.allTask
+  );
+  console.log("response 1", items);
+  console.log("response 2", meta_data);
   // useState
-  const [tasks, setTasks] = useState<Task[]>(initialTask);
   const [menu, setMenu] = useState<MenuState>({ anchorEl: null, open: false });
+  const [pagination, setPagination] = useState<PaginationState>({
+    page: 1,
+    limit: 5,
+  });
   // function event
-  const onChecked = (id: number) => {
-    setTasks((prev) =>
-      prev.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task
-      )
-    );
-  };
+  // const onChecked = (id: string) => {
+  //   setTasks((prev) =>
+  //     prev.map((task) =>
+  //       task.id === id ? { ...task, completed: !task.completed } : task
+  //     )
+  //   );
+  // };
   const onOpenMenu = (event: React.MouseEvent<HTMLButtonElement>): void => {
     setMenu({
       anchorEl: event.currentTarget,
@@ -74,13 +57,17 @@ const AllTask = () => {
       open: false,
     });
   };
+  // useEffect
+  useEffect(() => {
+    dispatch(fetchAllTask({ page: pagination.page, limit: pagination.limit }));
+  }, [dispatch]);
   return (
     <React.Fragment>
       <List sx={{ m: 0 }}>
-        {tasks.map((task, index) => (
+        {items?.map((task, index) => (
           <ListItem
-            key={task.id}
-            sx={(theme) => getTaskItemSx(theme, index, tasks.length)}
+            key={task._id}
+            sx={(theme) => getTaskItemSx(theme, index, items.length)}
             secondaryAction={
               <React.Fragment>
                 <IconButton edge="end" onClick={onOpenMenu}>
@@ -97,13 +84,34 @@ const AllTask = () => {
           >
             <ListItemIcon>
               <Checkbox
-                checked={task.completed}
-                onChange={() => onChecked(task.id)}
+                checked={task.is_completed}
+                // onChange={() => onChecked(task._id)}
               />
             </ListItemIcon>
             <ListItemText
-              primary={<Typography>{task.title}</Typography>}
-              secondary={<Typography>Due : {task.dueDate}</Typography>}
+              primary={
+                <Stack direction={"row"} spacing={2} alignItems={"center"}>
+                  <Chip
+                    label={task.priority}
+                    color={
+                      task.priority === "low"
+                        ? "success"
+                        : task.priority === "medium"
+                        ? "warning"
+                        : "error"
+                    }
+                    size="small"
+                    variant="outlined"
+                    sx={{ width: "68px", borderRadius: "4px" }}
+                  />
+                  <Typography variant="h6">{task.title}</Typography>
+                </Stack>
+              }
+              secondary={
+                <Typography variant="caption" color="textDisabled">
+                  Due : {task.due_date}
+                </Typography>
+              }
             />
           </ListItem>
         ))}
