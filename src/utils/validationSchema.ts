@@ -1,4 +1,7 @@
 import * as Yup from "yup";
+import dayjs from "dayjs";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+dayjs.extend(isSameOrAfter);
 
 export const registerSchema = Yup.object().shape({
   firstName: Yup.string().required("First name is required field!"),
@@ -29,4 +32,17 @@ export const loginSchema = Yup.object().shape({
   password: Yup.string()
     .min(6, "Password min 6 characters")
     .required("Password is required field!"),
+});
+
+export const taskSchema = Yup.object().shape({
+  title: Yup.string().required("Title is required field!"),
+  description: Yup.string().required("Description is required field!"),
+  due_date: Yup.string()
+    .required("Date is required field!")
+    .test("not-past", "Date must be today or later", (value) => {
+      if (!value) return false;
+
+      return value >= dayjs().format("YYYY-MM-DD");
+    }),
+  priority: Yup.string().required("Priority is required field!"),
 });

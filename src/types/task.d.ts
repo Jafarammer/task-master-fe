@@ -1,8 +1,12 @@
 import { Dayjs } from "dayjs";
 
-export type TaskFormValues = {
+export type CreateTaskPayload = {
   title: string;
   description: string;
-  dueDate: Dayjs | null;
+  due_date: string;
   priority: string;
+};
+
+export type CreateTaskResponse = {
+  message: string;
 };
