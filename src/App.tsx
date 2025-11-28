@@ -34,7 +34,8 @@ function App() {
         }
       >
         <Route path="/my-task" element={<MyTask />} />
-        <Route path="/task/:mode" element={<Task />} />
+        <Route path="/task/create" element={<Task />} />
+        <Route path="/task/update/:id" element={<Task />} />
       </Route>
     </Routes>
   );

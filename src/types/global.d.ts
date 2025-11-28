@@ -7,6 +7,7 @@ export type SnackbarState = {
 export type MenuState = {
   anchorEl: HTMLElement | null;
   open: boolean;
+  context?: any;
 };
 
 export type PaginationState = {

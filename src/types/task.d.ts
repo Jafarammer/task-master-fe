@@ -8,5 +8,9 @@ export type CreateTaskPayload = {
 };
 
 export type CreateTaskResponse = {
-  message: string;
+  message: string; // note : untuk ini cari tahu apa hubungannya dengan type snackbar karna pas di ubah jadi optional type error
 };
+
+export interface ITaskDetailResponse {
+  data: CreateTaskPayload;
+}

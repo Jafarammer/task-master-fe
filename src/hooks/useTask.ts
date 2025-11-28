@@ -16,6 +16,8 @@ type useTaskReturn = {
     event?: React.SyntheticEvent | Event,
     reason?: SnackbarCloseReason
   ) => void;
+  onGetDetailTask: (id: string) => void;
+  setDetailTask: React.Dispatch<React.SetStateAction<CreateTaskPayload | null>>;
 };
 
 const useTask = (): useTaskReturn => {
@@ -28,6 +30,7 @@ const useTask = (): useTaskReturn => {
     color: "success",
     message: "",
   });
+  const [detailTask, setDetailTask] = useState<CreateTaskPayload | null>(null);
   // function event
   const onCloseSnackbar = (
     event?: React.SyntheticEvent | Event,
@@ -43,11 +46,13 @@ const useTask = (): useTaskReturn => {
     }));
   };
   const formik = useFormik<CreateTaskPayload>({
+    enableReinitialize: true,
     initialValues: {
-      title: "",
-      description: "",
-      due_date: dayjs().startOf("day").format("YYYY-MM-DD"),
-      priority: "",
+      title: detailTask?.title ?? "",
+      description: detailTask?.description ?? "",
+      due_date:
+        detailTask?.due_date ?? dayjs().startOf("day").format("YYYY-MM-DD"), // ✅ STRING
+      priority: detailTask?.priority ?? "",
     },
     validationSchema: taskSchema,
     onSubmit: async (values) => {
@@ -80,11 +85,17 @@ const useTask = (): useTaskReturn => {
     },
   });
 
+  const onGetDetailTask = async (id: string) => {
+    navigate(`/task/update/${id}`);
+  };
+
   return {
     formik,
     loading,
     openSnackbar,
     onCloseSnackbar,
+    onGetDetailTask,
+    setDetailTask,
   };
 };
 

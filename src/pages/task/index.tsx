@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Typography,
@@ -16,15 +16,30 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { useParams, useNavigate } from "react-router-dom";
 import useTask from "../../hooks/useTask";
+import { fetchTaskDetail } from "../../services/taskService";
 // reusable components
 import { ButtonCloseSnackbar } from "../../components";
 
 const Task = () => {
   // react router
-  const { mode } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
   //  hooks
-  const { formik, loading, onCloseSnackbar, openSnackbar } = useTask();
+  const { formik, loading, onCloseSnackbar, openSnackbar, setDetailTask } =
+    useTask();
+  // function event
+  const onCancel = (): void => {
+    setDetailTask(null);
+    navigate("/my-task");
+  };
+  // useEffect
+  useEffect(() => {
+    if (!id) return;
+    fetchTaskDetail(id).then((res) => {
+      setDetailTask(res.data);
+    });
+  }, [id]);
+
   return (
     <React.Fragment>
       <Snackbar
@@ -43,12 +58,12 @@ const Task = () => {
         </Alert>
       </Snackbar>
       <Typography variant="h4" fontWeight={"bold"} letterSpacing={1}>
-        {mode === "create" && "Create New Task"}
-        {mode === "update" && "Update Task"}
+        {!id && "Create New Task"}
+        {!!id && "Update Task"}
       </Typography>
       <Typography variant="body1" color="text.secondary">
-        {mode === "create" && "Fill in the details below to create a new task."}
-        {mode === "update" && "Update the task details below."}
+        {!id && "Fill in the details below to create a new task."}
+        {!!id && "Update the task details below."}
       </Typography>
       {/* form */}
       <Box sx={{ mt: 3 }}>
@@ -58,6 +73,7 @@ const Task = () => {
               placeholder="Title task"
               name="title"
               size="small"
+              value={formik.values.title}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={!!formik.touched.title && !!formik.errors.title}
@@ -73,6 +89,7 @@ const Task = () => {
               name="description"
               multiline
               minRows={4}
+              value={formik.values.description}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={
@@ -155,7 +172,7 @@ const Task = () => {
               variant="contained"
               sx={{ fontWeight: "bold", mt: 2, width: 92 }}
               color="inherit"
-              onClick={() => navigate("/my-task")}
+              onClick={onCancel}
             >
               Cancel
             </Button>

@@ -16,6 +16,8 @@ import { MoreVert } from "@mui/icons-material";
 import { getTaskItemSx, chipSx } from "./styles";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { fetchAllTask } from "../../features/myTask/myTaskThunk";
+// custome hooks
+import useTask from "../../hooks/useTask";
 // types declaration
 import { MenuState, PaginationState } from "../../types/global";
 // reusable components
@@ -29,9 +31,14 @@ const AllTask = () => {
   const { items, meta_data, loading, error } = useAppSelector(
     (state) => state.allTask
   );
-
+  // hooks
+  const { onGetDetailTask } = useTask();
   // useState
-  const [menu, setMenu] = useState<MenuState>({ anchorEl: null, open: false });
+  const [menu, setMenu] = useState<MenuState>({
+    anchorEl: null,
+    open: false,
+    context: null,
+  });
   const [pagination, setPagination] = useState<PaginationState>({
     page: 1,
     limit: 5,
@@ -44,10 +51,14 @@ const AllTask = () => {
   //     )
   //   );
   // };
-  const onOpenMenu = (event: React.MouseEvent<HTMLButtonElement>): void => {
+  const onOpenMenu = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    id: string
+  ): void => {
     setMenu({
       anchorEl: event.currentTarget,
       open: true,
+      context: id,
     });
   };
   const onCloseMenu = (): void => {
@@ -65,18 +76,23 @@ const AllTask = () => {
       <List sx={{ m: 0 }}>
         {items?.map((task, index) => (
           <ListItem
-            key={task._id}
+            key={index}
             sx={getTaskItemSx(index, items.length)}
             secondaryAction={
               <React.Fragment>
-                <IconButton edge="end" onClick={onOpenMenu}>
+                <IconButton edge="end" onClick={(e) => onOpenMenu(e, task._id)}>
                   <MoreVert />
                 </IconButton>
                 <MenuOptions
                   anchorEl={menu.anchorEl}
                   open={menu.open}
                   onClose={onCloseMenu}
-                  onEdit={() => navigate("/task/update")}
+                  onEdit={() => {
+                    if (menu.context) {
+                      onGetDetailTask(menu.context);
+                      onCloseMenu();
+                    }
+                  }}
                 />
               </React.Fragment>
             }
