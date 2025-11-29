@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { useFormik, FormikProps } from "formik";
 import { useNavigate } from "react-router-dom";
 import { taskSchema } from "../utils/validationSchema";
-import { createTask } from "../services/taskService";
+import { createTask, deleteTask } from "../services/taskService";
 import { CreateTaskPayload } from "../types/task";
 import { SnackbarState } from "../types/global";
 import { SnackbarCloseReason } from "@mui/material";
 import dayjs from "dayjs";
+import { fetchAllTask } from "../features/myTask/myTaskThunk";
+import { useAppDispatch } from "../app/hooks";
 
 type useTaskReturn = {
   formik: FormikProps<CreateTaskPayload>;
@@ -17,12 +19,15 @@ type useTaskReturn = {
     reason?: SnackbarCloseReason
   ) => void;
   onGetDetailTask: (id: string) => void;
-  setDetailTask: React.Dispatch<React.SetStateAction<CreateTaskPayload | null>>;
+  onDeleteTask: (id: string) => void;
+  setDetailTask: (value: CreateTaskPayload | null) => void;
 };
 
 const useTask = (): useTaskReturn => {
   // router
   const navigate = useNavigate();
+  // redux
+  const dispatch = useAppDispatch();
   // useState
   const [loading, setLoading] = useState<boolean>(false);
   const [openSnackbar, setOpenSnackbar] = useState<SnackbarState>({
@@ -77,7 +82,7 @@ const useTask = (): useTaskReturn => {
         setOpenSnackbar({
           open: true,
           color: "error",
-          message: error?.response?.data?.message || "Create task failed",
+          message: error?.response?.data?.message || "Delete task failed",
         });
       } finally {
         setLoading(false);
@@ -85,8 +90,29 @@ const useTask = (): useTaskReturn => {
     },
   });
 
-  const onGetDetailTask = async (id: string) => {
+  const onGetDetailTask = (id: string): void => {
     navigate(`/task/update/${id}`);
+  };
+
+  const onDeleteTask = async (id: string) => {
+    try {
+      setLoading(true);
+      const response = await deleteTask(id);
+      setOpenSnackbar({
+        open: true,
+        color: "success",
+        message: response.message,
+      });
+      dispatch(fetchAllTask({ page: 1, limit: 5 }));
+    } catch (error: any) {
+      setOpenSnackbar({
+        open: true,
+        color: "error",
+        message: error?.response?.data?.message || "Create task failed",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return {
@@ -96,6 +122,7 @@ const useTask = (): useTaskReturn => {
     onCloseSnackbar,
     onGetDetailTask,
     setDetailTask,
+    onDeleteTask,
   };
 };
 

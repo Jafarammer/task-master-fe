@@ -14,3 +14,7 @@ export type CreateTaskResponse = {
 export interface ITaskDetailResponse {
   data: CreateTaskPayload;
 }
+
+export type DeleteTaskResponse = {
+  message: string;
+};

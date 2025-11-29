@@ -11,6 +11,8 @@ import {
   Stack,
   Pagination,
   Chip,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
 import { getTaskItemSx, chipSx } from "./styles";
@@ -21,7 +23,12 @@ import useTask from "../../hooks/useTask";
 // types declaration
 import { MenuState, PaginationState } from "../../types/global";
 // reusable components
-import { MenuOptions, EmptyState, DeleteConfirmDialog } from "../../components";
+import {
+  MenuOptions,
+  EmptyState,
+  DeleteConfirmDialog,
+  ButtonCloseSnackbar,
+} from "../../components";
 
 const AllTask = () => {
   // router
@@ -32,7 +39,8 @@ const AllTask = () => {
     (state) => state.allTask
   );
   // hooks
-  const { onGetDetailTask } = useTask();
+  const { onGetDetailTask, onDeleteTask, openSnackbar, onCloseSnackbar } =
+    useTask();
   // useState
   const [menu, setMenu] = useState<MenuState>({
     anchorEl: null,
@@ -92,6 +100,23 @@ const AllTask = () => {
     />
   ) : (
     <React.Fragment>
+      {/* alert */}
+      <Snackbar
+        open={openSnackbar.open}
+        autoHideDuration={1500}
+        onClose={onCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          severity={openSnackbar.color}
+          variant="filled"
+          sx={{ width: "100%", color: "white" }}
+          action={<ButtonCloseSnackbar onClose={onCloseSnackbar} />}
+        >
+          {openSnackbar.message}
+        </Alert>
+      </Snackbar>
+      {/* content */}
       <List sx={{ m: 0 }}>
         {items?.map((task, index) => (
           <ListItem
@@ -169,7 +194,7 @@ const AllTask = () => {
         taskName={menu.context?.title ?? ""}
         onClose={closeConfirmDelete}
         onConfirm={() => {
-          console.log("DELETE CONFIRMED");
+          onDeleteTask(menu.context.id);
           closeConfirmDelete();
         }}
       />

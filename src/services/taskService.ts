@@ -3,6 +3,7 @@ import {
   CreateTaskPayload,
   CreateTaskResponse,
   ITaskDetailResponse,
+  DeleteTaskResponse,
 } from "../types/task";
 
 export const createTask = async (
@@ -16,7 +17,11 @@ export const fetchTaskDetail = async (
   id: string
 ): Promise<ITaskDetailResponse> => {
   const res = await api.get(`/task/${id}`);
-  console.log("ini yak", res);
 
+  return res.data;
+};
+
+export const deleteTask = async (id: string): Promise<DeleteTaskResponse> => {
+  const res = await api.delete(`/task/hard/${id}`);
   return res.data;
 };
