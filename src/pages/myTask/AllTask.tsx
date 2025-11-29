@@ -21,7 +21,7 @@ import useTask from "../../hooks/useTask";
 // types declaration
 import { MenuState, PaginationState } from "../../types/global";
 // reusable components
-import { MenuOptions, EmptyState } from "../../components";
+import { MenuOptions, EmptyState, DeleteConfirmDialog } from "../../components";
 
 const AllTask = () => {
   // router
@@ -43,6 +43,7 @@ const AllTask = () => {
     page: 1,
     limit: 5,
   });
+  const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
   // function event
   // const onChecked = (id: string) => {
   //   setTasks((prev) =>
@@ -51,21 +52,34 @@ const AllTask = () => {
   //     )
   //   );
   // };
+  const openConfirmDelete = (): void => {
+    setConfirmDelete(true);
+    onCloseMenu();
+  };
+  const closeConfirmDelete = (): void => {
+    setConfirmDelete(false);
+    setMenu((prev) => ({ ...prev, context: null }));
+  };
   const onOpenMenu = (
     event: React.MouseEvent<HTMLButtonElement>,
-    id: string
+    id: string,
+    title: string
   ): void => {
     setMenu({
       anchorEl: event.currentTarget,
       open: true,
-      context: id,
+      context: {
+        id,
+        title,
+      },
     });
   };
-  const onCloseMenu = (): void => {
-    setMenu({
+  const onCloseMenu = () => {
+    setMenu((prev) => ({
+      ...prev,
       anchorEl: null,
       open: false,
-    });
+    }));
   };
   // useEffect
   useEffect(() => {
@@ -81,24 +95,16 @@ const AllTask = () => {
       <List sx={{ m: 0 }}>
         {items?.map((task, index) => (
           <ListItem
-            key={index}
+            key={task._id}
             sx={getTaskItemSx(index, items.length)}
             secondaryAction={
               <React.Fragment>
-                <IconButton edge="end" onClick={(e) => onOpenMenu(e, task._id)}>
+                <IconButton
+                  edge="end"
+                  onClick={(e) => onOpenMenu(e, task._id, task.title)}
+                >
                   <MoreVert />
                 </IconButton>
-                <MenuOptions
-                  anchorEl={menu.anchorEl}
-                  open={menu.open}
-                  onClose={onCloseMenu}
-                  onEdit={() => {
-                    if (menu.context) {
-                      onGetDetailTask(menu.context);
-                      onCloseMenu();
-                    }
-                  }}
-                />
               </React.Fragment>
             }
           >
@@ -145,6 +151,28 @@ const AllTask = () => {
           color="primary"
         />
       </Stack>
+      {/* pop up */}
+      <MenuOptions
+        anchorEl={menu.anchorEl}
+        open={menu.open}
+        onClose={onCloseMenu}
+        onEdit={() => {
+          if (menu.context) {
+            onGetDetailTask(menu.context.id);
+            onCloseMenu();
+          }
+        }}
+        onDelete={openConfirmDelete}
+      />
+      <DeleteConfirmDialog
+        open={confirmDelete}
+        taskName={menu.context?.title ?? ""}
+        onClose={closeConfirmDelete}
+        onConfirm={() => {
+          console.log("DELETE CONFIRMED");
+          closeConfirmDelete();
+        }}
+      />
     </React.Fragment>
   );
 };
