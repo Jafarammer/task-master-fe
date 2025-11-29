@@ -21,7 +21,7 @@ import useTask from "../../hooks/useTask";
 // types declaration
 import { MenuState, PaginationState } from "../../types/global";
 // reusable components
-import { MenuOptions } from "../../components";
+import { MenuOptions, EmptyState } from "../../components";
 
 const AllTask = () => {
   // router
@@ -71,7 +71,12 @@ const AllTask = () => {
   useEffect(() => {
     dispatch(fetchAllTask({ page: pagination.page, limit: pagination.limit }));
   }, [dispatch, pagination]);
-  return (
+  return items.length === 0 ? (
+    <EmptyState
+      buttonText="Create Task"
+      onAction={() => navigate("/task/create")}
+    />
+  ) : (
     <React.Fragment>
       <List sx={{ m: 0 }}>
         {items?.map((task, index) => (
