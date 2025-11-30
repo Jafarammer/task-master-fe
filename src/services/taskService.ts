@@ -15,6 +15,14 @@ export const createTask = async (
   return res.data;
 };
 
+export const updateTask = async (
+  id: string,
+  payload: CreateTaskPayload
+): Promise<CreateTaskResponse> => {
+  const res = await api.patch(`/task/${id}`, payload);
+  return res.data;
+};
+
 export const fetchTaskDetail = async (
   id: string
 ): Promise<ITaskDetailResponse> => {

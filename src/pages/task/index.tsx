@@ -173,6 +173,7 @@ const Task = () => {
               sx={{ fontWeight: "bold", mt: 2, width: 92 }}
               color="inherit"
               onClick={onCancel}
+              disabled={loading}
             >
               Cancel
             </Button>
@@ -182,7 +183,7 @@ const Task = () => {
               color="primary"
               type="submit"
               loading={loading}
-              disabled={loading}
+              disabled={!formik.dirty || !formik.isValid || loading}
             >
               Save
             </Button>

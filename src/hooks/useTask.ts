@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useFormik, FormikProps } from "formik";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { taskSchema } from "../utils/validationSchema";
 import {
   createTask,
   deleteTask,
   updateStatusTask,
+  updateTask,
 } from "../services/taskService";
 import { CreateTaskPayload, UpdateStatusPaylod } from "../types/task";
 import { SnackbarState } from "../types/global";
@@ -31,6 +32,7 @@ type useTaskReturn = {
 const useTask = (): useTaskReturn => {
   // router
   const navigate = useNavigate();
+  const { id } = useParams();
   // redux
   const dispatch = useAppDispatch();
   // useState
@@ -68,13 +70,18 @@ const useTask = (): useTaskReturn => {
     onSubmit: async (values) => {
       try {
         setLoading(true);
+        let response;
         const payload = {
           title: values.title,
           description: values.description,
           due_date: values.due_date,
           priority: values.priority,
         };
-        const response = await createTask(payload);
+        if (!id) {
+          response = await createTask(payload);
+        } else {
+          response = await updateTask(id, payload);
+        }
         setOpenSnackbar({
           open: true,
           color: "success",
@@ -87,7 +94,9 @@ const useTask = (): useTaskReturn => {
         setOpenSnackbar({
           open: true,
           color: "error",
-          message: error?.response?.data?.message || "Delete task failed",
+          message:
+            error?.response?.data?.message ||
+            (id ? "Update task failed" : "Create task failed"),
         });
       } finally {
         setLoading(false);
