@@ -58,8 +58,8 @@ const AllTask = () => {
   });
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
   // function event
-  const onChecked = (id: string, checked: boolean): void => {
-    onUpdateStatus(id, !checked);
+  const onChecked = (page: string, id: string, checked: boolean): void => {
+    onUpdateStatus(page, id, !checked);
   };
   const openConfirmDelete = (): void => {
     setConfirmDelete(true);
@@ -124,20 +124,18 @@ const AllTask = () => {
             key={task._id}
             sx={getTaskItemSx(index, items.length)}
             secondaryAction={
-              <React.Fragment>
-                <IconButton
-                  edge="end"
-                  onClick={(e) => onOpenMenu(e, task._id, task.title)}
-                >
-                  <MoreVert />
-                </IconButton>
-              </React.Fragment>
+              <IconButton
+                edge="end"
+                onClick={(e) => onOpenMenu(e, task._id, task.title)}
+              >
+                <MoreVert />
+              </IconButton>
             }
           >
             <ListItemIcon>
               <Checkbox
                 checked={task.is_completed}
-                onChange={() => onChecked(task._id, task.is_completed)}
+                onChange={() => onChecked("all", task._id, task.is_completed)}
               />
             </ListItemIcon>
             <ListItemText
@@ -195,7 +193,7 @@ const AllTask = () => {
         taskName={menu.context?.title ?? ""}
         onClose={closeConfirmDelete}
         onConfirm={() => {
-          onDeleteTask(menu.context.id);
+          onDeleteTask("all", menu.context.id);
           closeConfirmDelete();
         }}
       />

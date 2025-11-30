@@ -13,6 +13,7 @@ import { SnackbarState } from "../types/global";
 import { SnackbarCloseReason } from "@mui/material";
 import dayjs from "dayjs";
 import { fetchAllTask } from "../features/myTask/myTaskThunk";
+import { fetchCompletedTask } from "../features/myTask/completedTaskThunk";
 import { useAppDispatch } from "../app/hooks";
 
 type useTaskReturn = {
@@ -24,9 +25,9 @@ type useTaskReturn = {
     reason?: SnackbarCloseReason
   ) => void;
   onGetDetailTask: (id: string) => void;
-  onDeleteTask: (id: string) => void;
+  onDeleteTask: (page: string, id: string) => void;
   setDetailTask: (value: CreateTaskPayload | null) => void;
-  onUpdateStatus: (id: string, checked: boolean) => void;
+  onUpdateStatus: (page: string, id: string, checked: boolean) => void;
 };
 
 const useTask = (): useTaskReturn => {
@@ -108,7 +109,7 @@ const useTask = (): useTaskReturn => {
     navigate(`/task/update/${id}`);
   };
 
-  const onDeleteTask = async (id: string) => {
+  const onDeleteTask = async (page: string, id: string) => {
     try {
       setLoading(true);
       const response = await deleteTask(id);
@@ -117,7 +118,11 @@ const useTask = (): useTaskReturn => {
         color: "success",
         message: response.message,
       });
-      dispatch(fetchAllTask({ page: 1, limit: 5 }));
+      if (page === "all") {
+        dispatch(fetchAllTask({ page: 1, limit: 5 }));
+      } else if (page === "completed") {
+        dispatch(fetchCompletedTask({ page: 1, limit: 5 }));
+      }
     } catch (error: any) {
       setOpenSnackbar({
         open: true,
@@ -129,7 +134,7 @@ const useTask = (): useTaskReturn => {
     }
   };
 
-  const onUpdateStatus = async (id: string, checked: boolean) => {
+  const onUpdateStatus = async (page: string, id: string, checked: boolean) => {
     try {
       setLoading(true);
       const payload = { is_completed: checked };
@@ -139,7 +144,11 @@ const useTask = (): useTaskReturn => {
         color: "success",
         message: response.message,
       });
-      dispatch(fetchAllTask({ page: 1, limit: 5 }));
+      if (page === "all") {
+        dispatch(fetchAllTask({ page: 1, limit: 5 }));
+      } else if (page === "completed") {
+        dispatch(fetchCompletedTask({ page: 1, limit: 5 }));
+      }
     } catch (error: any) {
       setOpenSnackbar({
         open: true,
