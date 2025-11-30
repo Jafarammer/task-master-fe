@@ -2,8 +2,12 @@ import React, { useState } from "react";
 import { useFormik, FormikProps } from "formik";
 import { useNavigate } from "react-router-dom";
 import { taskSchema } from "../utils/validationSchema";
-import { createTask, deleteTask } from "../services/taskService";
-import { CreateTaskPayload } from "../types/task";
+import {
+  createTask,
+  deleteTask,
+  updateStatusTask,
+} from "../services/taskService";
+import { CreateTaskPayload, UpdateStatusPaylod } from "../types/task";
 import { SnackbarState } from "../types/global";
 import { SnackbarCloseReason } from "@mui/material";
 import dayjs from "dayjs";
@@ -21,6 +25,7 @@ type useTaskReturn = {
   onGetDetailTask: (id: string) => void;
   onDeleteTask: (id: string) => void;
   setDetailTask: (value: CreateTaskPayload | null) => void;
+  onUpdateStatus: (id: string, checked: boolean) => void;
 };
 
 const useTask = (): useTaskReturn => {
@@ -115,6 +120,28 @@ const useTask = (): useTaskReturn => {
     }
   };
 
+  const onUpdateStatus = async (id: string, checked: boolean) => {
+    try {
+      setLoading(true);
+      const payload = { is_completed: checked };
+      const response = await updateStatusTask(id, payload);
+      setOpenSnackbar({
+        open: true,
+        color: "success",
+        message: response.message,
+      });
+      dispatch(fetchAllTask({ page: 1, limit: 5 }));
+    } catch (error: any) {
+      setOpenSnackbar({
+        open: true,
+        color: "error",
+        message: error?.response?.data?.message || "Update status failed",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     formik,
     loading,
@@ -123,6 +150,7 @@ const useTask = (): useTaskReturn => {
     onGetDetailTask,
     setDetailTask,
     onDeleteTask,
+    onUpdateStatus,
   };
 };
 

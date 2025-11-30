@@ -39,8 +39,13 @@ const AllTask = () => {
     (state) => state.allTask
   );
   // hooks
-  const { onGetDetailTask, onDeleteTask, openSnackbar, onCloseSnackbar } =
-    useTask();
+  const {
+    onGetDetailTask,
+    onDeleteTask,
+    openSnackbar,
+    onCloseSnackbar,
+    onUpdateStatus,
+  } = useTask();
   // useState
   const [menu, setMenu] = useState<MenuState>({
     anchorEl: null,
@@ -53,13 +58,9 @@ const AllTask = () => {
   });
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
   // function event
-  // const onChecked = (id: string) => {
-  //   setTasks((prev) =>
-  //     prev.map((task) =>
-  //       task.id === id ? { ...task, completed: !task.completed } : task
-  //     )
-  //   );
-  // };
+  const onChecked = (id: string, checked: boolean): void => {
+    onUpdateStatus(id, !checked);
+  };
   const openConfirmDelete = (): void => {
     setConfirmDelete(true);
     onCloseMenu();
@@ -136,7 +137,7 @@ const AllTask = () => {
             <ListItemIcon>
               <Checkbox
                 checked={task.is_completed}
-                // onChange={() => onChecked(task._id)}
+                onChange={() => onChecked(task._id, task.is_completed)}
               />
             </ListItemIcon>
             <ListItemText

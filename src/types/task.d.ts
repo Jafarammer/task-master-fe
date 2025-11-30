@@ -18,3 +18,10 @@ export interface ITaskDetailResponse {
 export type DeleteTaskResponse = {
   message: string;
 };
+
+export type UpdateStatusResponse = {
+  message: string;
+};
+export type UpdateStatusPaylod = {
+  is_completed: boolean;
+};

@@ -4,6 +4,8 @@ import {
   CreateTaskResponse,
   ITaskDetailResponse,
   DeleteTaskResponse,
+  UpdateStatusResponse,
+  UpdateStatusPaylod,
 } from "../types/task";
 
 export const createTask = async (
@@ -23,5 +25,13 @@ export const fetchTaskDetail = async (
 
 export const deleteTask = async (id: string): Promise<DeleteTaskResponse> => {
   const res = await api.delete(`/task/hard/${id}`);
+  return res.data;
+};
+
+export const updateStatusTask = async (
+  id: string,
+  payload: UpdateStatusPaylod
+): Promise<UpdateStatusResponse> => {
+  const res = await api.patch(`/task/status/${id}`, payload);
   return res.data;
 };
