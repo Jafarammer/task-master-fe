@@ -5,6 +5,7 @@ export type LoginPayload = {
 
 export type LoginResponse = {
   accessToken: string;
+  message: string;
 };
 
 export type RegisterPayload = {

@@ -9,24 +9,19 @@ import {
   FormControl,
   Button,
   FormHelperText,
-  Snackbar,
-  Alert,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { useParams, useNavigate } from "react-router-dom";
 import useTask from "../../hooks/useTask";
 import { fetchTaskDetail } from "../../services/taskService";
-// reusable components
-import { ButtonCloseSnackbar } from "../../components";
 
 const Task = () => {
   // react router
   const { id } = useParams();
   const navigate = useNavigate();
   //  hooks
-  const { formik, loading, onCloseSnackbar, openSnackbar, setDetailTask } =
-    useTask();
+  const { formik, loading, setDetailTask } = useTask();
   // function event
   const onCancel = (): void => {
     setDetailTask(null);
@@ -42,21 +37,6 @@ const Task = () => {
 
   return (
     <React.Fragment>
-      <Snackbar
-        open={openSnackbar.open}
-        autoHideDuration={1500}
-        onClose={onCloseSnackbar}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert
-          severity={openSnackbar.color}
-          variant="filled"
-          sx={{ width: "100%", color: "white" }}
-          action={<ButtonCloseSnackbar onClose={onCloseSnackbar} />}
-        >
-          {openSnackbar.message}
-        </Alert>
-      </Snackbar>
       <Typography variant="h4" fontWeight={"bold"} letterSpacing={1}>
         {!id && "Create New Task"}
         {!!id && "Update Task"}

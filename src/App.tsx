@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import { SnackbarAlert } from "./components";
 // layout
 import AuthLayout from "./layouts/AuthLayout";
 import MainLayout from "./layouts/MainLayout";
@@ -13,31 +14,34 @@ import Task from "./pages/task";
 
 function App() {
   return (
-    <Routes>
-      {/* Auth layout */}
-      <Route
-        element={
-          <GuestRoute>
-            <AuthLayout />
-          </GuestRoute>
-        }
-      >
-        <Route index path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-      </Route>
-      {/* Main layout */}
-      <Route
-        element={
-          <ProtectedRoute>
-            <MainLayout />
-          </ProtectedRoute>
-        }
-      >
-        <Route path="/my-task" element={<MyTask />} />
-        <Route path="/task/create" element={<Task />} />
-        <Route path="/task/update/:id" element={<Task />} />
-      </Route>
-    </Routes>
+    <>
+      <SnackbarAlert />
+      <Routes>
+        {/* Auth layout */}
+        <Route
+          element={
+            <GuestRoute>
+              <AuthLayout />
+            </GuestRoute>
+          }
+        >
+          <Route index path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Route>
+        {/* Main layout */}
+        <Route
+          element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="/my-task" element={<MyTask />} />
+          <Route path="/task/create" element={<Task />} />
+          <Route path="/task/update/:id" element={<Task />} />
+        </Route>
+      </Routes>
+    </>
   );
 }
 

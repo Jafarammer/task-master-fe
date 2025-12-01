@@ -11,17 +11,14 @@ import {
   FormHelperText,
   IconButton,
   InputAdornment,
-  Alert,
-  Snackbar,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import useLogin from "../../hooks/useLogin";
-import { ButtonCloseSnackbar } from "../../components";
 import { containerSx, linkContainerSx, linkForgotPasswordSx } from "./styles";
 
 const Login = () => {
   // hooks
-  const { formik, loading, openSnackbar, onCloseSnackbar } = useLogin();
+  const { formik, loading } = useLogin();
   // useState
   const [showPassword, setShowPassword] = useState<boolean>(false);
   // function event
@@ -43,21 +40,6 @@ const Login = () => {
 
   return (
     <React.Fragment>
-      <Snackbar
-        open={openSnackbar.open}
-        autoHideDuration={1500}
-        onClose={onCloseSnackbar}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert
-          severity={openSnackbar.color}
-          variant="filled"
-          sx={{ width: "100%", color: "white" }}
-          action={<ButtonCloseSnackbar onClose={onCloseSnackbar} />}
-        >
-          {openSnackbar.message}
-        </Alert>
-      </Snackbar>
       <Box component={"div"} sx={containerSx()}>
         <Typography variant="h4" fontWeight="bold">
           Welcome back

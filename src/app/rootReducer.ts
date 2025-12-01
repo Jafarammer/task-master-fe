@@ -3,12 +3,14 @@ import authReducer from "../features/auth/authSlice";
 import allTaskReducer from "../features/myTask/allTaskSlice";
 import completedTaskReducer from "../features/myTask/completedTaskSlice";
 import pendingTaskReducer from "../features/myTask/pendingTaskSlice";
+import snackbarReducer from "../features/snackbar/snackbarSlice";
 
 const rootReducer = combineReducers({
   auth: authReducer,
   allTask: allTaskReducer,
   completedTask: completedTaskReducer,
   pendingTask: pendingTaskReducer,
+  snackbar: snackbarReducer,
 });
 
 export default rootReducer;

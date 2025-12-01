@@ -8,7 +8,7 @@ import {
   updateStatusTask,
   updateTask,
 } from "../services/taskService";
-import { CreateTaskPayload, UpdateStatusPaylod } from "../types/task";
+import { CreateTaskPayload } from "../types/task";
 import { SnackbarState } from "../types/global";
 import { SnackbarCloseReason } from "@mui/material";
 import dayjs from "dayjs";
@@ -16,19 +16,12 @@ import { fetchAllTask } from "../features/myTask/allTaskThunk";
 import { fetchCompletedTask } from "../features/myTask/completedTaskThunk";
 import { fetchPendingTask } from "../features/myTask/pendingTaskThunk";
 import { useAppDispatch } from "../app/hooks";
+import useSnackbarAlert from "./useSnackbarAlert";
 
 type useTaskReturn = {
   formik: FormikProps<CreateTaskPayload>;
   loading: boolean;
-  openSnackbar: SnackbarState;
-  onCloseSnackbar: (
-    event?: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason
-  ) => void;
-  onGetDetailTask: (id: string) => void;
-  onDeleteTask: (page: string, id: string) => void;
   setDetailTask: (value: CreateTaskPayload | null) => void;
-  onUpdateStatus: (page: string, id: string, checked: boolean) => void;
 };
 
 const useTask = (): useTaskReturn => {
@@ -44,6 +37,8 @@ const useTask = (): useTaskReturn => {
     color: "success",
     message: "",
   });
+  // hooks
+  const notify = useSnackbarAlert();
   const [detailTask, setDetailTask] = useState<CreateTaskPayload | null>(null);
   // function event
   const onCloseSnackbar = (
@@ -84,22 +79,14 @@ const useTask = (): useTaskReturn => {
         } else {
           response = await updateTask(id, payload);
         }
-        setOpenSnackbar({
-          open: true,
-          color: "success",
-          message: response.message,
-        });
-        setTimeout(() => {
-          navigate("/my-task");
-        }, 1500);
+        notify(response.message, "success");
+        navigate("/my-task");
       } catch (error: any) {
-        setOpenSnackbar({
-          open: true,
-          color: "error",
-          message:
-            error?.response?.data?.message ||
+        notify(
+          error?.response?.data?.message ||
             (id ? "Update task failed" : "Create task failed"),
-        });
+          "error"
+        );
       } finally {
         setLoading(false);
       }
@@ -168,12 +155,7 @@ const useTask = (): useTaskReturn => {
   return {
     formik,
     loading,
-    openSnackbar,
-    onCloseSnackbar,
-    onGetDetailTask,
     setDetailTask,
-    onDeleteTask,
-    onUpdateStatus,
   };
 };
 

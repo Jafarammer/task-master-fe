@@ -1,47 +1,24 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useFormik, FormikProps } from "formik";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../features/auth/authService";
 import { registerSchema } from "../utils/validationSchema";
 import { RegisterPayload } from "../types/auth";
-import { SnackbarState } from "../types/global";
-import { SnackbarCloseReason } from "@mui/material";
+import useSnackbarAlert from "./useSnackbarAlert";
 
 type useRegisterReturn = {
   formik: FormikProps<RegisterPayload>;
   loading: boolean;
-  openSnackbar: SnackbarState;
-  onCloseSnackbar: (
-    event?: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason
-  ) => void;
 };
 
 const useRegister = (): useRegisterReturn => {
   // router
   const navigate = useNavigate();
+  // hooks
+  const notify = useSnackbarAlert();
   // useState
   const [loading, setLoading] = useState<boolean>(false);
-  const [openSnackbar, setOpenSnackbar] = useState<SnackbarState>({
-    open: false,
-    color: "success",
-    message: "",
-  });
   // function event
-  const onCloseSnackbar = (
-    event?: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason
-  ): void => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpenSnackbar((prev) => ({
-      ...prev,
-      open: false,
-    }));
-  };
-
   const formik = useFormik<RegisterPayload>({
     initialValues: {
       firstName: "",
@@ -61,21 +38,13 @@ const useRegister = (): useRegisterReturn => {
           password: values.password,
         };
         const response = await registerUser(payload);
-
-        setOpenSnackbar({
-          open: true,
-          color: "success",
-          message: response.message,
-        });
-        setTimeout(() => {
-          navigate("/login");
-        }, 1500);
+        notify(response.message, "success");
+        navigate("/login");
       } catch (error: any) {
-        setOpenSnackbar({
-          open: true,
-          color: "error",
-          message: error?.response?.data?.message || "Registration failed",
-        });
+        notify(
+          error?.response?.data?.message || "Registration failed",
+          "error"
+        );
       } finally {
         setLoading(false);
       }
@@ -85,8 +54,6 @@ const useRegister = (): useRegisterReturn => {
   return {
     formik,
     loading,
-    openSnackbar,
-    onCloseSnackbar,
   };
 };
 

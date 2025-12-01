@@ -5,17 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { loginUser } from "../features/auth/authService";
 import { loginSchema } from "../utils/validationSchema";
 import { LoginPayload } from "../types/auth";
-import { SnackbarState } from "../types/global";
-import { SnackbarCloseReason } from "@mui/material";
+import useSnackbarAlert from "./useSnackbarAlert";
 
 type UseLoginReturn = {
   formik: FormikProps<LoginPayload>;
   loading: boolean;
-  openSnackbar: SnackbarState;
-  onCloseSnackbar: (
-    event?: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason
-  ) => void;
 };
 
 const useLogin = (): UseLoginReturn => {
@@ -23,27 +17,10 @@ const useLogin = (): UseLoginReturn => {
   const navigate = useNavigate();
   // hooks
   const [cookies, setCookie] = useCookies(["token"]);
+  const notify = useSnackbarAlert();
   // useState
   const [loading, setLoading] = useState<boolean>(false);
-  const [openSnackbar, setOpenSnackbar] = useState<SnackbarState>({
-    open: false,
-    color: "success",
-    message: "",
-  });
   // function event
-  const onCloseSnackbar = (
-    event?: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason
-  ): void => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpenSnackbar((prev) => ({
-      ...prev,
-      open: false,
-    }));
-  };
   const formik = useFormik<LoginPayload>({
     initialValues: {
       email: "",
@@ -70,6 +47,7 @@ const useLogin = (): UseLoginReturn => {
           //   : { sameSite: "lax" as const }),
         });
         navigate("/my-task");
+        notify(response.message, "success");
       } catch (error: any) {
         if (error.status === 400) {
           const msg: string = error?.response?.data?.message;
@@ -90,11 +68,7 @@ const useLogin = (): UseLoginReturn => {
             return;
           }
         } else {
-          setOpenSnackbar({
-            open: true,
-            color: "error",
-            message: error?.response?.data?.message || "Login failed",
-          });
+          notify(error?.response?.data?.message || "Login failed", "error");
         }
       } finally {
         setLoading(false);
@@ -105,8 +79,6 @@ const useLogin = (): UseLoginReturn => {
   return {
     formik,
     loading,
-    openSnackbar,
-    onCloseSnackbar,
   };
 };
 

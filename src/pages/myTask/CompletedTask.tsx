@@ -12,21 +12,14 @@ import {
   Stack,
   Pagination,
   Chip,
-  Snackbar,
-  Alert,
 } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
 import { getTaskItemSx, chipSx } from "./styles";
 import { fetchCompletedTask } from "../../features/myTask/completedTaskThunk";
 // custome hooks
-import useTask from "../../hooks/useTask";
+import useMyTask from "../../hooks/useMyTask";
 // reusable components
-import {
-  MenuOptions,
-  EmptyState,
-  DeleteConfirmDialog,
-  ButtonCloseSnackbar,
-} from "../../components";
+import { MenuOptions, EmptyState, DeleteConfirmDialog } from "../../components";
 // type declaration
 import { MenuState, PaginationState } from "../../types/global";
 
@@ -39,13 +32,7 @@ const CompletedTask = () => {
     (state) => state.completedTask
   );
   // hooks
-  const {
-    onUpdateStatus,
-    onGetDetailTask,
-    openSnackbar,
-    onCloseSnackbar,
-    onDeleteTask,
-  } = useTask();
+  const { onDeleteTask, onGetDetailTask, onUpdateStatus } = useMyTask();
   // useState
   const [menu, setMenu] = useState<MenuState>({
     anchorEl: null,
@@ -99,22 +86,6 @@ const CompletedTask = () => {
   }, [dispatch, pagination]);
   return (
     <React.Fragment>
-      {/* alert */}
-      <Snackbar
-        open={openSnackbar.open}
-        autoHideDuration={1500}
-        onClose={onCloseSnackbar}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert
-          severity={openSnackbar.color}
-          variant="filled"
-          sx={{ width: "100%", color: "white" }}
-          action={<ButtonCloseSnackbar onClose={onCloseSnackbar} />}
-        >
-          {openSnackbar.message}
-        </Alert>
-      </Snackbar>
       {/* content */}
       {items.length === 0 && (
         <EmptyState

@@ -9,19 +9,16 @@ import {
   Button,
   FormControl,
   FormHelperText,
-  Alert,
-  Snackbar,
   IconButton,
   InputAdornment,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { ButtonCloseSnackbar } from "../../components";
 import useRegister from "../../hooks/useRegister";
 import { containerSx } from "./styles";
 
 const Register = () => {
   // hooks
-  const { formik, loading, onCloseSnackbar, openSnackbar } = useRegister();
+  const { formik, loading } = useRegister();
   // useState
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
@@ -60,21 +57,6 @@ const Register = () => {
 
   return (
     <React.Fragment>
-      <Snackbar
-        open={openSnackbar.open}
-        autoHideDuration={1500}
-        onClose={onCloseSnackbar}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert
-          severity={openSnackbar.color}
-          variant="filled"
-          sx={{ width: "100%", color: "white" }}
-          action={<ButtonCloseSnackbar onClose={onCloseSnackbar} />}
-        >
-          {openSnackbar.message}
-        </Alert>
-      </Snackbar>
       <Box component={"div"} sx={containerSx()}>
         <Typography variant="h4" fontWeight="bold">
           Create your account
