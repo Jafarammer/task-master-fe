@@ -90,18 +90,14 @@ const CompletedTask = () => {
       open: false,
     }));
   };
+
   // useEffect
   useEffect(() => {
     dispatch(
       fetchCompletedTask({ page: pagination.page, limit: pagination.limit })
     );
   }, [dispatch, pagination]);
-  return items.length === 0 ? (
-    <EmptyState
-      buttonText="Create Task"
-      onAction={() => navigate("/task/create")}
-    />
-  ) : (
+  return (
     <React.Fragment>
       {/* alert */}
       <Snackbar
@@ -120,62 +116,72 @@ const CompletedTask = () => {
         </Alert>
       </Snackbar>
       {/* content */}
-      <List sx={{ m: 0 }}>
-        {items?.map((task, index) => (
-          <ListItem
-            key={task._id}
-            sx={getTaskItemSx(index, items.length)}
-            secondaryAction={
-              <IconButton
-                edge="end"
-                aria-label="more"
-                onClick={(e) => onOpenMenu(e, task._id, task.title)}
-              >
-                <MoreVert />
-              </IconButton>
-            }
-          >
-            <ListItemIcon>
-              <Checkbox
-                checked={task.is_completed}
-                onChange={() =>
-                  onChecked("completed", task._id, task.is_completed)
-                }
-              />
-            </ListItemIcon>
-            <ListItemText
-              primary={
-                <Stack direction={"row"} spacing={2} alignItems={"center"}>
-                  <Chip
-                    label={task.priority}
-                    color={
-                      task.priority === "low"
-                        ? "success"
-                        : task.priority === "medium"
-                        ? "warning"
-                        : "error"
-                    }
-                    size="small"
-                    variant="outlined"
-                    sx={chipSx()}
-                  />
-                  <Typography variant="h6">{task.title}</Typography>
-                </Stack>
-              }
-              secondary={<Typography>Due {task.due_date}</Typography>}
-            />
-          </ListItem>
-        ))}
-      </List>
-      <Stack direction={"row"} justifyContent={"center"} my={3}>
-        <Pagination
-          count={meta_data.total_pages}
-          page={pagination.page}
-          onChange={(_, value) => setPagination({ page: value, limit: 5 })}
-          shape="rounded"
-          color="primary"
+      {items.length === 0 && (
+        <EmptyState
+          buttonText="Create Task"
+          onAction={() => navigate("/task/create")}
         />
-      </Stack>
+      )}
+      {items.length > 0 && (
+        <React.Fragment>
+          <List sx={{ m: 0 }}>
+            {items?.map((task, index) => (
+              <ListItem
+                key={task._id}
+                sx={getTaskItemSx(index, items.length)}
+                secondaryAction={
+                  <IconButton
+                    edge="end"
+                    aria-label="more"
+                    onClick={(e) => onOpenMenu(e, task._id, task.title)}
+                  >
+                    <MoreVert />
+                  </IconButton>
+                }
+              >
+                <ListItemIcon>
+                  <Checkbox
+                    checked={task.is_completed}
+                    onChange={() =>
+                      onChecked("completed", task._id, task.is_completed)
+                    }
+                  />
+                </ListItemIcon>
+                <ListItemText
+                  primary={
+                    <Stack direction={"row"} spacing={2} alignItems={"center"}>
+                      <Chip
+                        label={task.priority}
+                        color={
+                          task.priority === "low"
+                            ? "success"
+                            : task.priority === "medium"
+                            ? "warning"
+                            : "error"
+                        }
+                        size="small"
+                        variant="outlined"
+                        sx={chipSx()}
+                      />
+                      <Typography variant="h6">{task.title}</Typography>
+                    </Stack>
+                  }
+                  secondary={<Typography>Due {task.due_date}</Typography>}
+                />
+              </ListItem>
+            ))}
+          </List>
+          <Stack direction={"row"} justifyContent={"center"} my={3}>
+            <Pagination
+              count={meta_data.total_pages}
+              page={pagination.page}
+              onChange={(_, value) => setPagination({ page: value, limit: 5 })}
+              shape="rounded"
+              color="primary"
+            />
+          </Stack>
+        </React.Fragment>
+      )}
       {/* pop up */}
       <MenuOptions
         anchorEl={menu.anchorEl}

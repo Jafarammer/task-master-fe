@@ -30,35 +30,6 @@ import useTask from "../../hooks/useTask";
 // type declaration
 import { MenuState, PaginationState } from "../../types/global";
 
-type Task = {
-  id: number;
-  title: string;
-  dueDate: string;
-  completed: boolean;
-};
-
-const initialTask: Task[] = [
-  { id: 1, title: "Grocery Shopping", dueDate: "2024-03-15", completed: false },
-  {
-    id: 2,
-    title: "Book Appointment with Dr. Smith",
-    dueDate: "2024-03-18",
-    completed: false,
-  },
-  {
-    id: 3,
-    title: "Plan Weekend Trip",
-    dueDate: "2024-03-22",
-    completed: false,
-  },
-  {
-    id: 4,
-    title: "Submit Project Report",
-    dueDate: "2024-03-25",
-    completed: false,
-  },
-];
-
 const PendingTask = () => {
   // router
   const navigate = useNavigate();
@@ -68,9 +39,14 @@ const PendingTask = () => {
     (state) => state.pendingTask
   );
   // hooks
-  const { onUpdateStatus, onGetDetailTask, onDeleteTask } = useTask();
+  const {
+    onUpdateStatus,
+    onGetDetailTask,
+    onDeleteTask,
+    openSnackbar,
+    onCloseSnackbar,
+  } = useTask();
   // useState
-  const [tasks, setTasks] = useState<Task[]>(initialTask);
   const [menu, setMenu] = useState<MenuState>({
     anchorEl: null,
     open: false,
@@ -120,69 +96,92 @@ const PendingTask = () => {
       fetchPendingTask({ page: pagination.page, limit: pagination.limit })
     );
   }, [dispatch, pagination]);
-  return items.length === 0 ? (
-    <EmptyState
-      buttonText="Create Task"
-      onAction={() => navigate("/task/create")}
-    />
-  ) : (
+
+  return (
     <React.Fragment>
-      <List sx={{ m: 0 }}>
-        {items?.map((task, index) => (
-          <ListItem
-            key={task._id}
-            sx={getTaskItemSx(index, items.length)}
-            secondaryAction={
-              <IconButton
-                edge="end"
-                aria-label="more"
-                onClick={(e) => onOpenMenu(e, task._id, task.title)}
-              >
-                <MoreVert />
-              </IconButton>
-            }
-          >
-            <ListItemIcon>
-              <Checkbox
-                checked={task.is_completed}
-                onChange={() =>
-                  onChecked("pending,", task._id, task.is_completed)
-                }
-              />
-            </ListItemIcon>
-            <ListItemText
-              primary={
-                <Stack direction={"row"} spacing={2} alignItems={"center"}>
-                  <Chip
-                    label={task.priority}
-                    color={
-                      task.priority === "low"
-                        ? "success"
-                        : task.priority === "medium"
-                        ? "warning"
-                        : "error"
-                    }
-                    size="small"
-                    variant="outlined"
-                    sx={chipSx()}
-                  />
-                  <Typography variant="h6">{task.title}</Typography>
-                </Stack>
-              }
-              secondary={<Typography>Due {task.due_date}</Typography>}
-            />
-          </ListItem>
-        ))}
-      </List>
-      <Stack direction={"row"} justifyContent={"center"} my={3}>
-        <Pagination
-          count={meta_data.total_pages}
-          page={pagination.page}
-          onChange={(_, value) => setPagination({ page: value, limit: 5 })}
-          shape="rounded"
-          color="primary"
+      {/* alert */}
+      <Snackbar
+        open={openSnackbar.open}
+        autoHideDuration={1500}
+        onClose={onCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          severity={openSnackbar.color}
+          variant="filled"
+          sx={{ width: "100%", color: "white" }}
+          action={<ButtonCloseSnackbar onClose={onCloseSnackbar} />}
+        >
+          {openSnackbar.message}
+        </Alert>
+      </Snackbar>
+      {/* content */}
+      {items.length === 0 && (
+        <EmptyState
+          buttonText="Create Task"
+          onAction={() => navigate("/task/create")}
         />
-      </Stack>
+      )}
+      {items.length > 0 && (
+        <React.Fragment>
+          <List sx={{ m: 0 }}>
+            {items?.map((task, index) => (
+              <ListItem
+                key={task._id}
+                sx={getTaskItemSx(index, items.length)}
+                secondaryAction={
+                  <IconButton
+                    edge="end"
+                    aria-label="more"
+                    onClick={(e) => onOpenMenu(e, task._id, task.title)}
+                  >
+                    <MoreVert />
+                  </IconButton>
+                }
+              >
+                <ListItemIcon>
+                  <Checkbox
+                    checked={task.is_completed}
+                    onChange={() =>
+                      onChecked("pending,", task._id, task.is_completed)
+                    }
+                  />
+                </ListItemIcon>
+                <ListItemText
+                  primary={
+                    <Stack direction={"row"} spacing={2} alignItems={"center"}>
+                      <Chip
+                        label={task.priority}
+                        color={
+                          task.priority === "low"
+                            ? "success"
+                            : task.priority === "medium"
+                            ? "warning"
+                            : "error"
+                        }
+                        size="small"
+                        variant="outlined"
+                        sx={chipSx()}
+                      />
+                      <Typography variant="h6">{task.title}</Typography>
+                    </Stack>
+                  }
+                  secondary={<Typography>Due {task.due_date}</Typography>}
+                />
+              </ListItem>
+            ))}
+          </List>
+          <Stack direction={"row"} justifyContent={"center"} my={3}>
+            <Pagination
+              count={meta_data.total_pages}
+              page={pagination.page}
+              onChange={(_, value) => setPagination({ page: value, limit: 5 })}
+              shape="rounded"
+              color="primary"
+            />
+          </Stack>
+        </React.Fragment>
+      )}
       {/* pop up */}
       <MenuOptions
         anchorEl={menu.anchorEl}
