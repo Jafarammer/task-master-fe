@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchAllTask } from "./myTaskThunk";
+import { fetchAllTask } from "./allTaskThunk";
 import { IAllTaskData, IAllTaskResponse } from "./types";
 
 interface AllTaskState {

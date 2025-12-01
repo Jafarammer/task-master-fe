@@ -17,7 +17,7 @@ import {
 import { MoreVert } from "@mui/icons-material";
 import { getTaskItemSx, chipSx } from "./styles";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { fetchAllTask } from "../../features/myTask/myTaskThunk";
+import { fetchAllTask } from "../../features/myTask/allTaskThunk";
 // custome hooks
 import useTask from "../../hooks/useTask";
 // types declaration

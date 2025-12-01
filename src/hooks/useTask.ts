@@ -12,7 +12,7 @@ import { CreateTaskPayload, UpdateStatusPaylod } from "../types/task";
 import { SnackbarState } from "../types/global";
 import { SnackbarCloseReason } from "@mui/material";
 import dayjs from "dayjs";
-import { fetchAllTask } from "../features/myTask/myTaskThunk";
+import { fetchAllTask } from "../features/myTask/allTaskThunk";
 import { fetchCompletedTask } from "../features/myTask/completedTaskThunk";
 import { fetchPendingTask } from "../features/myTask/pendingTaskThunk";
 import { useAppDispatch } from "../app/hooks";
