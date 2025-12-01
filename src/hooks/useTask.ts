@@ -14,6 +14,7 @@ import { SnackbarCloseReason } from "@mui/material";
 import dayjs from "dayjs";
 import { fetchAllTask } from "../features/myTask/myTaskThunk";
 import { fetchCompletedTask } from "../features/myTask/completedTaskThunk";
+import { fetchPendingTask } from "../features/myTask/pendingTaskThunk";
 import { useAppDispatch } from "../app/hooks";
 
 type useTaskReturn = {
@@ -122,6 +123,8 @@ const useTask = (): useTaskReturn => {
         dispatch(fetchAllTask({ page: 1, limit: 5 }));
       } else if (page === "completed") {
         dispatch(fetchCompletedTask({ page: 1, limit: 5 }));
+      } else {
+        dispatch(fetchPendingTask({ page: 1, limit: 5 }));
       }
     } catch (error: any) {
       setOpenSnackbar({
@@ -148,6 +151,8 @@ const useTask = (): useTaskReturn => {
         dispatch(fetchAllTask({ page: 1, limit: 5 }));
       } else if (page === "completed") {
         dispatch(fetchCompletedTask({ page: 1, limit: 5 }));
+      } else {
+        dispatch(fetchPendingTask({ page: 1, limit: 5 }));
       }
     } catch (error: any) {
       setOpenSnackbar({
