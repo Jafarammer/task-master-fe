@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   List,
@@ -11,6 +11,7 @@ import {
   Stack,
   Pagination,
   Chip,
+  Box,
 } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
 import { getTaskItemSx, chipSx } from "./styles";
@@ -22,6 +23,9 @@ import useMyTask from "../../hooks/useMyTask";
 import { MenuState, PaginationState } from "../../types/global";
 // reusable components
 import { MenuOptions, EmptyState, DeleteConfirmDialog } from "../../components";
+// skeleton
+import ListTaskSkeleton from "./ListTaskSkeleton";
+import PaginationSkeleton from "./PaginationSkeleton";
 
 const AllTask = () => {
   // router
@@ -44,6 +48,7 @@ const AllTask = () => {
     limit: 5,
   });
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
+  const [showSkeleton, setShowSkeleton] = useState<boolean>(false);
   // function event
   const onChecked = (page: string, id: string, checked: boolean): void => {
     onUpdateStatus(page, id, !checked);
@@ -82,8 +87,21 @@ const AllTask = () => {
     dispatch(fetchAllTask({ page: pagination.page, limit: pagination.limit }));
   }, [dispatch, pagination]);
 
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+    if (loading) {
+      setShowSkeleton(true);
+    } else {
+      timer = setTimeout(() => {
+        setShowSkeleton(false);
+      }, 400);
+    }
+
+    return () => clearTimeout(timer);
+  }, [loading]);
+
   return (
-    <React.Fragment>
+    <Box>
       {/* content */}
       {items.length === 0 && (
         <EmptyState
@@ -91,68 +109,76 @@ const AllTask = () => {
           onAction={() => navigate("/task/create")}
         />
       )}
-      {items.length > 0 && (
-        <React.Fragment>
-          <List sx={{ m: 0 }}>
-            {items?.map((task, index) => (
-              <ListItem
-                key={task._id}
-                sx={getTaskItemSx(index, items.length)}
-                secondaryAction={
-                  <IconButton
-                    edge="end"
-                    onClick={(e) => onOpenMenu(e, task._id, task.title)}
-                  >
-                    <MoreVert />
-                  </IconButton>
-                }
-              >
-                <ListItemIcon>
-                  <Checkbox
-                    checked={task.is_completed}
-                    onChange={() =>
-                      onChecked("all", task._id, task.is_completed)
-                    }
-                  />
-                </ListItemIcon>
-                <ListItemText
-                  primary={
-                    <Stack direction={"row"} spacing={2} alignItems={"center"}>
-                      <Chip
-                        label={task.priority}
-                        color={
-                          task.priority === "low"
-                            ? "success"
-                            : task.priority === "medium"
-                            ? "warning"
-                            : "error"
-                        }
-                        size="small"
-                        variant="outlined"
-                        sx={chipSx()}
-                      />
-                      <Typography variant="h6">{task.title}</Typography>
-                    </Stack>
-                  }
-                  secondary={
-                    <Typography variant="caption" color="textDisabled">
-                      Due : {task.due_date}
-                    </Typography>
-                  }
+      {showSkeleton && (
+        <List sx={{ m: 0 }}>
+          {Array.from({ length: items.length || pagination.limit }).map(
+            (_, index) => (
+              <ListTaskSkeleton key={index} />
+            )
+          )}
+        </List>
+      )}
+      {items.length > 0 && !showSkeleton && (
+        <List sx={{ m: 0 }}>
+          {items?.map((task, index) => (
+            <ListItem
+              key={task._id}
+              sx={getTaskItemSx(index, items.length)}
+              secondaryAction={
+                <IconButton
+                  edge="end"
+                  onClick={(e) => onOpenMenu(e, task._id, task.title)}
+                >
+                  <MoreVert />
+                </IconButton>
+              }
+            >
+              <ListItemIcon>
+                <Checkbox
+                  checked={task.is_completed}
+                  onChange={() => onChecked("all", task._id, task.is_completed)}
                 />
-              </ListItem>
-            ))}
-          </List>
-          <Stack direction={"row"} justifyContent={"center"} my={3}>
-            <Pagination
-              count={meta_data.total_pages}
-              page={pagination.page}
-              onChange={(_, value) => setPagination({ page: value, limit: 5 })}
-              shape="rounded"
-              color="primary"
-            />
-          </Stack>
-        </React.Fragment>
+              </ListItemIcon>
+              <ListItemText
+                primary={
+                  <Stack direction={"row"} spacing={2} alignItems={"center"}>
+                    <Chip
+                      label={task.priority}
+                      color={
+                        task.priority === "low"
+                          ? "success"
+                          : task.priority === "medium"
+                          ? "warning"
+                          : "error"
+                      }
+                      size="small"
+                      variant="outlined"
+                      sx={chipSx()}
+                    />
+                    <Typography variant="h6">{task.title}</Typography>
+                  </Stack>
+                }
+                secondary={
+                  <Typography variant="caption" color="textDisabled">
+                    Due : {task.due_date}
+                  </Typography>
+                }
+              />
+            </ListItem>
+          ))}
+        </List>
+      )}
+      {showSkeleton && <PaginationSkeleton />}
+      {!showSkeleton && (
+        <Stack direction={"row"} justifyContent={"center"} my={3}>
+          <Pagination
+            count={meta_data.total_pages}
+            page={pagination.page}
+            onChange={(_, value) => setPagination({ page: value, limit: 5 })}
+            shape="rounded"
+            color="primary"
+          />
+        </Stack>
       )}
       {/* pop up */}
       <MenuOptions
@@ -176,7 +202,7 @@ const AllTask = () => {
           closeConfirmDelete();
         }}
       />
-    </React.Fragment>
+    </Box>
   );
 };
 
