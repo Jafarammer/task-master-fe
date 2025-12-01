@@ -26,7 +26,7 @@ export const updateTask = async (
 export const fetchTaskDetail = async (
   id: string
 ): Promise<ITaskDetailResponse> => {
-  const res = await api.get(`/task/${id}`);
+  const res = await api.get(`/task/detail/${id}`);
 
   return res.data;
 };
