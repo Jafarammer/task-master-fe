@@ -8,6 +8,7 @@ import useSnackbarAlert from "./useSnackbarAlert";
 
 type useMyTaskReturn = {
   onGetDetailTask: (id: string) => void;
+  onGetEditTask: (id: string) => void;
   onDeleteTask: (tab: string, id: string) => void;
   onUpdateStatus: (tab: string, id: string, checked: boolean) => void;
 };
@@ -21,6 +22,9 @@ const useMyTask = (): useMyTaskReturn => {
   const notify = useSnackbarAlert();
   // function event
   const onGetDetailTask = (id: string): void => {
+    navigate(`/task/detail/${id}`);
+  };
+  const onGetEditTask = (id: string): void => {
     navigate(`/task/update/${id}`);
   };
   const onUpdateStatus = async (tab: string, id: string, checked: boolean) => {
@@ -60,6 +64,7 @@ const useMyTask = (): useMyTaskReturn => {
     onGetDetailTask,
     onUpdateStatus,
     onDeleteTask,
+    onGetEditTask,
   };
 };
 

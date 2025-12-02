@@ -36,7 +36,8 @@ const AllTask = () => {
     (state) => state.allTask
   );
   // hooks
-  const { onDeleteTask, onGetDetailTask, onUpdateStatus } = useMyTask();
+  const { onDeleteTask, onGetDetailTask, onUpdateStatus, onGetEditTask } =
+    useMyTask();
   // useState
   const [menu, setMenu] = useState<MenuState>({
     anchorEl: null,
@@ -186,6 +187,12 @@ const AllTask = () => {
         open={menu.open}
         onClose={onCloseMenu}
         onEdit={() => {
+          if (menu.context) {
+            onGetEditTask(menu.context.id);
+            onCloseMenu();
+          }
+        }}
+        onDetail={() => {
           if (menu.context) {
             onGetDetailTask(menu.context.id);
             onCloseMenu();

@@ -2,20 +2,11 @@ import React, { useState } from "react";
 import { useFormik, FormikProps } from "formik";
 import { useNavigate, useParams } from "react-router-dom";
 import { taskSchema } from "../utils/validationSchema";
-import {
-  createTask,
-  deleteTask,
-  updateStatusTask,
-  updateTask,
-} from "../services/taskService";
+import { createTask, updateTask } from "../services/taskService";
 import { CreateTaskPayload } from "../types/task";
 import { SnackbarState } from "../types/global";
 import { SnackbarCloseReason } from "@mui/material";
 import dayjs from "dayjs";
-import { fetchAllTask } from "../features/myTask/allTaskThunk";
-import { fetchCompletedTask } from "../features/myTask/completedTaskThunk";
-import { fetchPendingTask } from "../features/myTask/pendingTaskThunk";
-import { useAppDispatch } from "../app/hooks";
 import useSnackbarAlert from "./useSnackbarAlert";
 
 type useTaskReturn = {
@@ -28,8 +19,6 @@ const useTask = (): useTaskReturn => {
   // router
   const navigate = useNavigate();
   const { id } = useParams();
-  // redux
-  const dispatch = useAppDispatch();
   // useState
   const [loading, setLoading] = useState<boolean>(false);
   const [openSnackbar, setOpenSnackbar] = useState<SnackbarState>({
@@ -92,65 +81,6 @@ const useTask = (): useTaskReturn => {
       }
     },
   });
-
-  const onGetDetailTask = (id: string): void => {
-    navigate(`/task/update/${id}`);
-  };
-
-  const onDeleteTask = async (page: string, id: string) => {
-    try {
-      setLoading(true);
-      const response = await deleteTask(id);
-      setOpenSnackbar({
-        open: true,
-        color: "success",
-        message: response.message,
-      });
-      if (page === "all") {
-        dispatch(fetchAllTask({ page: 1, limit: 5 }));
-      } else if (page === "completed") {
-        dispatch(fetchCompletedTask({ page: 1, limit: 5 }));
-      } else {
-        dispatch(fetchPendingTask({ page: 1, limit: 5 }));
-      }
-    } catch (error: any) {
-      setOpenSnackbar({
-        open: true,
-        color: "error",
-        message: error?.response?.data?.message || "Create task failed",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const onUpdateStatus = async (page: string, id: string, checked: boolean) => {
-    try {
-      setLoading(true);
-      const payload = { is_completed: checked };
-      const response = await updateStatusTask(id, payload);
-      setOpenSnackbar({
-        open: true,
-        color: "success",
-        message: response.message,
-      });
-      if (page === "all") {
-        dispatch(fetchAllTask({ page: 1, limit: 5 }));
-      } else if (page === "completed") {
-        dispatch(fetchCompletedTask({ page: 1, limit: 5 }));
-      } else {
-        dispatch(fetchPendingTask({ page: 1, limit: 5 }));
-      }
-    } catch (error: any) {
-      setOpenSnackbar({
-        open: true,
-        color: "error",
-        message: error?.response?.data?.message || "Update status failed",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return {
     formik,

@@ -11,6 +11,7 @@ import Login from "./pages/login";
 import Register from "./pages/register";
 import MyTask from "./pages/myTask";
 import Task from "./pages/task";
+import DetailTask from "./pages/detailTask";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
           <Route path="/my-task" element={<MyTask />} />
           <Route path="/task/create" element={<Task />} />
           <Route path="/task/update/:id" element={<Task />} />
+          <Route path="/task/detail/:id" element={<DetailTask />} />
         </Route>
       </Routes>
     </>
