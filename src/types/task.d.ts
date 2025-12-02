@@ -5,6 +5,7 @@ export type CreateTaskPayload = {
   description: string;
   due_date: string;
   priority: string;
+  is_completed?: boolean;
 };
 
 export type CreateTaskResponse = {

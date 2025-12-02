@@ -121,7 +121,7 @@ const AllTask = () => {
       )}
       {items.length > 0 && !showSkeleton && (
         <List sx={{ m: 0 }}>
-          {items?.map((task, index) => (
+          {items?.map((task, index): any => (
             <ListItem
               key={task._id}
               sx={getTaskItemSx(index, items.length)}

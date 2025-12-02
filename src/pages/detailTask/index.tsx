@@ -1,5 +1,5 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Box,
   Divider,
@@ -19,10 +19,38 @@ import {
   ArrowBackIos,
 } from "@mui/icons-material";
 import { titleSx, chipStatusSx, chipProritySx, buttonActionSx } from "./styles";
+import { fetchTaskDetail } from "../../services/taskService";
+import { CreateTaskPayload } from "../../types/task";
+import dayjs from "dayjs";
+import { DeleteConfirmDialog } from "../../components";
+import useMyTask from "../../hooks/useMyTask";
 
 const DetailTask = () => {
   // router
   const navigate = useNavigate();
+  const { id } = useParams();
+  // hooks
+  const { onDeleteTask, onUpdateStatus } = useMyTask();
+  // useState
+  const [data, setData] = useState<CreateTaskPayload | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
+  // function event
+  const getPriorityColor = (p: CreateTaskPayload["priority"]) =>
+    p === "high" ? "error" : p === "medium" ? "warning" : "success";
+  const openConfirmDelete = (): void => {
+    setConfirmDelete(true);
+  };
+  const closeConfirmDelete = (): void => {
+    setConfirmDelete(false);
+  };
+  // useEffect
+  useEffect(() => {
+    if (!id) return;
+    fetchTaskDetail(id).then((res) => {
+      setData(res.data);
+    });
+  }, [id]);
+
   return (
     <Box mt={4} px={{ xs: 1, sm: 3 }}>
       <IconButton sx={{ mb: 3 }} onClick={() => navigate("/my-task")}>
@@ -37,26 +65,18 @@ const DetailTask = () => {
             spacing={2}
             mb={3}
           >
-            <Typography sx={titleSx()}>Title</Typography>
+            <Typography sx={titleSx()}>{data?.title}</Typography>
 
             <Chip
-              label="Pending"
-              color="warning"
+              label={data?.is_completed === true ? "Complete" : "Pending"}
+              color={data?.is_completed === true ? "primary" : "warning"}
               size="small"
               variant="filled"
               sx={chipStatusSx()}
             />
           </Stack>
           <Typography variant="body2" color="text.secondary" mb={2}>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s
-            with the release of Letraset sheets containing Lorem Ipsum passages,
-            and more recently with desktop publishing software like Aldus
-            PageMaker including versions of Lorem Ipsum.
+            {data?.description}
           </Typography>
 
           <Divider />
@@ -70,15 +90,19 @@ const DetailTask = () => {
               <Typography variant="body2" color="text.secondary">
                 Due Date
               </Typography>
-              <Typography fontWeight={600}>July 15, 2024</Typography>
+              <Typography fontWeight={600}>
+                {dayjs(data?.due_date).format("MMMM D, YYYY")}
+              </Typography>
             </Box>
             <Box width="100%">
               <Typography variant="body2" color="text.secondary">
                 Priority
               </Typography>
               <Chip
-                label="High"
-                color="error"
+                label={data?.priority}
+                color={
+                  data?.priority ? getPriorityColor(data.priority) : "default"
+                }
                 size="small"
                 variant="outlined"
                 sx={chipProritySx()}
@@ -109,6 +133,12 @@ const DetailTask = () => {
                 variant="contained"
                 startIcon={<CheckCircleOutline />}
                 sx={buttonActionSx()}
+                disabled={data?.is_completed}
+                onClick={() => {
+                  if (!id) return;
+                  onUpdateStatus("detail", id, true);
+                  navigate("/my-task");
+                }}
               >
                 Mark as Complete
               </Button>
@@ -119,6 +149,7 @@ const DetailTask = () => {
                 color="inherit"
                 startIcon={<EditOutlined />}
                 sx={buttonActionSx()}
+                onClick={() => navigate(`/task/update/${id}`)}
               >
                 Edit Task
               </Button>
@@ -135,6 +166,7 @@ const DetailTask = () => {
                 color="error"
                 startIcon={<DeleteOutline />}
                 sx={buttonActionSx()}
+                onClick={openConfirmDelete}
               >
                 Delete Task
               </Button>
@@ -142,6 +174,18 @@ const DetailTask = () => {
           </Stack>
         </CardActions>
       </Card>
+      {/* pop up */}
+      <DeleteConfirmDialog
+        open={confirmDelete}
+        onClose={closeConfirmDelete}
+        taskName={data?.title ?? ""}
+        onConfirm={() => {
+          if (!id) return;
+          onDeleteTask("detail", id);
+          closeConfirmDelete();
+          navigate("/my-task");
+        }}
+      />
     </Box>
   );
 };
