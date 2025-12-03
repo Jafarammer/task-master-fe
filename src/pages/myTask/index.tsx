@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   Typography,
   Stack,
@@ -15,23 +15,41 @@ import { toggleGroupSx } from "./styles";
 import AllTask from "./AllTask";
 import CompletedTask from "./CompletedTask";
 import PendingTask from "./PendingTask";
+// helper
+import { parseParams, ParamsFilter } from "../../helpers/filterParamsHelper";
 
 const MyTask = () => {
   // react router
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialFilter = parseParams(searchParams.get("filter"));
   // useState
-  const [filter, setFilter] = useState<"all" | "pending" | "completed">("all");
+  const [params, setParams] = useState<ParamsFilter>(initialFilter);
   // function event
   const onChangeToggle = (
     _event: React.MouseEvent<HTMLElement>,
-    newValue: "all" | "pending" | "completed" | null
+    newValue: ParamsFilter | null
   ) => {
-    if (newValue !== null) {
-      setFilter(newValue);
-    }
+    if (!newValue) return;
+    setParams(newValue);
+    setSearchParams({ filter: newValue });
   };
+  // useEffect
+  useEffect(() => {
+    const p = parseParams(searchParams.get("filter"));
+    setParams(p);
+  }, [searchParams]);
+
+  useEffect(() => {
+    const filter = searchParams.get("filter");
+
+    if (!filter) {
+      setSearchParams({ filter: "all" }, { replace: true });
+    }
+  }, []);
+
   return (
-    <React.Fragment>
+    <Box>
       <Stack
         direction="row"
         spacing={2}
@@ -47,7 +65,7 @@ const MyTask = () => {
         <Button
           variant="contained"
           sx={{ fontWeight: "bold" }}
-          onClick={() => navigate("/task/create")}
+          onClick={() => navigate(`/task/create?filter=${params}`)}
         >
           + Add New Task{" "}
         </Button>
@@ -75,7 +93,7 @@ const MyTask = () => {
           }}
         />
         <ToggleButtonGroup
-          value={filter}
+          value={params}
           exclusive
           onChange={onChangeToggle}
           aria-label="task filter"
@@ -94,11 +112,11 @@ const MyTask = () => {
         </ToggleButtonGroup>
       </Stack>
       <Box sx={{ mt: 4 }}>
-        {filter === "all" && <AllTask />}
-        {filter === "completed" && <CompletedTask />}
-        {filter === "pending" && <PendingTask />}
+        {params === "all" && <AllTask params={params} />}
+        {params === "completed" && <CompletedTask params={params} />}
+        {params === "pending" && <PendingTask params={params} />}
       </Box>
-    </React.Fragment>
+    </Box>
   );
 };
 

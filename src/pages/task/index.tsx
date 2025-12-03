@@ -12,20 +12,24 @@ import {
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import useTask from "../../hooks/useTask";
 import { fetchTaskDetail } from "../../services/taskService";
+// helper
+import { parseParams } from "../../helpers/filterParamsHelper";
 
 const Task = () => {
   // react router
   const { id } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const filterParams = parseParams(searchParams.get("filter"));
   //  hooks
   const { formik, loading, setDetailTask } = useTask();
   // function event
   const onCancel = (): void => {
     setDetailTask(null);
-    navigate("/my-task");
+    navigate(`/my-task?filter=${filterParams}`);
   };
   // useEffect
   useEffect(() => {

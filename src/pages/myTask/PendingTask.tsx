@@ -26,8 +26,14 @@ import { MenuState, PaginationState } from "../../types/global";
 // skeleton
 import ListTaskSkeleton from "./ListTaskSkeleton";
 import PaginationSkeleton from "./PaginationSkeleton";
+// helper
+import { ParamsFilter } from "../../helpers/filterParamsHelper";
 
-const PendingTask = () => {
+type Props = {
+  params: ParamsFilter;
+};
+
+const PendingTask = ({ params }: Props) => {
   // router
   const navigate = useNavigate();
   // redux
@@ -188,13 +194,13 @@ const PendingTask = () => {
         onClose={onCloseMenu}
         onEdit={() => {
           if (menu.context) {
-            onGetEditTask(menu.context.id);
+            onGetEditTask(menu.context.id, params);
             onCloseMenu();
           }
         }}
         onDetail={() => {
           if (menu.context) {
-            onGetDetailTask(menu.context.id);
+            onGetDetailTask(menu.context.id, params);
             onCloseMenu();
           }
         }}

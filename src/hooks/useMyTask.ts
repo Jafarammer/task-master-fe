@@ -5,10 +5,11 @@ import { fetchCompletedTask } from "../features/myTask/completedTaskThunk";
 import { fetchPendingTask } from "../features/myTask/pendingTaskThunk";
 import { deleteTask, updateStatusTask } from "../services/taskService";
 import useSnackbarAlert from "./useSnackbarAlert";
+import { ParamsFilter } from "../helpers/filterParamsHelper";
 
 type useMyTaskReturn = {
-  onGetDetailTask: (id: string) => void;
-  onGetEditTask: (id: string) => void;
+  onGetDetailTask: (id: string, params: ParamsFilter) => void;
+  onGetEditTask: (id: string, params: ParamsFilter) => void;
   onDeleteTask: (tab: string, id: string) => void;
   onUpdateStatus: (tab: string, id: string, checked: boolean) => void;
 };
@@ -21,11 +22,11 @@ const useMyTask = (): useMyTaskReturn => {
   // hooks
   const notify = useSnackbarAlert();
   // function event
-  const onGetDetailTask = (id: string): void => {
-    navigate(`/task/detail/${id}`);
+  const onGetDetailTask = (id: string, params: ParamsFilter): void => {
+    navigate(`/task/detail/${id}?filter=${params}`);
   };
-  const onGetEditTask = (id: string): void => {
-    navigate(`/task/update/${id}`);
+  const onGetEditTask = (id: string, params: ParamsFilter): void => {
+    navigate(`/task/update/${id}?filter=${params}`);
   };
   const onUpdateStatus = async (tab: string, id: string, checked: boolean) => {
     try {

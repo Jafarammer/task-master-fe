@@ -69,7 +69,7 @@ const useTask = (): useTaskReturn => {
           response = await updateTask(id, payload);
         }
         notify(response.message, "success");
-        navigate("/my-task");
+        navigate("/my-task?filter=all"); // note : karna ini create langsung define all saja routingnya
       } catch (error: any) {
         notify(
           error?.response?.data?.message ||

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import {
   Box,
   Divider,
@@ -24,11 +24,15 @@ import { CreateTaskPayload } from "../../types/task";
 import dayjs from "dayjs";
 import { DeleteConfirmDialog } from "../../components";
 import useMyTask from "../../hooks/useMyTask";
+// helper
+import { parseParams } from "../../helpers/filterParamsHelper";
 
 const DetailTask = () => {
   // router
   const navigate = useNavigate();
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const filterParams = parseParams(searchParams.get("filter"));
   // hooks
   const { onDeleteTask, onUpdateStatus } = useMyTask();
   // useState
@@ -53,7 +57,10 @@ const DetailTask = () => {
 
   return (
     <Box mt={4} px={{ xs: 1, sm: 3 }}>
-      <IconButton sx={{ mb: 3 }} onClick={() => navigate("/my-task")}>
+      <IconButton
+        sx={{ mb: 3 }}
+        onClick={() => navigate(`/my-task?filter=${filterParams}`)}
+      >
         <ArrowBackIos />
       </IconButton>
       <Card sx={{ width: "100%" }}>
@@ -137,7 +144,7 @@ const DetailTask = () => {
                 onClick={() => {
                   if (!id) return;
                   onUpdateStatus("detail", id, true);
-                  navigate("/my-task");
+                  navigate(`/my-task?filter=${filterParams}`);
                 }}
               >
                 Mark as Complete
