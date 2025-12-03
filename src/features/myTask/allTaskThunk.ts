@@ -13,10 +13,11 @@ export const fetchAllTask = createAsyncThunk<
       limit = 1,
       sort_by = "createdAt",
       order = "desc",
+      search = "",
     } = params || {};
 
     const response = await axios.get("/task", {
-      params: { page, limit, sort_by, order },
+      params: { page, limit, sort_by, order, search },
     });
 
     return response.data as IAllTaskResponse;

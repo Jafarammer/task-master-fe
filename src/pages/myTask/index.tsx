@@ -25,6 +25,8 @@ const MyTask = () => {
   const initialFilter = parseParams(searchParams.get("filter"));
   // useState
   const [params, setParams] = useState<ParamsFilter>(initialFilter);
+  const [search, setSearch] = useState<string>("");
+  const [debouncedSearch, setDebouncedSearch] = useState<string>(search);
   // function event
   const onChangeToggle = (
     _event: React.MouseEvent<HTMLElement>,
@@ -47,6 +49,13 @@ const MyTask = () => {
       setSearchParams({ filter: "all" }, { replace: true });
     }
   }, []);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 400);
+    return () => clearTimeout(handler);
+  }, [search]);
 
   return (
     <Box>
@@ -91,6 +100,8 @@ const MyTask = () => {
               </InputAdornment>
             ),
           }}
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
         <ToggleButtonGroup
           value={params}
@@ -112,9 +123,15 @@ const MyTask = () => {
         </ToggleButtonGroup>
       </Stack>
       <Box sx={{ mt: 4 }}>
-        {params === "all" && <AllTask params={params} />}
-        {params === "completed" && <CompletedTask params={params} />}
-        {params === "pending" && <PendingTask params={params} />}
+        {params === "all" && (
+          <AllTask params={params} search={debouncedSearch} />
+        )}
+        {params === "completed" && (
+          <CompletedTask params={params} search={debouncedSearch} />
+        )}
+        {params === "pending" && (
+          <PendingTask params={params} search={debouncedSearch} />
+        )}
       </Box>
     </Box>
   );

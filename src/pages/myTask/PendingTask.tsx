@@ -31,9 +31,10 @@ import { ParamsFilter } from "../../helpers/filterParamsHelper";
 
 type Props = {
   params: ParamsFilter;
+  search: string;
 };
 
-const PendingTask = ({ params }: Props) => {
+const PendingTask = ({ params, search }: Props) => {
   // router
   const navigate = useNavigate();
   // redux
@@ -92,9 +93,13 @@ const PendingTask = ({ params }: Props) => {
   // useEffect
   useEffect(() => {
     dispatch(
-      fetchPendingTask({ page: pagination.page, limit: pagination.limit })
+      fetchPendingTask({
+        page: pagination.page,
+        limit: pagination.limit,
+        search: search,
+      })
     );
-  }, [dispatch, pagination]);
+  }, [dispatch, pagination, search]);
 
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;

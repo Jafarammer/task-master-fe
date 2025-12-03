@@ -16,6 +16,7 @@ export interface IAllTaskParams {
   limit?: number;
   sort_by?: string;
   order?: "asc" | "desc";
+  search?: string;
 }
 
 export interface IAllTaskResponse {

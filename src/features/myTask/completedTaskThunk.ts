@@ -13,10 +13,11 @@ export const fetchCompletedTask = createAsyncThunk<
       limit = 5,
       sort_by = "createdAt",
       order = "desc",
+      search = "",
     } = params || {};
 
     const response = await axios.get("/task/completed", {
-      params: { page, limit, sort_by, order },
+      params: { page, limit, sort_by, order, search },
     });
     return response.data as IAllTaskResponse;
   } catch (error: any) {
