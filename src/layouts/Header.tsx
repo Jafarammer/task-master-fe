@@ -64,8 +64,8 @@ const Header = () => {
             <Tooltip title="Open Setting">
               <IconButton onClick={onOpenMenu} sx={{ p: 0 }}>
                 <Avatar>
-                  {items?.data.first_name.charAt(0).toUpperCase()}
-                  {items?.data.last_name.charAt(0).toUpperCase()}
+                  {items?.data?.first_name.charAt(0).toUpperCase()}
+                  {items?.data?.last_name.charAt(0).toUpperCase()}
                 </Avatar>
               </IconButton>
             </Tooltip>
