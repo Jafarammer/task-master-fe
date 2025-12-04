@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link as RouterLink, useLocation } from "react-router-dom";
 import {
   Container,
   Box,
@@ -14,11 +14,15 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import useLogin from "../../hooks/useLogin";
+import useSnackbarAlert from "../../hooks/useSnackbarAlert";
 import { containerSx, linkContainerSx, linkForgotPasswordSx } from "./styles";
 
 const Login = () => {
+  // router
+  const location = useLocation();
   // hooks
   const { formik, loading } = useLogin();
+  const notify = useSnackbarAlert();
   // useState
   const [showPassword, setShowPassword] = useState<boolean>(false);
   // function event
@@ -37,9 +41,18 @@ const Login = () => {
   ) => {
     event.preventDefault();
   };
+  // useEffect
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const status = params.get("status");
+    const message = params.get("message");
+    if (status && message) {
+      notify(decodeURIComponent(message), status as any);
+    }
+  }, []);
 
   return (
-    <React.Fragment>
+    <Box>
       <Box component={"div"} sx={containerSx()}>
         <Typography variant="h4" fontWeight="bold">
           Welcome back
@@ -130,7 +143,7 @@ const Login = () => {
           </form>
         </Container>
       </Box>
-    </React.Fragment>
+    </Box>
   );
 };
 

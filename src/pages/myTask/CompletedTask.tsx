@@ -123,7 +123,7 @@ const CompletedTask = ({ params, search }: Props) => {
           onAction={() => navigate("/task/create")}
         />
       )}
-      {showSkeleton && (
+      {showSkeleton && items.length !== 0 && (
         <List sx={{ m: 0 }}>
           {Array.from({ length: items.length || pagination.limit }).map(
             (_, index) => (
@@ -181,8 +181,8 @@ const CompletedTask = ({ params, search }: Props) => {
           ))}
         </List>
       )}
-      {showSkeleton && <PaginationSkeleton />}
-      {!showSkeleton && (
+      {showSkeleton && items.length !== 0 && <PaginationSkeleton />}
+      {!showSkeleton && items.length !== 0 && (
         <Stack direction={"row"} justifyContent={"center"} my={3}>
           <Pagination
             count={meta_data.total_pages}
