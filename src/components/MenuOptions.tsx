@@ -6,7 +6,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import { EditDocument, Delete, Logout, Info } from "@mui/icons-material";
+import { Edit, Delete, Logout, Info } from "@mui/icons-material";
 
 type Props = {
   anchorEl: HTMLElement | null;
@@ -33,7 +33,7 @@ const MenuOptions: React.FC<Props> = ({
         {onEdit && (
           <MenuItem onClick={onEdit}>
             <ListItemIcon>
-              <EditDocument color="info" fontSize="small" />
+              <Edit color="info" fontSize="small" />
             </ListItemIcon>
             <ListItemText>Edit</ListItemText>
           </MenuItem>
