@@ -2,10 +2,9 @@ import { useState } from "react";
 import { useFormik, FormikProps } from "formik";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../features/auth/authService";
 import { loginSchema } from "../utils/validationSchema";
-import { LoginPayload } from "../types/auth";
 import useSnackbarAlert from "./useSnackbarAlert";
+import { LoginPayload, authService } from "@task-master/core-fe";
 
 type UseLoginReturn = {
   formik: FormikProps<LoginPayload>;
@@ -36,7 +35,7 @@ const useLogin = (): UseLoginReturn => {
           password: values.password,
         };
 
-        const response = await loginUser(payload);
+        const response = await authService.login(payload);
 
         setCookie("token", response.accessToken, {
           path: "/",
