@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { useFormik, FormikProps } from "formik";
 import { useNavigate } from "react-router-dom";
-import { registerUser } from "../features/auth/authService";
 import { registerSchema } from "../utils/validationSchema";
-import { RegisterPayload } from "../types/auth";
 import useSnackbarAlert from "./useSnackbarAlert";
+import { RegisterPayload, authService } from "@task-master/core-fe";
 
 type useRegisterReturn = {
   formik: FormikProps<RegisterPayload>;
@@ -37,7 +36,7 @@ const useRegister = (): useRegisterReturn => {
           email: values.email,
           password: values.password,
         };
-        const response = await registerUser(payload);
+        const response = await authService.register(payload);
         notify(response.message, "success");
         navigate("/login");
       } catch (error: any) {
