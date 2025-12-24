@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
 import { getTaskItemSx, chipSx } from "./styles";
-import { fetchPendingTask } from "../../features/myTask/pendingTaskThunk";
+import { fetchPendingTask } from "@task-master/core-fe";
 // reusable components
 import { MenuOptions, EmptyState, DeleteConfirmDialog } from "../../components";
 // custome hooks

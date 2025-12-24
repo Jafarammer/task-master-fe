@@ -1,10 +1,10 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import pendingTaskReducer from "../features/myTask/pendingTaskSlice";
 import snackbarReducer from "../features/snackbar/snackbarSlice";
 import {
   profileReducer,
   allTaskReducer,
   completedTaskReducer,
+  pendingTaskReducer,
 } from "@task-master/core-fe";
 
 const rootReducer = combineReducers({
