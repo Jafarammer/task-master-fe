@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
 import { getTaskItemSx, chipSx } from "./styles";
-import { fetchCompletedTask } from "../../features/myTask/completedTaskThunk";
+import { fetchCompletedTask } from "@task-master/core-fe";
 // custome hooks
 import useMyTask from "../../hooks/useMyTask";
 // reusable components

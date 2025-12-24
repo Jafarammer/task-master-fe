@@ -1,11 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../app/hooks";
-import { fetchCompletedTask } from "../features/myTask/completedTaskThunk";
 import { fetchPendingTask } from "../features/myTask/pendingTaskThunk";
 import { deleteTask, updateStatusTask } from "../services/taskService";
 import useSnackbarAlert from "./useSnackbarAlert";
 import { ParamsFilter } from "../helpers/filterParamsHelper";
-import { fetchAllTask } from "@task-master/core-fe";
+import { fetchAllTask, fetchCompletedTask } from "@task-master/core-fe";
 
 type useMyTaskReturn = {
   onGetDetailTask: (id: string, params: ParamsFilter) => void;
