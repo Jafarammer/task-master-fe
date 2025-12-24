@@ -2,17 +2,16 @@ import React, { useState } from "react";
 import { useFormik, FormikProps } from "formik";
 import { useNavigate, useParams } from "react-router-dom";
 import { taskSchema } from "../utils/validationSchema";
-import { createTask, updateTask } from "../services/taskService";
-import { CreateTaskPayload } from "../types/task";
 import { SnackbarState } from "../types/global";
 import { SnackbarCloseReason } from "@mui/material";
 import dayjs from "dayjs";
 import useSnackbarAlert from "./useSnackbarAlert";
+import { myTaskService, TMyTaskPayload } from "@task-master/core-fe";
 
 type useTaskReturn = {
-  formik: FormikProps<CreateTaskPayload>;
+  formik: FormikProps<TMyTaskPayload>;
   loading: boolean;
-  setDetailTask: (value: CreateTaskPayload | null) => void;
+  setDetailTask: (value: TMyTaskPayload | null) => void;
 };
 
 const useTask = (): useTaskReturn => {
@@ -28,7 +27,7 @@ const useTask = (): useTaskReturn => {
   });
   // hooks
   const notify = useSnackbarAlert();
-  const [detailTask, setDetailTask] = useState<CreateTaskPayload | null>(null);
+  const [detailTask, setDetailTask] = useState<TMyTaskPayload | null>(null);
   // function event
   const onCloseSnackbar = (
     event?: React.SyntheticEvent | Event,
@@ -43,7 +42,7 @@ const useTask = (): useTaskReturn => {
       open: false,
     }));
   };
-  const formik = useFormik<CreateTaskPayload>({
+  const formik = useFormik<TMyTaskPayload>({
     enableReinitialize: true,
     initialValues: {
       title: detailTask?.title ?? "",
@@ -64,9 +63,9 @@ const useTask = (): useTaskReturn => {
           priority: values.priority,
         };
         if (!id) {
-          response = await createTask(payload);
+          response = await myTaskService.create(payload);
         } else {
-          response = await updateTask(id, payload);
+          response = await myTaskService.update(id, payload);
         }
         notify(response.message, "success");
         navigate("/my-task?filter=all"); // note : karna ini create langsung define all saja routingnya

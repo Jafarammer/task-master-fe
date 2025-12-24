@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../app/hooks";
-import { deleteTask, updateStatusTask } from "../services/taskService";
 import useSnackbarAlert from "./useSnackbarAlert";
 import { ParamsFilter } from "../helpers/filterParamsHelper";
 import {
   fetchAllTask,
   fetchCompletedTask,
   fetchPendingTask,
+  myTaskService,
 } from "@task-master/core-fe";
 
 type useMyTaskReturn = {
@@ -33,7 +33,7 @@ const useMyTask = (): useMyTaskReturn => {
   const onUpdateStatus = async (tab: string, id: string, checked: boolean) => {
     try {
       const payload = { is_completed: checked };
-      const response = await updateStatusTask(id, payload);
+      const response = await myTaskService.updateStatus(id, payload);
       notify(response.message, "success");
       if (tab === "all") {
         dispatch(fetchAllTask({ page: 1, limit: 5 }));
@@ -48,7 +48,7 @@ const useMyTask = (): useMyTaskReturn => {
   };
   const onDeleteTask = async (tab: string, id: string) => {
     try {
-      const response = await deleteTask(id);
+      const response = await myTaskService.delete(id);
       notify(response.message, "success");
 
       if (tab === "all") {

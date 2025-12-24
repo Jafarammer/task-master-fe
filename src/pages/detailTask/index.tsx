@@ -19,11 +19,10 @@ import {
   ArrowBackIos,
 } from "@mui/icons-material";
 import { titleSx, chipStatusSx, chipProritySx, buttonActionSx } from "./styles";
-import { fetchTaskDetail } from "../../services/taskService";
-import { CreateTaskPayload } from "../../types/task";
 import dayjs from "dayjs";
 import { DeleteConfirmDialog } from "../../components";
 import useMyTask from "../../hooks/useMyTask";
+import { myTaskService, TMyTaskPayload } from "@task-master/core-fe";
 // helper
 import { parseParams } from "../../helpers/filterParamsHelper";
 
@@ -36,10 +35,10 @@ const DetailTask = () => {
   // hooks
   const { onDeleteTask, onUpdateStatus } = useMyTask();
   // useState
-  const [data, setData] = useState<CreateTaskPayload | null>(null);
+  const [data, setData] = useState<TMyTaskPayload | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
   // function event
-  const getPriorityColor = (p: CreateTaskPayload["priority"]) =>
+  const getPriorityColor = (p: TMyTaskPayload["priority"]) =>
     p === "high" ? "error" : p === "medium" ? "warning" : "success";
   const openConfirmDelete = (): void => {
     setConfirmDelete(true);
@@ -50,7 +49,7 @@ const DetailTask = () => {
   // useEffect
   useEffect(() => {
     if (!id) return;
-    fetchTaskDetail(id).then((res) => {
+    myTaskService.fetchDetail(id).then((res) => {
       setData(res.data);
     });
   }, [id]);

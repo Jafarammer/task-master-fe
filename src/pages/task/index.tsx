@@ -14,7 +14,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import useTask from "../../hooks/useTask";
-import { fetchTaskDetail } from "../../services/taskService";
+import { myTaskService } from "@task-master/core-fe";
 // helper
 import { parseParams } from "../../helpers/filterParamsHelper";
 
@@ -34,7 +34,7 @@ const Task = () => {
   // useEffect
   useEffect(() => {
     if (!id) return;
-    fetchTaskDetail(id).then((res) => {
+    myTaskService.fetchDetail(id).then((res) => {
       setDetailTask(res.data);
     });
   }, [id]);
