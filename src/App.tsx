@@ -12,8 +12,11 @@ import Register from "./pages/register";
 import MyTask from "./pages/myTask";
 import Task from "./pages/task";
 import DetailTask from "./pages/detailTask";
+// hooks
+import useAuthToken from "./hooks/useAuthToken";
 
 function App() {
+  useAuthToken(); //refresh token dari cookies
   return (
     <>
       <SnackbarAlert />

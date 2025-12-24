@@ -4,7 +4,7 @@ import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { loginSchema } from "../utils/validationSchema";
 import useSnackbarAlert from "./useSnackbarAlert";
-import { LoginPayload, authService } from "@task-master/core-fe";
+import { LoginPayload, authService, setToken } from "@task-master/core-fe";
 
 type UseLoginReturn = {
   formik: FormikProps<LoginPayload>;
@@ -36,6 +36,8 @@ const useLogin = (): UseLoginReturn => {
         };
 
         const response = await authService.login(payload);
+
+        setToken(response.accessToken);
 
         setCookie("token", response.accessToken, {
           path: "/",

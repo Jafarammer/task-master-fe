@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import useLogout from "../hooks/useLogout";
-import { fetchProfile } from "../features/profile/profileThunk";
+import { fetchProfile } from "@task-master/core-fe";
 import { headerTitleSx, containerSx, toolbarSx } from "./styles";
 // custome components
 import { MenuOptions } from "../components";
