@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useFormik, FormikProps } from "formik";
 import { useNavigate, useParams } from "react-router-dom";
-import { taskSchema } from "../utils/validationSchema";
 import { SnackbarState } from "../types/global";
-import { SnackbarCloseReason } from "@mui/material";
 import dayjs from "dayjs";
 import useSnackbarAlert from "./useSnackbarAlert";
-import { myTaskService, TMyTaskPayload } from "@task-master/core-fe";
+import {
+  myTaskService,
+  TMyTaskPayload,
+  validations,
+} from "@task-master/core-fe";
 
 type useTaskReturn = {
   formik: FormikProps<TMyTaskPayload>;
@@ -29,19 +31,6 @@ const useTask = (): useTaskReturn => {
   const notify = useSnackbarAlert();
   const [detailTask, setDetailTask] = useState<TMyTaskPayload | null>(null);
   // function event
-  const onCloseSnackbar = (
-    event?: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason
-  ): void => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpenSnackbar((prev) => ({
-      ...prev,
-      open: false,
-    }));
-  };
   const formik = useFormik<TMyTaskPayload>({
     enableReinitialize: true,
     initialValues: {
@@ -51,7 +40,7 @@ const useTask = (): useTaskReturn => {
         detailTask?.due_date ?? dayjs().startOf("day").format("YYYY-MM-DD"), // ✅ STRING
       priority: detailTask?.priority ?? "",
     },
-    validationSchema: taskSchema,
+    validationSchema: validations.task,
     onSubmit: async (values) => {
       try {
         setLoading(true);

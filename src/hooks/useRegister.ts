@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { useFormik, FormikProps } from "formik";
 import { useNavigate } from "react-router-dom";
-import { registerSchema } from "../utils/validationSchema";
 import useSnackbarAlert from "./useSnackbarAlert";
-import { RegisterPayload, authService } from "@task-master/core-fe";
+import {
+  RegisterPayload,
+  authService,
+  validations,
+} from "@task-master/core-fe";
 
 type useRegisterReturn = {
   formik: FormikProps<RegisterPayload>;
@@ -26,7 +29,7 @@ const useRegister = (): useRegisterReturn => {
       password: "",
       confirmPassword: "",
     },
-    validationSchema: registerSchema,
+    validationSchema: validations.register,
     onSubmit: async (values): Promise<void> => {
       try {
         setLoading(true);
