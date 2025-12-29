@@ -1,5 +1,5 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import snackbarReducer from "../features/snackbar/snackbarSlice";
+import snackbarReducer from "./ui/snackbarSlice";
 import {
   profileReducer,
   allTaskReducer,

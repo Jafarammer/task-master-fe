@@ -1,5 +1,5 @@
 import { useAppDispatch } from "../app/hooks";
-import { showSnackbar } from "../features/snackbar/snackbarSlice";
+import { showSnackbar } from "../app/ui/snackbarSlice";
 import { SnackbarState } from "../types/global";
 
 type useSnackbarAlertReturn = (
