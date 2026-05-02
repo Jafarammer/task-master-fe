@@ -16,7 +16,7 @@ import DetailTask from "./pages/detailTask";
 import useAuthToken from "./hooks/useAuthToken";
 
 function App() {
-  useAuthToken(); //refresh token dari cookies
+  // useAuthToken(); //refresh token dari cookies
   return (
     <>
       <SnackbarAlert />

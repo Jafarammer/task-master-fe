@@ -3,12 +3,9 @@ import { useFormik, FormikProps } from "formik";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import useSnackbarAlert from "./useSnackbarAlert";
-import {
-  LoginPayload,
-  authService,
-  setToken,
-  validations,
-} from "@task-master/core-fe";
+import { LoginPayload } from "../types/auth";
+import { validations } from "../validations";
+import { loginUser } from "../features/auth/authService";
 
 type UseLoginReturn = {
   formik: FormikProps<LoginPayload>;
@@ -39,9 +36,9 @@ const useLogin = (): UseLoginReturn => {
           password: values.password,
         };
 
-        const response = await authService.login(payload);
+        const response = await loginUser(payload);
 
-        setToken(response.accessToken);
+        // setToken(response.accessToken);
 
         setCookie("token", response.accessToken, {
           path: "/",
@@ -58,7 +55,7 @@ const useLogin = (): UseLoginReturn => {
           const msg: string = error?.response?.data?.message;
           if (
             /password|wrong password|incorrect password|invalid password/i.test(
-              msg
+              msg,
             )
           ) {
             setFieldError("password", msg);
@@ -66,7 +63,7 @@ const useLogin = (): UseLoginReturn => {
           }
           if (
             /email|not found|no account|user not found|not registered/i.test(
-              msg
+              msg,
             )
           ) {
             setFieldError("email", msg);

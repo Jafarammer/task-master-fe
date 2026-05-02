@@ -3,10 +3,13 @@ import { useFormik, FormikProps } from "formik";
 import { useNavigate } from "react-router-dom";
 import useSnackbarAlert from "./useSnackbarAlert";
 import {
-  RegisterPayload,
+  // RegisterPayload,
   authService,
-  validations,
+  // validations,
 } from "@task-master/core-fe";
+import { RegisterPayload } from "../types/auth";
+import { validations } from "../validations";
+import { registerUser } from "../features/auth/authService";
 
 type useRegisterReturn = {
   formik: FormikProps<RegisterPayload>;
@@ -39,13 +42,13 @@ const useRegister = (): useRegisterReturn => {
           email: values.email,
           password: values.password,
         };
-        const response = await authService.register(payload);
+        const response = await registerUser(payload);
         notify(response.message, "success");
         navigate("/login");
       } catch (error: any) {
         notify(
           error?.response?.data?.message || "Registration failed",
-          "error"
+          "error",
         );
       } finally {
         setLoading(false);
