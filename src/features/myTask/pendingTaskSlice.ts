@@ -1,15 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchAllTask } from "./allTaskThunk";
+import { fetchPendingTask } from "./pendingTaskThunk";
 import { IMyTaskResponse } from "../../types/myTask";
 
-interface AllTaskState {
+interface PendingTaskState {
   items: IMyTaskResponse["data"];
   meta_data: IMyTaskResponse["meta_data"];
   loading: boolean;
   error: string | null;
 }
 
-const initialState: AllTaskState = {
+const initialState: PendingTaskState = {
   items: [],
   meta_data: {
     page: 1,
@@ -21,11 +21,11 @@ const initialState: AllTaskState = {
   error: null,
 };
 
-const allTaskSlice = createSlice({
-  name: "allTasks",
+const pendingTaskSlice = createSlice({
+  name: "pendingTask",
   initialState,
   reducers: {
-    logoutAllTask: (state) => {
+    logoutPendingTask: (state) => {
       state.items = [];
       state.meta_data = {
         page: 1,
@@ -39,17 +39,17 @@ const allTaskSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAllTask.pending, (state) => {
+      .addCase(fetchPendingTask.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchAllTask.fulfilled, (state, action) => {
+      .addCase(fetchPendingTask.fulfilled, (state, action) => {
         state.loading = false;
         state.items = action.payload.data;
         state.meta_data = action.payload.meta_data;
         state.error = null;
       })
-      .addCase(fetchAllTask.rejected, (state, action) => {
+      .addCase(fetchPendingTask.rejected, (state, action) => {
         state.loading = false;
         state.items = [];
         state.error = action.error.message || "Failed to load data!";
@@ -57,5 +57,5 @@ const allTaskSlice = createSlice({
   },
 });
 
-export const { logoutAllTask } = allTaskSlice.actions;
-export default allTaskSlice.reducer;
+export const { logoutPendingTask } = pendingTaskSlice.actions;
+export default pendingTaskSlice.reducer;

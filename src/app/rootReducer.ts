@@ -4,9 +4,10 @@ import {
   profileReducer,
   // allTaskReducer,
   completedTaskReducer,
-  pendingTaskReducer,
+  // pendingTaskReducer,
 } from "@task-master/core-fe";
 import allTaskReducer from "../features/myTask/allTaskSlice";
+import pendingTaskReducer from "../features/myTask/pendingTaskSlice";
 
 const rootReducer = combineReducers({
   allTask: allTaskReducer,
