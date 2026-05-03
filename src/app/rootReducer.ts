@@ -3,11 +3,12 @@ import snackbarReducer from "./ui/snackbarSlice";
 import {
   profileReducer,
   // allTaskReducer,
-  completedTaskReducer,
+  // completedTaskReducer,
   // pendingTaskReducer,
 } from "@task-master/core-fe";
 import allTaskReducer from "../features/myTask/allTaskSlice";
 import pendingTaskReducer from "../features/myTask/pendingTaskSlice";
+import completedTaskReducer from "../features/myTask/completedTaskSlice";
 
 const rootReducer = combineReducers({
   allTask: allTaskReducer,

@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
 import { getTaskItemSx, chipSx } from "./styles";
-import { fetchCompletedTask } from "@task-master/core-fe";
+import { fetchCompletedTask } from "../../features/myTask/completedTaskThunk";
 // custome hooks
 import useMyTask from "../../hooks/useMyTask";
 // reusable components
@@ -40,7 +40,7 @@ const CompletedTask = ({ params, search }: Props) => {
   // redux
   const dispatch = useAppDispatch();
   const { items, meta_data, loading, error } = useAppSelector(
-    (state) => state.completedTask
+    (state) => state.completedTask,
   );
   // hooks
   const { onDeleteTask, onGetDetailTask, onUpdateStatus, onGetEditTask } =
@@ -72,7 +72,7 @@ const CompletedTask = ({ params, search }: Props) => {
   const onOpenMenu = (
     event: React.MouseEvent<HTMLButtonElement>,
     id: string,
-    title: string
+    title: string,
   ): void => {
     setMenu({
       anchorEl: event.currentTarget,
@@ -98,7 +98,7 @@ const CompletedTask = ({ params, search }: Props) => {
         page: pagination.page,
         limit: pagination.limit,
         search: search,
-      })
+      }),
     );
   }, [dispatch, pagination, search]);
 
@@ -128,7 +128,7 @@ const CompletedTask = ({ params, search }: Props) => {
           {Array.from({ length: items.length || pagination.limit }).map(
             (_, index) => (
               <ListTaskSkeleton key={index} />
-            )
+            ),
           )}
         </List>
       )}
@@ -165,8 +165,8 @@ const CompletedTask = ({ params, search }: Props) => {
                         task.priority === "low"
                           ? "success"
                           : task.priority === "medium"
-                          ? "warning"
-                          : "error"
+                            ? "warning"
+                            : "error"
                       }
                       size="small"
                       variant="outlined"
