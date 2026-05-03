@@ -2,10 +2,11 @@ import { combineReducers } from "@reduxjs/toolkit";
 import snackbarReducer from "./ui/snackbarSlice";
 import {
   profileReducer,
-  allTaskReducer,
+  // allTaskReducer,
   completedTaskReducer,
   pendingTaskReducer,
 } from "@task-master/core-fe";
+import allTaskReducer from "../features/myTask/allTaskSlice";
 
 const rootReducer = combineReducers({
   allTask: allTaskReducer,

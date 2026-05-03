@@ -16,7 +16,8 @@ import {
 import { MoreVert } from "@mui/icons-material";
 import { getTaskItemSx, chipSx } from "./styles";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { fetchAllTask } from "@task-master/core-fe";
+// import { fetchAllTask } from "@task-master/core-fe";
+import { fetchAllTask } from "../../features/myTask/allTaskThunk";
 // custome hooks
 import useMyTask from "../../hooks/useMyTask";
 // types declaration
@@ -40,7 +41,7 @@ const AllTask = ({ params, search }: Props) => {
   // redux
   const dispatch = useAppDispatch();
   const { items, meta_data, loading, error } = useAppSelector(
-    (state) => state.allTask
+    (state) => state.allTask,
   );
   // hooks
   const { onDeleteTask, onGetDetailTask, onUpdateStatus, onGetEditTask } =
@@ -72,7 +73,7 @@ const AllTask = ({ params, search }: Props) => {
   const onOpenMenu = (
     event: React.MouseEvent<HTMLButtonElement>,
     id: string,
-    title: string
+    title: string,
   ): void => {
     setMenu({
       anchorEl: event.currentTarget,
@@ -97,7 +98,7 @@ const AllTask = ({ params, search }: Props) => {
         page: pagination.page,
         limit: pagination.limit,
         search: search,
-      })
+      }),
     );
   }, [dispatch, pagination, search]);
 
@@ -128,7 +129,7 @@ const AllTask = ({ params, search }: Props) => {
           {Array.from({ length: items.length || pagination.limit }).map(
             (_, index) => (
               <ListTaskSkeleton key={index} />
-            )
+            ),
           )}
         </List>
       )}
@@ -162,8 +163,8 @@ const AllTask = ({ params, search }: Props) => {
                         task.priority === "low"
                           ? "success"
                           : task.priority === "medium"
-                          ? "warning"
-                          : "error"
+                            ? "warning"
+                            : "error"
                       }
                       size="small"
                       variant="outlined"
