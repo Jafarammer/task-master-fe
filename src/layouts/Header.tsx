@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import useLogout from "../hooks/useLogout";
-import { fetchProfile } from "@task-master/core-fe";
+import { fetchProfile } from "../features/profile/profileThunk";
 import { headerTitleSx, containerSx, toolbarSx } from "./styles";
 // custome components
 import { MenuOptions } from "../components";
@@ -28,7 +28,7 @@ const Header = () => {
   const [menu, setMenu] = useState<MenuState>({ anchorEl: null, open: false });
   // function event
   const onOpenMenu: React.MouseEventHandler<HTMLButtonElement> = (
-    event
+    event,
   ): void => {
     setMenu({
       anchorEl: event.currentTarget,

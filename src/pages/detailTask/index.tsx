@@ -24,7 +24,6 @@ import { DeleteConfirmDialog } from "../../components";
 import useMyTask from "../../hooks/useMyTask";
 import { TaskDetailResponse } from "../../types/task";
 import { fetchDetailTask } from "../../services/taskService";
-import { myTaskService, TMyTaskPayload } from "@task-master/core-fe";
 // helper
 import { parseParams } from "../../helpers/filterParamsHelper";
 
