@@ -2,12 +2,10 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../app/hooks";
 import useSnackbarAlert from "./useSnackbarAlert";
 import { ParamsFilter } from "../helpers/filterParamsHelper";
-import {
-  fetchAllTask,
-  fetchCompletedTask,
-  fetchPendingTask,
-  myTaskService,
-} from "@task-master/core-fe";
+import { updateStatusTask, deleteTask } from "../services/myTaskService";
+import { fetchAllTask } from "../features/myTask/allTaskThunk";
+import { fetchCompletedTask } from "../features/myTask/completedTaskThunk";
+import { fetchPendingTask } from "../features/myTask/pendingTaskThunk";
 
 type useMyTaskReturn = {
   onGetDetailTask: (id: string, params: ParamsFilter) => void;
@@ -33,7 +31,7 @@ const useMyTask = (): useMyTaskReturn => {
   const onUpdateStatus = async (tab: string, id: string, checked: boolean) => {
     try {
       const payload = { is_completed: checked };
-      const response = await myTaskService.updateStatus(id, payload);
+      const response = await updateStatusTask(id, payload);
       notify(response.message, "success");
       if (tab === "all") {
         dispatch(fetchAllTask({ page: 1, limit: 5 }));
@@ -48,7 +46,7 @@ const useMyTask = (): useMyTaskReturn => {
   };
   const onDeleteTask = async (tab: string, id: string) => {
     try {
-      const response = await myTaskService.delete(id);
+      const response = await deleteTask(id);
       notify(response.message, "success");
 
       if (tab === "all") {

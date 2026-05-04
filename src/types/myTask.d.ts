@@ -29,10 +29,13 @@ export interface IMyTaskResponse {
   };
 }
 
-export type TMyTaskPayload = {
-  title: string;
-  description: string;
-  due_date: string;
-  priority: string;
-  is_completed?: boolean;
+export type UpdateStatusResponse = {
+  message: string;
+};
+export type UpdateStatusPaylod = {
+  is_completed: boolean;
+};
+
+export type DeleteTaskResponse = {
+  message: string;
 };
