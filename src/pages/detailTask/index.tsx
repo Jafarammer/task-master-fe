@@ -22,6 +22,8 @@ import { titleSx, chipStatusSx, chipProritySx, buttonActionSx } from "./styles";
 import dayjs from "dayjs";
 import { DeleteConfirmDialog } from "../../components";
 import useMyTask from "../../hooks/useMyTask";
+import { TaskDetailResponse } from "../../types/task";
+import { fetchDetailTask } from "../../services/taskService";
 import { myTaskService, TMyTaskPayload } from "@task-master/core-fe";
 // helper
 import { parseParams } from "../../helpers/filterParamsHelper";
@@ -35,10 +37,10 @@ const DetailTask = () => {
   // hooks
   const { onDeleteTask, onUpdateStatus } = useMyTask();
   // useState
-  const [data, setData] = useState<TMyTaskPayload | null>(null);
+  const [data, setData] = useState<TaskDetailResponse["data"] | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
   // function event
-  const getPriorityColor = (p: TMyTaskPayload["priority"]) =>
+  const getPriorityColor = (p: TaskDetailResponse["data"]["priority"]) =>
     p === "high" ? "error" : p === "medium" ? "warning" : "success";
   const openConfirmDelete = (): void => {
     setConfirmDelete(true);
@@ -49,7 +51,7 @@ const DetailTask = () => {
   // useEffect
   useEffect(() => {
     if (!id) return;
-    myTaskService.fetchDetail(id).then((res) => {
+    fetchDetailTask(id).then((res) => {
       setData(res.data);
     });
   }, [id]);
