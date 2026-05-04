@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { SnackbarAlert } from "./components";
 // layout
 import AuthLayout from "./layouts/AuthLayout";
@@ -21,6 +21,7 @@ function App() {
     <>
       <SnackbarAlert />
       <Routes>
+        <Route path="/" element={<Navigate to="/login" replace />} />
         {/* Auth layout */}
         <Route
           element={
