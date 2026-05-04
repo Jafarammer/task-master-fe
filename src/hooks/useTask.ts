@@ -1,19 +1,16 @@
 import { useState } from "react";
 import { useFormik, FormikProps } from "formik";
 import { useNavigate, useParams } from "react-router-dom";
-import { SnackbarState } from "../types/global";
 import dayjs from "dayjs";
 import useSnackbarAlert from "./useSnackbarAlert";
-import {
-  myTaskService,
-  TMyTaskPayload,
-  validations,
-} from "@task-master/core-fe";
+import { validations } from "../validations";
+import { CreateTaskPayload } from "../types/task";
+import { createTask, updateTask } from "../services/taskService";
 
 type useTaskReturn = {
-  formik: FormikProps<TMyTaskPayload>;
+  formik: FormikProps<CreateTaskPayload>;
   loading: boolean;
-  setDetailTask: (value: TMyTaskPayload | null) => void;
+  setDetailTask: (value: CreateTaskPayload | null) => void;
 };
 
 const useTask = (): useTaskReturn => {
@@ -22,16 +19,11 @@ const useTask = (): useTaskReturn => {
   const { id } = useParams();
   // useState
   const [loading, setLoading] = useState<boolean>(false);
-  const [openSnackbar, setOpenSnackbar] = useState<SnackbarState>({
-    open: false,
-    color: "success",
-    message: "",
-  });
   // hooks
   const notify = useSnackbarAlert();
-  const [detailTask, setDetailTask] = useState<TMyTaskPayload | null>(null);
+  const [detailTask, setDetailTask] = useState<CreateTaskPayload | null>(null);
   // function event
-  const formik = useFormik<TMyTaskPayload>({
+  const formik = useFormik<CreateTaskPayload>({
     enableReinitialize: true,
     initialValues: {
       title: detailTask?.title ?? "",
@@ -40,7 +32,7 @@ const useTask = (): useTaskReturn => {
         detailTask?.due_date ?? dayjs().startOf("day").format("YYYY-MM-DD"), // ✅ STRING
       priority: detailTask?.priority ?? "",
     },
-    validationSchema: validations.task,
+    validationSchema: validations.createTask,
     onSubmit: async (values) => {
       try {
         setLoading(true);
@@ -52,9 +44,9 @@ const useTask = (): useTaskReturn => {
           priority: values.priority,
         };
         if (!id) {
-          response = await myTaskService.create(payload);
+          response = await createTask(payload);
         } else {
-          response = await myTaskService.update(id, payload);
+          response = await updateTask(id, payload);
         }
         notify(response.message, "success");
         navigate("/my-task?filter=all"); // note : karna ini create langsung define all saja routingnya
@@ -62,7 +54,7 @@ const useTask = (): useTaskReturn => {
         notify(
           error?.response?.data?.message ||
             (id ? "Update task failed" : "Create task failed"),
-          "error"
+          "error",
         );
       } finally {
         setLoading(false);
