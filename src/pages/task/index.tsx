@@ -14,7 +14,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import useTask from "../../hooks/useTask";
-import { myTaskService } from "@task-master/core-fe";
+import { fetchDetailTask } from "../../services/taskService";
 // helper
 import { parseParams } from "../../helpers/filterParamsHelper";
 
@@ -34,7 +34,7 @@ const Task = () => {
   // useEffect
   useEffect(() => {
     if (!id) return;
-    myTaskService.fetchDetail(id).then((res) => {
+    fetchDetailTask(id).then((res) => {
       setDetailTask(res.data);
     });
   }, [id]);
@@ -98,7 +98,7 @@ const Task = () => {
                   formik.setFieldValue(
                     "due_date",
                     value ? value.format("YYYY-MM-DD") : "",
-                    true
+                    true,
                   );
                 }}
                 onAccept={() => formik.setFieldTouched("due_date", true)}
@@ -107,7 +107,7 @@ const Task = () => {
                   textField: {
                     size: "small",
                     error: Boolean(
-                      formik.touched.due_date && formik.errors.due_date
+                      formik.touched.due_date && formik.errors.due_date,
                     ),
                   },
                 }}

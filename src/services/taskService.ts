@@ -1,5 +1,9 @@
 import api from "../app/api";
-import { CreateTaskPayload, CreateTaskResponse } from "../types/task";
+import {
+  CreateTaskPayload,
+  CreateTaskResponse,
+  TaskDetailResponse,
+} from "../types/task";
 
 export const createTask = async (
   payload: CreateTaskPayload,
@@ -13,5 +17,12 @@ export const updateTask = async (
   payload: CreateTaskPayload,
 ): Promise<CreateTaskResponse> => {
   const res = await api.patch<CreateTaskResponse>(`/task/${id}`, payload);
+  return res.data;
+};
+
+export const fetchDetailTask = async (
+  id: string,
+): Promise<TaskDetailResponse> => {
+  const res = await api.get<TaskDetailResponse>(`/task/detail/${id}`);
   return res.data;
 };

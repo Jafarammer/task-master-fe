@@ -9,3 +9,7 @@ export type CreateTaskPayload = {
 export type CreateTaskResponse = {
   message: string;
 };
+
+export type TaskDetailResponse = {
+  data: CreateTaskPayload;
+};
