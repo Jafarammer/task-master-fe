@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
 import { getTaskItemSx, chipSx } from "./styles";
-import { fetchCompletedTask } from "../../features/myTask/completedTaskThunk";
+import { fetchCompletedTask } from "../../features/myTask/myTaskThunk";
 // custome hooks
 import useMyTask from "../../hooks/useMyTask";
 // reusable components
@@ -40,7 +40,7 @@ const CompletedTask = ({ params, search }: Props) => {
   // redux
   const dispatch = useAppDispatch();
   const { items, meta_data, loading, error } = useAppSelector(
-    (state) => state.completedTask,
+    (state) => state.myTasks,
   );
   // hooks
   const { onDeleteTask, onGetDetailTask, onUpdateStatus, onGetEditTask } =

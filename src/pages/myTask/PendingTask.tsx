@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
 import { getTaskItemSx, chipSx } from "./styles";
-import { fetchPendingTask } from "../../features/myTask/pendingTaskThunk";
+import { fetchPendingTask } from "../../features/myTask/myTaskThunk";
 // reusable components
 import { MenuOptions, EmptyState, DeleteConfirmDialog } from "../../components";
 // custome hooks
@@ -40,7 +40,7 @@ const PendingTask = ({ params, search }: Props) => {
   // redux
   const dispatch = useAppDispatch();
   const { items, meta_data, loading, error } = useAppSelector(
-    (state) => state.pendingTask,
+    (state) => state.myTasks,
   );
   // hooks
   const { onDeleteTask, onGetDetailTask, onUpdateStatus, onGetEditTask } =

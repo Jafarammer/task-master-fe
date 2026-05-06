@@ -6,9 +6,11 @@ import { useAppDispatch } from "../app/hooks";
 import useSnackbarAlert from "./useSnackbarAlert";
 import { ParamsFilter } from "../helpers/filterParamsHelper";
 import { updateStatusTask, deleteTask } from "../services/myTaskService";
-import { fetchAllTask } from "../features/myTask/allTaskThunk";
-import { fetchCompletedTask } from "../features/myTask/completedTaskThunk";
-import { fetchPendingTask } from "../features/myTask/pendingTaskThunk";
+import {
+  fetchAllTask,
+  fetchCompletedTask,
+  fetchPendingTask,
+} from "../features/myTask/myTaskThunk";
 import { MyTaskPayload } from "../types/myTask";
 import { validations } from "../validations";
 import { createTask, updateTask } from "../services/myTaskService";
@@ -45,7 +47,7 @@ const useMyTask = (): useMyTaskReturn => {
         detailTask?.due_date ?? dayjs().startOf("day").format("YYYY-MM-DD"), // ✅ STRING
       priority: detailTask?.priority ?? "",
     },
-    validationSchema: validations.createTask,
+    validationSchema: validations.myTask,
     onSubmit: async (values): Promise<void> => {
       try {
         setLoading(true);

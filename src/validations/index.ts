@@ -1,8 +1,8 @@
 import { loginSchema, registerSchema } from "./authSchema";
-import { createTaskSchema } from "./taskSchema";
+import { myTaskSchema } from "./myTaskSchema";
 
 export const validations = {
   login: loginSchema,
   register: registerSchema,
-  createTask: createTaskSchema,
+  myTask: myTaskSchema,
 };

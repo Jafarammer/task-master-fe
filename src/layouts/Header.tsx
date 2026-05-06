@@ -60,7 +60,17 @@ const Header = () => {
             Task Master
           </Typography>
 
-          <Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 2,
+            }}
+          >
+            <Typography variant="body2">
+              {items?.data?.first_name} {items?.data?.last_name}
+            </Typography>
             <Tooltip title="Open Setting">
               <IconButton onClick={onOpenMenu} sx={{ p: 0 }}>
                 <Avatar>

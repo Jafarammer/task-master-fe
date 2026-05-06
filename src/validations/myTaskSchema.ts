@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 
-export const createTaskSchema = Yup.object({
+export const myTaskSchema = Yup.object({
   title: Yup.string().required("Title is required field!"),
   description: Yup.string().required("Description is required field!"),
   due_date: Yup.string()

@@ -16,7 +16,7 @@ import {
 import { MoreVert } from "@mui/icons-material";
 import { getTaskItemSx, chipSx } from "./styles";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { fetchAllTask } from "../../features/myTask/allTaskThunk";
+import { fetchAllTask } from "../../features/myTask/myTaskThunk";
 // custome hooks
 import useMyTask from "../../hooks/useMyTask";
 // types declaration
@@ -40,7 +40,7 @@ const AllTask = ({ params, search }: Props) => {
   // redux
   const dispatch = useAppDispatch();
   const { items, meta_data, loading, error } = useAppSelector(
-    (state) => state.allTask,
+    (state) => state.myTasks,
   );
   // hooks
   const { onDeleteTask, onGetDetailTask, onUpdateStatus, onGetEditTask } =
