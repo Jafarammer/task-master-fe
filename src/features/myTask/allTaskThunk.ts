@@ -1,4 +1,4 @@
-import api from "../api";
+import api from "../../app/api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { IMyTaskParams, IMyTaskResponse } from "../../types/myTask";
 

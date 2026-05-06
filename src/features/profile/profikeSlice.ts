@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchProfile } from "@task-master/core-fe";
+import { fetchProfile } from "./profileThunk";
 import { IProfileResponse } from "../../types/profile";
 
 interface IProfileState {

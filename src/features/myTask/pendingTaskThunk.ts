@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import api from "../api";
+import api from "../../app/api";
 import { IMyTaskParams, IMyTaskResponse } from "../../types/myTask";
 
 export const fetchPendingTask = createAsyncThunk<
