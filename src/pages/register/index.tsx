@@ -13,12 +13,12 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import useRegister from "../../hooks/useRegister";
+import useAuth from "../../hooks/useAuth";
 import { containerSx } from "./styles";
 
 const Register = () => {
   // hooks
-  const { formik, loading } = useRegister();
+  const { formikRegister, loading } = useAuth();
   // useState
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
@@ -30,12 +30,12 @@ const Register = () => {
     setShowPassword((prev) => !prev);
   };
   const onMouseDownPassword: React.MouseEventHandler<HTMLButtonElement> = (
-    event
+    event,
   ) => {
     event.preventDefault();
   };
   const onMouseUpPassword: React.MouseEventHandler<HTMLButtonElement> = (
-    event
+    event,
   ) => {
     event.preventDefault();
   };
@@ -50,7 +50,7 @@ const Register = () => {
     event.preventDefault();
   };
   const onMouseUpConfirmPassword: React.MouseEventHandler<HTMLButtonElement> = (
-    event
+    event,
   ) => {
     event.preventDefault();
   };
@@ -73,21 +73,27 @@ const Register = () => {
           </Link>
         </Typography>
         <Container maxWidth="xs" sx={{ mt: 2 }}>
-          <form onSubmit={formik.handleSubmit}>
+          <form onSubmit={formikRegister.handleSubmit}>
             <FormControl fullWidth sx={{ my: 1.5 }}>
               <TextField
                 placeholder="First Name"
                 size="small"
                 name="firstName"
                 type="text"
-                value={formik.values.firstName}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={!!formik.touched.firstName && !!formik.errors.firstName}
+                value={formikRegister.values.firstName}
+                onChange={formikRegister.handleChange}
+                onBlur={formikRegister.handleBlur}
+                error={
+                  !!formikRegister.touched.firstName &&
+                  !!formikRegister.errors.firstName
+                }
               />
-              {formik.touched.firstName && formik.errors.firstName && (
-                <FormHelperText error>{formik.errors.firstName}</FormHelperText>
-              )}
+              {formikRegister.touched.firstName &&
+                formikRegister.errors.firstName && (
+                  <FormHelperText error>
+                    {formikRegister.errors.firstName}
+                  </FormHelperText>
+                )}
             </FormControl>
             <FormControl fullWidth sx={{ my: 1.5 }}>
               <TextField
@@ -95,14 +101,20 @@ const Register = () => {
                 size="small"
                 name="lastName"
                 type="text"
-                value={formik.values.lastName}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={!!formik.touched.lastName && !!formik.errors.lastName}
+                value={formikRegister.values.lastName}
+                onChange={formikRegister.handleChange}
+                onBlur={formikRegister.handleBlur}
+                error={
+                  !!formikRegister.touched.lastName &&
+                  !!formikRegister.errors.lastName
+                }
               />
-              {formik.touched.lastName && formik.errors.lastName && (
-                <FormHelperText error>{formik.errors.lastName}</FormHelperText>
-              )}
+              {formikRegister.touched.lastName &&
+                formikRegister.errors.lastName && (
+                  <FormHelperText error>
+                    {formikRegister.errors.lastName}
+                  </FormHelperText>
+                )}
             </FormControl>
             <FormControl fullWidth sx={{ my: 1.5 }}>
               <TextField
@@ -110,13 +122,18 @@ const Register = () => {
                 size="small"
                 name="email"
                 type="email"
-                value={formik.values.email}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={!!formik.touched.email && !!formik.errors.email}
+                value={formikRegister.values.email}
+                onChange={formikRegister.handleChange}
+                onBlur={formikRegister.handleBlur}
+                error={
+                  !!formikRegister.touched.email &&
+                  !!formikRegister.errors.email
+                }
               />
-              {formik.touched.email && formik.errors.email && (
-                <FormHelperText error>{formik.errors.email}</FormHelperText>
+              {formikRegister.touched.email && formikRegister.errors.email && (
+                <FormHelperText error>
+                  {formikRegister.errors.email}
+                </FormHelperText>
               )}
             </FormControl>
             <FormControl fullWidth sx={{ my: 1.5 }}>
@@ -125,10 +142,13 @@ const Register = () => {
                 size="small"
                 name="password"
                 type={showPassword ? "text" : "password"}
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={!!formik.touched.password && !!formik.errors.password}
+                value={formikRegister.values.password}
+                onChange={formikRegister.handleChange}
+                onBlur={formikRegister.handleBlur}
+                error={
+                  !!formikRegister.touched.password &&
+                  !!formikRegister.errors.password
+                }
                 slotProps={{
                   input: {
                     endAdornment: (
@@ -150,9 +170,12 @@ const Register = () => {
                   },
                 }}
               />
-              {formik.touched.password && formik.errors.password && (
-                <FormHelperText error>{formik.errors.password}</FormHelperText>
-              )}
+              {formikRegister.touched.password &&
+                formikRegister.errors.password && (
+                  <FormHelperText error>
+                    {formikRegister.errors.password}
+                  </FormHelperText>
+                )}
             </FormControl>
             <FormControl fullWidth sx={{ my: 1.5 }}>
               <TextField
@@ -160,12 +183,12 @@ const Register = () => {
                 size="small"
                 name="confirmPassword"
                 type={showConfirmPassword ? "text" : "password"}
-                value={formik.values.confirmPassword}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
+                value={formikRegister.values.confirmPassword}
+                onChange={formikRegister.handleChange}
+                onBlur={formikRegister.handleBlur}
                 error={
-                  !!formik.touched.confirmPassword &&
-                  !!formik.errors.confirmPassword
+                  !!formikRegister.touched.confirmPassword &&
+                  !!formikRegister.errors.confirmPassword
                 }
                 slotProps={{
                   input: {
@@ -188,10 +211,10 @@ const Register = () => {
                   },
                 }}
               />
-              {formik.touched.confirmPassword &&
-                formik.errors.confirmPassword && (
+              {formikRegister.touched.confirmPassword &&
+                formikRegister.errors.confirmPassword && (
                   <FormHelperText error>
-                    {formik.errors.confirmPassword}
+                    {formikRegister.errors.confirmPassword}
                   </FormHelperText>
                 )}
             </FormControl>

@@ -1,10 +1,10 @@
-import api from "../api";
+import api from "../app/api";
 import {
   LoginPayload,
   LoginResponse,
   RegisterPayload,
   RegisterResponse,
-} from "../../types/auth";
+} from "../types/auth";
 
 export const loginUser = async (
   payload: LoginPayload,

@@ -13,7 +13,7 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import useLogin from "../../hooks/useLogin";
+import useAuth from "../../hooks/useAuth";
 import useSnackbarAlert from "../../hooks/useSnackbarAlert";
 import { containerSx, linkContainerSx, linkForgotPasswordSx } from "./styles";
 
@@ -21,7 +21,8 @@ const Login = () => {
   // router
   const location = useLocation();
   // hooks
-  const { formik, loading } = useLogin();
+  // const { formik, loading } = useLogin();
+  const { formikLogin, loading } = useAuth();
   const notify = useSnackbarAlert();
   // useState
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -32,12 +33,12 @@ const Login = () => {
     setShowPassword((prev) => !prev);
   };
   const onMouseDownPassword: React.MouseEventHandler<HTMLButtonElement> = (
-    event
+    event,
   ) => {
     event.preventDefault();
   };
   const onMouseUpPassword: React.MouseEventHandler<HTMLButtonElement> = (
-    event
+    event,
   ) => {
     event.preventDefault();
   };
@@ -70,19 +71,23 @@ const Login = () => {
           </Link>
         </Typography>
         <Container maxWidth="xs" sx={{ mt: 2 }}>
-          <form onSubmit={formik.handleSubmit}>
+          <form onSubmit={formikLogin.handleSubmit}>
             <FormControl fullWidth sx={{ my: 1.5 }}>
               <TextField
                 placeholder="Username or Email"
                 size="small"
                 name="email"
-                value={formik.values.email}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={!!formik.touched.email && !!formik.errors.email}
+                value={formikLogin.values.email}
+                onChange={formikLogin.handleChange}
+                onBlur={formikLogin.handleBlur}
+                error={
+                  !!formikLogin.touched.email && !!formikLogin.errors.email
+                }
               />
-              {formik.touched.email && formik.errors.email && (
-                <FormHelperText error>{formik.errors.email}</FormHelperText>
+              {formikLogin.touched.email && formikLogin.errors.email && (
+                <FormHelperText error>
+                  {formikLogin.errors.email}
+                </FormHelperText>
               )}
             </FormControl>
             <FormControl fullWidth sx={{ my: 1.5 }}>
@@ -91,10 +96,13 @@ const Login = () => {
                 size="small"
                 name="password"
                 type={showPassword ? "text" : "password"}
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={!!formik.touched.password && !!formik.errors.password}
+                value={formikLogin.values.password}
+                onChange={formikLogin.handleChange}
+                onBlur={formikLogin.handleBlur}
+                error={
+                  !!formikLogin.touched.password &&
+                  !!formikLogin.errors.password
+                }
                 slotProps={{
                   input: {
                     endAdornment: (
@@ -116,8 +124,10 @@ const Login = () => {
                   },
                 }}
               />
-              {formik.touched.password && formik.errors.password && (
-                <FormHelperText error>{formik.errors.password}</FormHelperText>
+              {formikLogin.touched.password && formikLogin.errors.password && (
+                <FormHelperText error>
+                  {formikLogin.errors.password}
+                </FormHelperText>
               )}
             </FormControl>
             <Box sx={linkContainerSx()}>

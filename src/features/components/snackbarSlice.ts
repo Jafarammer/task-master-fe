@@ -13,7 +13,10 @@ const snackbarSlice = createSlice({
   reducers: {
     showSnackbar: (
       state,
-      action: PayloadAction<{ message: string; color?: SnackbarState["color"] }>
+      action: PayloadAction<{
+        message: string;
+        color?: SnackbarState["color"];
+      }>,
     ) => {
       state.open = true;
       state.message = action.payload.message;

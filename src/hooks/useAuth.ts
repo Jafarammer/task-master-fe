@@ -3,16 +3,17 @@ import { useFormik, FormikProps } from "formik";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import useSnackbarAlert from "./useSnackbarAlert";
-import { LoginPayload } from "../types/auth";
+import { LoginPayload, RegisterPayload } from "../types/auth";
 import { validations } from "../validations";
-import { loginUser } from "../features/auth/authService";
+import { loginUser, registerUser } from "../services/authService";
 
-type UseLoginReturn = {
-  formik: FormikProps<LoginPayload>;
+type UseAuthReturn = {
+  formikLogin: FormikProps<LoginPayload>;
+  formikRegister: FormikProps<RegisterPayload>;
   loading: boolean;
 };
 
-const useLogin = (): UseLoginReturn => {
+const useAuth = (): UseAuthReturn => {
   // router
   const navigate = useNavigate();
   // hooks
@@ -20,8 +21,8 @@ const useLogin = (): UseLoginReturn => {
   const notify = useSnackbarAlert();
   // useState
   const [loading, setLoading] = useState<boolean>(false);
-  // function event
-  const formik = useFormik<LoginPayload>({
+  // formik
+  const formikLogin = useFormik<LoginPayload>({
     initialValues: {
       email: "",
       password: "",
@@ -30,23 +31,14 @@ const useLogin = (): UseLoginReturn => {
     onSubmit: async (values, { setFieldError }): Promise<void> => {
       try {
         setLoading(true);
-
         const payload = {
           email: values.email,
           password: values.password,
         };
-
         const response = await loginUser(payload);
-
-        // setToken(response.accessToken);
-
         setCookie("token", response.accessToken, {
           path: "/",
-          maxAge: 60 * 60 * 24, // 1 hari
-          // hanya aktifkan secure di production (HTTPS)
-          // ...(process.env.NODE_ENV === "production"
-          //   ? { secure: true, sameSite: "strict" as const }
-          //   : { sameSite: "lax" as const }),
+          maxAge: 60 * 60 * 24,
         });
         navigate("/my-task");
         notify(response.message, "success");
@@ -78,10 +70,43 @@ const useLogin = (): UseLoginReturn => {
     },
   });
 
+  const formikRegister = useFormik<RegisterPayload>({
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+    validationSchema: validations.register,
+    onSubmit: async (values): Promise<void> => {
+      try {
+        setLoading(true);
+        const payload = {
+          firstName: values.firstName,
+          lastName: values.lastName,
+          email: values.email,
+          password: values.password,
+        };
+        const response = await registerUser(payload);
+        notify(response.message, "success");
+        navigate("/login");
+      } catch (error: any) {
+        notify(
+          error?.response?.data?.message || "Registration failed",
+          "error",
+        );
+      } finally {
+        setLoading(false);
+      }
+    },
+  });
+
   return {
-    formik,
     loading,
+    formikLogin,
+    formikRegister,
   };
 };
 
-export default useLogin;
+export default useAuth;
