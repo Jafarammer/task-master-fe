@@ -22,8 +22,8 @@ import { titleSx, chipStatusSx, chipProritySx, buttonActionSx } from "./styles";
 import dayjs from "dayjs";
 import { DeleteConfirmDialog } from "../../components";
 import useMyTask from "../../hooks/useMyTask";
-import { TaskDetailResponse } from "../../types/task";
-import { fetchDetailTask } from "../../services/taskService";
+import { TaskDetailResponse } from "../../types/myTask";
+import { fetchDetailTask } from "../../services/myTaskService";
 // helper
 import { parseParams } from "../../helpers/filterParamsHelper";
 

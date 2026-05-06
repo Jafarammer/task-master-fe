@@ -13,8 +13,8 @@ import {
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
-import useTask from "../../hooks/useTask";
-import { fetchDetailTask } from "../../services/taskService";
+import useMyTask from "../../hooks/useMyTask";
+import { fetchDetailTask } from "../../services/myTaskService";
 // helper
 import { parseParams } from "../../helpers/filterParamsHelper";
 
@@ -25,7 +25,7 @@ const Task = () => {
   const [searchParams] = useSearchParams();
   const filterParams = parseParams(searchParams.get("filter"));
   //  hooks
-  const { formik, loading, setDetailTask } = useTask();
+  const { formik, loading, setDetailTask } = useMyTask();
   // function event
   const onCancel = (): void => {
     setDetailTask(null);
