@@ -12,11 +12,10 @@ import Register from "./pages/register";
 import MyTask from "./pages/myTask";
 import Task from "./pages/task";
 import DetailTask from "./pages/detailTask";
+import NotFound from "./pages/notFound";
 // hooks
-import useAuthToken from "./hooks/useAuthToken";
 
 function App() {
-  // useAuthToken(); //refresh token dari cookies
   return (
     <>
       <SnackbarAlert />
@@ -32,6 +31,7 @@ function App() {
         >
           <Route index path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
         </Route>
         {/* Main layout */}
         <Route
@@ -45,6 +45,7 @@ function App() {
           <Route path="/task/create" element={<Task />} />
           <Route path="/task/update/:id" element={<Task />} />
           <Route path="/task/detail/:id" element={<DetailTask />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </>
