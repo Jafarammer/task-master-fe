@@ -12,6 +12,9 @@ import {
   Stack,
   Button,
   IconButton,
+  Card,
+  CardContent,
+  Avatar,
 } from "@mui/material";
 import { ArrowBackIos } from "@mui/icons-material";
 import { parseParams } from "../../helpers/filterParamsHelper";
@@ -44,7 +47,54 @@ const Profile = () => {
       </Typography>
       <Grid2 container spacing={2} mt={5}>
         <Grid2 size={{ xs: 12, md: 4 }}>
-          <Box component={"div"}>photos</Box>
+          <Box component={"div"}>
+            <Card
+              variant="elevation"
+              sx={{
+                borderRadius: 6,
+                border: "1px solid #08CB00",
+                p: 2,
+              }}
+            >
+              <CardContent
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  textAlign: "center",
+                }}
+              >
+                <Avatar
+                  sx={{
+                    width: 100,
+                    height: 100,
+                    mb: 2,
+                  }}
+                >
+                  WJ
+                </Avatar>
+
+                <Button
+                  size="small"
+                  sx={{
+                    mb: 2,
+                    textTransform: "none",
+                  }}
+                >
+                  Edit
+                </Button>
+
+                <Typography variant="h6" fontWeight="bold">
+                  Wan Jafar
+                </Typography>
+
+                <Typography color="text.secondary">
+                  wan.jafar1@gmail.com
+                </Typography>
+              </CardContent>
+            </Card>
+          </Box>
         </Grid2>
         <Grid2 size={{ xs: 12, md: 8 }}>
           <Box component={"div"}>
@@ -128,7 +178,7 @@ const Profile = () => {
                   sx={{ fontWeight: "bold", float: "right", my: 3 }}
                   variant="contained"
                 >
-                  Save
+                  Save Password
                 </Button>
               </form>
             )}
