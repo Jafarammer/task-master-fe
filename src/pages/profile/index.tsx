@@ -1,4 +1,5 @@
-import React from "react";
+import { useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -10,12 +11,32 @@ import {
   FormLabel,
   Stack,
   Button,
+  IconButton,
 } from "@mui/material";
+import { ArrowBackIos } from "@mui/icons-material";
+import { parseParams } from "../../helpers/filterParamsHelper";
 
 const Profile = () => {
+  // router
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const filterParams = parseParams(searchParams.get("filter"));
+  // useState
+  const [open, setOpen] = useState<boolean>(false);
+
   return (
     <Box component={"div"}>
       <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+        <IconButton
+          sx={{
+            "&:hover": {
+              backgroundColor: "transparent",
+            },
+          }}
+          onClick={() => navigate(`/my-task?filter=${filterParams}`)}
+        >
+          <ArrowBackIos />
+        </IconButton>
         Profile Settings
       </Typography>
       <Typography color="textDisabled">
@@ -47,14 +68,70 @@ const Profile = () => {
                   <TextField value={"wan.jafar1@gmail.com"} size="small" />
                 </FormControl>
               </Stack>
-              <Button
-                variant="contained"
-                sx={{ fontWeight: "bold", float: "right" }}
-                color="primary"
+              <Stack
+                direction={"row"}
+                justifyContent={"right"}
+                alignItems={"center"}
+                mb={3}
               >
-                Update Profile
-              </Button>
+                <Button
+                  variant="contained"
+                  sx={{ fontWeight: "bold" }}
+                  color="primary"
+                >
+                  Update Profile
+                </Button>
+              </Stack>
             </form>
+            <Typography variant="h5" fontWeight={"bold"}>
+              Security
+            </Typography>
+            <Divider sx={{ mt: 3 }} />
+            <Stack
+              direction={{ xs: "column", md: "row" }}
+              justifyContent={"space-between"}
+              alignItems={"center"}
+              spacing={3}
+              mt={5}
+              mb={3}
+            >
+              <Typography color="textDisabled">
+                Update your password for enhanced security.
+              </Typography>
+              <Button
+                color="inherit"
+                variant="contained"
+                sx={{ fontWeight: "bold" }}
+                onClick={() => setOpen(!open)}
+              >
+                Change Password
+              </Button>
+            </Stack>
+            {open && (
+              <form>
+                <FormControl fullWidth sx={{ mt: 3 }}>
+                  <TextField placeholder="Current Password" size="small" />
+                </FormControl>
+                <Stack
+                  direction={{ xs: "column", md: "row" }}
+                  spacing={4}
+                  mt={3}
+                >
+                  <FormControl fullWidth>
+                    <TextField placeholder="New Password" size="small" />
+                  </FormControl>
+                  <FormControl fullWidth>
+                    <TextField placeholder="Confirm Password" size="small" />
+                  </FormControl>
+                </Stack>
+                <Button
+                  sx={{ fontWeight: "bold", float: "right", my: 3 }}
+                  variant="contained"
+                >
+                  Save
+                </Button>
+              </form>
+            )}
           </Box>
         </Grid2>
       </Grid2>
