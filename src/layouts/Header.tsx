@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import useLogout from "../hooks/useLogout";
+import { useNavigate } from "react-router-dom";
 import { fetchProfile } from "../features/profile/profileThunk";
 import { headerTitleSx, containerSx, toolbarSx } from "./styles";
 // custome components
@@ -19,6 +20,8 @@ import { MenuOptions } from "../components";
 import { MenuState } from "../types/global";
 
 const Header = () => {
+  // router
+  const navigate = useNavigate();
   // redux
   const dispatch = useAppDispatch();
   const { items, loading, error } = useAppSelector((state) => state.profile);
@@ -27,6 +30,9 @@ const Header = () => {
   // useState
   const [menu, setMenu] = useState<MenuState>({ anchorEl: null, open: false });
   // function event
+  const onSetting = () => {
+    navigate("/profile");
+  };
   const onOpenMenu: React.MouseEventHandler<HTMLButtonElement> = (
     event,
   ): void => {
@@ -84,6 +90,7 @@ const Header = () => {
               open={menu.open}
               onClose={onCloseMenu}
               onLogout={onLogout}
+              onSetting={onSetting}
             />
           </Box>
         </Toolbar>
