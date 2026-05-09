@@ -42,9 +42,16 @@ const AppThemeProvider = ({ children }: AppThemeProviderProps) => {
               },
             },
           },
+          MuiButton: {
+            styleOverrides: {
+              root: {
+                fontWeight: "bold",
+              },
+            },
+          },
         },
       }),
-    [prefersDarkMode]
+    [prefersDarkMode],
   );
 
   return (

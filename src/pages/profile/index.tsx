@@ -18,6 +18,16 @@ import {
 } from "@mui/material";
 import { ArrowBackIos } from "@mui/icons-material";
 import { parseParams } from "../../helpers/filterParamsHelper";
+// styles
+import {
+  iconButtonSX,
+  cardSX,
+  cardContentSX,
+  avatartSX,
+  buttonTextSX,
+  dividerLineSX,
+  formLabelSX,
+} from "./styles";
 
 const Profile = () => {
   // router
@@ -31,11 +41,7 @@ const Profile = () => {
     <Box component={"div"}>
       <Typography variant="h4" sx={{ fontWeight: "bold" }}>
         <IconButton
-          sx={{
-            "&:hover": {
-              backgroundColor: "transparent",
-            },
-          }}
+          sx={iconButtonSX()}
           onClick={() => navigate(`/my-task?filter=${filterParams}`)}
         >
           <ArrowBackIos />
@@ -48,40 +54,11 @@ const Profile = () => {
       <Grid2 container spacing={2} mt={5}>
         <Grid2 size={{ xs: 12, md: 4 }}>
           <Box component={"div"}>
-            <Card
-              variant="elevation"
-              sx={{
-                borderRadius: 6,
-                border: "1px solid #08CB00",
-                p: 2,
-              }}
-            >
-              <CardContent
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  textAlign: "center",
-                }}
-              >
-                <Avatar
-                  sx={{
-                    width: 100,
-                    height: 100,
-                    mb: 2,
-                  }}
-                >
-                  WJ
-                </Avatar>
+            <Card variant="elevation" sx={cardSX()}>
+              <CardContent sx={cardContentSX()}>
+                <Avatar sx={avatartSX()}>WJ</Avatar>
 
-                <Button
-                  size="small"
-                  sx={{
-                    mb: 2,
-                    textTransform: "none",
-                  }}
-                >
+                <Button size="small" sx={buttonTextSX()}>
                   Edit
                 </Button>
 
@@ -101,7 +78,7 @@ const Profile = () => {
             <Typography variant="h5" fontWeight={"bold"}>
               Personal Information
             </Typography>
-            <Divider sx={{ mt: 3 }} />
+            <Divider sx={dividerLineSX()} />
             <form>
               <Stack
                 direction={{ xs: "column", md: "row" }}
@@ -110,11 +87,11 @@ const Profile = () => {
                 spacing={4}
               >
                 <FormControl fullWidth>
-                  <FormLabel sx={{ mb: 2 }}>Full Name</FormLabel>
+                  <FormLabel sx={formLabelSX()}>Full Name</FormLabel>
                   <TextField value={"Wan Jafar"} size="small" />
                 </FormControl>
                 <FormControl fullWidth>
-                  <FormLabel sx={{ mb: 2 }}> Email</FormLabel>
+                  <FormLabel sx={formLabelSX()}> Email</FormLabel>
                   <TextField value={"wan.jafar1@gmail.com"} size="small" />
                 </FormControl>
               </Stack>
@@ -124,11 +101,7 @@ const Profile = () => {
                 alignItems={"center"}
                 mb={3}
               >
-                <Button
-                  variant="contained"
-                  sx={{ fontWeight: "bold" }}
-                  color="primary"
-                >
+                <Button variant="contained" color="primary">
                   Update Profile
                 </Button>
               </Stack>
@@ -136,7 +109,7 @@ const Profile = () => {
             <Typography variant="h5" fontWeight={"bold"}>
               Security
             </Typography>
-            <Divider sx={{ mt: 3 }} />
+            <Divider sx={dividerLineSX()} />
             <Stack
               direction={{ xs: "column", md: "row" }}
               justifyContent={"space-between"}
@@ -151,7 +124,6 @@ const Profile = () => {
               <Button
                 color="inherit"
                 variant="contained"
-                sx={{ fontWeight: "bold" }}
                 onClick={() => setOpen(!open)}
               >
                 Change Password
@@ -174,12 +146,14 @@ const Profile = () => {
                     <TextField placeholder="Confirm Password" size="small" />
                   </FormControl>
                 </Stack>
-                <Button
-                  sx={{ fontWeight: "bold", float: "right", my: 3 }}
-                  variant="contained"
+                <Stack
+                  direction={"row"}
+                  justifyContent={"right"}
+                  alignItems={"center"}
+                  my={3}
                 >
-                  Save Password
-                </Button>
+                  <Button variant="contained">Save Password</Button>
+                </Stack>
               </form>
             )}
           </Box>
