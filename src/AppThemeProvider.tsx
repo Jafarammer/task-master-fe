@@ -23,14 +23,6 @@ const AppThemeProvider = ({ children }: AppThemeProviderProps) => {
             light: "#5DF74F",
             dark: "#049000",
           },
-          // background: {
-          //   default: "#0d1117", // background page
-          //   paper: "#1a1f2b", // background card/input
-          // },
-          // text: {
-          //   primary: "#fff",
-          //   secondary: "#8a8f98",
-          // },
         },
         components: {
           MuiTextField: {
@@ -71,6 +63,18 @@ const AppThemeProvider = ({ children }: AppThemeProviderProps) => {
           MuiSelect: {
             styleOverrides: {
               select: {
+                fontSize: "16px",
+                "@media (max-width:600px)": {
+                  fontSize: "12px",
+                  paddingTop: "6px",
+                  paddingBottom: "6px",
+                },
+              },
+            },
+          },
+          MuiMenuItem: {
+            styleOverrides: {
+              root: {
                 fontSize: "16px",
                 "@media (max-width:600px)": {
                   fontSize: "12px",

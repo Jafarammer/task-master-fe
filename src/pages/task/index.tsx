@@ -9,7 +9,9 @@ import {
   FormControl,
   Button,
   FormHelperText,
+  IconButton,
 } from "@mui/material";
+import { ArrowBackIos } from "@mui/icons-material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
@@ -17,6 +19,14 @@ import useMyTask from "../../hooks/useMyTask";
 import { fetchDetailTask } from "../../services/myTaskService";
 // helper
 import { parseParams } from "../../helpers/filterParamsHelper";
+// styles
+import {
+  fontTitleSX,
+  iconButtonSX,
+  fontBodySX,
+  formControlSX,
+  selectRenderValueSX,
+} from "./styles";
 
 const Task = () => {
   // react router
@@ -40,19 +50,25 @@ const Task = () => {
   }, [id]);
 
   return (
-    <React.Fragment>
-      <Typography variant="h4" fontWeight={"bold"} letterSpacing={1}>
+    <Box component={"div"}>
+      <Typography sx={fontTitleSX()} fontWeight={"bold"}>
+        <IconButton
+          sx={iconButtonSX()}
+          onClick={() => navigate(`/my-task?filter=${filterParams}`)}
+        >
+          <ArrowBackIos />
+        </IconButton>
         {!id && "Create New Task"}
         {!!id && "Update Task"}
       </Typography>
-      <Typography variant="body1" color="text.secondary">
+      <Typography sx={fontBodySX()} color="textDisabled" mb={3}>
         {!id && "Fill in the details below to create a new task."}
         {!!id && "Update the task details below."}
       </Typography>
       {/* form */}
-      <Box sx={{ mt: 3 }}>
+      <Box component={"div"}>
         <form onSubmit={formik.handleSubmit}>
-          <FormControl fullWidth sx={{ my: 1.5 }}>
+          <FormControl fullWidth sx={formControlSX()}>
             <TextField
               placeholder="Title task"
               name="title"
@@ -66,7 +82,7 @@ const Task = () => {
               <FormHelperText error>{formik.errors.title}</FormHelperText>
             )}
           </FormControl>
-          <FormControl fullWidth sx={{ my: 1.5 }}>
+          <FormControl fullWidth sx={formControlSX()}>
             <TextField
               placeholder="Description task"
               name="description"
@@ -129,14 +145,9 @@ const Task = () => {
                   value ? (
                     value
                   ) : (
-                    <span
-                      style={{
-                        opacity: 0.4,
-                        fontSize: "16px",
-                      }}
-                    >
+                    <Box component={"span"} sx={selectRenderValueSX()}>
                       Select Priority
-                    </span>
+                    </Box>
                   )
                 }
                 size="small"
@@ -154,7 +165,6 @@ const Task = () => {
           <Stack direction={"row"} gap={2} justifyContent={"end"} mt={5}>
             <Button
               variant="contained"
-              sx={{ mt: 2, width: 92 }}
               color="inherit"
               onClick={onCancel}
               disabled={loading}
@@ -163,7 +173,6 @@ const Task = () => {
             </Button>
             <Button
               variant="contained"
-              sx={{ mt: 2, width: 92 }}
               color="primary"
               type="submit"
               loading={loading}
@@ -174,7 +183,7 @@ const Task = () => {
           </Stack>
         </form>
       </Box>
-    </React.Fragment>
+    </Box>
   );
 };
 
