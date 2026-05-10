@@ -15,13 +15,18 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import useAuth from "../../hooks/useAuth";
 import useSnackbarAlert from "../../hooks/useSnackbarAlert";
-import { containerSx, linkContainerSx, linkForgotPasswordSx } from "./styles";
+import {
+  containerSx,
+  linkContainerSx,
+  fontBodySX,
+  fontTitleSX,
+  formControlSX,
+} from "./styles";
 
 const Login = () => {
   // router
   const location = useLocation();
   // hooks
-  // const { formik, loading } = useLogin();
   const { formikLogin, loading } = useAuth();
   const notify = useSnackbarAlert();
   // useState
@@ -55,24 +60,23 @@ const Login = () => {
   return (
     <Box>
       <Box component={"div"} sx={containerSx()}>
-        <Typography variant="h4" fontWeight="bold">
-          Welcome back
-        </Typography>
+        <Typography sx={fontTitleSX()}>Welcome back</Typography>
 
-        <Typography variant="body1" color="text.secondary">
+        <Typography sx={fontBodySX()} color="textDisabled">
           Don’t have an account?{" "}
           <Link
             component={RouterLink}
             to="/register"
             underline="none"
-            sx={{ color: "#08CB00", fontWeight: 500 }}
+            color="#08CB00"
+            fontWeight={500}
           >
             Sign up
           </Link>
         </Typography>
-        <Container maxWidth="xs" sx={{ mt: 2 }}>
+        <Container maxWidth="xs">
           <form onSubmit={formikLogin.handleSubmit}>
-            <FormControl fullWidth sx={{ my: 1.5 }}>
+            <FormControl fullWidth sx={formControlSX()}>
               <TextField
                 placeholder="Username or Email"
                 size="small"
@@ -90,7 +94,7 @@ const Login = () => {
                 </FormHelperText>
               )}
             </FormControl>
-            <FormControl fullWidth sx={{ my: 1.5 }}>
+            <FormControl fullWidth sx={formControlSX()}>
               <TextField
                 placeholder="Password"
                 size="small"
@@ -134,7 +138,10 @@ const Login = () => {
               <Link
                 href="/forgot-password"
                 underline="none"
-                sx={linkForgotPasswordSx()}
+                fontWeight={500}
+                color="textDisabled"
+                sx={fontBodySX()}
+                mb={3}
               >
                 Forgot your password?
               </Link>
@@ -142,7 +149,6 @@ const Login = () => {
             <Button
               variant="contained"
               fullWidth
-              sx={{ fontWeight: "bold", mt: 2 }}
               color="primary"
               loading={loading}
               disabled={loading}
