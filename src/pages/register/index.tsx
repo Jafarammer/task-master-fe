@@ -116,7 +116,7 @@ const Register = () => {
           </FormControl>
           <FormControl fullWidth sx={formControlSX()}>
             <TextField
-              placeholder="Email address"
+              placeholder="Email Address"
               size="small"
               name="email"
               type="email"
@@ -176,7 +176,7 @@ const Register = () => {
           </FormControl>
           <FormControl fullWidth sx={formControlSX()}>
             <TextField
-              placeholder="Confirm password"
+              placeholder="Confirm Password"
               size="small"
               name="confirmPassword"
               type={showConfirmPassword ? "text" : "password"}

@@ -9,6 +9,7 @@ import GuestRoute from "./routes/GuestRoute";
 // page
 import Login from "./pages/login";
 import Register from "./pages/register";
+import ForgotPassword from "./pages/forgotPassword";
 import MyTask from "./pages/myTask";
 import Task from "./pages/task";
 import DetailTask from "./pages/detailTask";
@@ -33,6 +34,7 @@ function App() {
         >
           <Route index path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Route>
         {/* Main layout */}

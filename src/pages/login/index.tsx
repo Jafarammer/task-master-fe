@@ -61,7 +61,7 @@ const Login = () => {
     <Box component={"div"} sx={containerSx()}>
       <Typography sx={fontTitleSX()}>Welcome back</Typography>
 
-      <Typography sx={fontBodySX()} color="textDisabled">
+      <Typography sx={fontBodySX()} color="textDisabled" mb={2}>
         Don’t have an account?{" "}
         <Link
           component={RouterLink}
@@ -130,7 +130,8 @@ const Login = () => {
           </FormControl>
           <Box sx={linkContainerSx()}>
             <Link
-              href="/forgot-password"
+              component={RouterLink}
+              to="/forgot-password"
               underline="none"
               fontWeight={500}
               color="textDisabled"
