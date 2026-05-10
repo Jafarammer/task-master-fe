@@ -13,6 +13,7 @@ import MyTask from "./pages/myTask";
 import Task from "./pages/task";
 import DetailTask from "./pages/detailTask";
 import Profile from "./pages/profile";
+import Trash from "./pages/trash";
 import NotFound from "./pages/notFound";
 // hooks
 
@@ -47,6 +48,7 @@ function App() {
           <Route path="/task/update/:id" element={<Task />} />
           <Route path="/task/detail/:id" element={<DetailTask />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/trash" element={<Trash />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

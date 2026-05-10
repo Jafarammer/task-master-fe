@@ -33,6 +33,9 @@ const Header = () => {
   const onSetting = () => {
     navigate("/profile");
   };
+  const onTrash = () => {
+    navigate("/trash");
+  };
   const onOpenMenu: React.MouseEventHandler<HTMLButtonElement> = (
     event,
   ): void => {
@@ -91,6 +94,7 @@ const Header = () => {
               onClose={onCloseMenu}
               onLogout={onLogout}
               onSetting={onSetting}
+              onTrash={onTrash}
             />
           </Box>
         </Toolbar>
