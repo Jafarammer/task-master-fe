@@ -42,10 +42,39 @@ const AppThemeProvider = ({ children }: AppThemeProviderProps) => {
               },
             },
           },
+          MuiOutlinedInput: {
+            styleOverrides: {
+              root: {
+                borderRadius: 6,
+              },
+              input: {
+                fontSize: "16px",
+                "@media (max-width:600px)": {
+                  fontSize: "12px",
+                },
+              },
+            },
+          },
           MuiButton: {
             styleOverrides: {
               root: {
                 fontWeight: "bold",
+                borderRadius: 6,
+                fontSize: "12px",
+                whiteSpace: "nowrap",
+                "@media (max-width:600px)": {
+                  fontSize: "8px",
+                },
+              },
+            },
+          },
+          MuiSelect: {
+            styleOverrides: {
+              select: {
+                fontSize: "16px",
+                "@media (max-width:600px)": {
+                  fontSize: "12px",
+                },
               },
             },
           },

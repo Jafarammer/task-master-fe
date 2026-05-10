@@ -69,10 +69,10 @@ const Task = () => {
           <FormControl fullWidth sx={{ my: 1.5 }}>
             <TextField
               placeholder="Description task"
-              size="small"
               name="description"
               multiline
               minRows={4}
+              size="small"
               value={formik.values.description}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -154,7 +154,7 @@ const Task = () => {
           <Stack direction={"row"} gap={2} justifyContent={"end"} mt={5}>
             <Button
               variant="contained"
-              sx={{ fontWeight: "bold", mt: 2, width: 92 }}
+              sx={{ mt: 2, width: 92 }}
               color="inherit"
               onClick={onCancel}
               disabled={loading}
@@ -163,7 +163,7 @@ const Task = () => {
             </Button>
             <Button
               variant="contained"
-              sx={{ fontWeight: "bold", mt: 2, width: 92 }}
+              sx={{ mt: 2, width: 92 }}
               color="primary"
               type="submit"
               loading={loading}

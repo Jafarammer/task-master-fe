@@ -67,23 +67,3 @@ export const storageIconSX = (): SxProps<Theme> => (theme) => ({
     sm: "32px",
   },
 });
-
-export const buttonSx = (): SxProps<Theme> => (theme) => ({
-  fontSize: {
-    xs: "8px",
-    sm: "12px",
-  },
-  whiteSpace: "nowrap",
-  width: {
-    xs: "100%",
-    sm: "120px",
-  },
-});
-
-export const buttonTitleSX = (): SxProps<Theme> => (theme) => ({
-  fontSize: {
-    xs: "8px",
-    sm: "12px",
-  },
-  whiteSpace: "nowrap",
-});

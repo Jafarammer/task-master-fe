@@ -24,9 +24,11 @@ import {
   cardSX,
   cardContentSX,
   avatartSX,
-  buttonTextSX,
   dividerLineSX,
   formLabelSX,
+  fontBodySX,
+  fontLabelSx,
+  fontTitleSX,
 } from "./styles";
 
 const Profile = () => {
@@ -39,7 +41,7 @@ const Profile = () => {
 
   return (
     <Box component={"div"}>
-      <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+      <Typography fontWeight={"bold"} sx={fontTitleSX()}>
         <IconButton
           sx={iconButtonSX()}
           onClick={() => navigate(`/my-task?filter=${filterParams}`)}
@@ -48,7 +50,7 @@ const Profile = () => {
         </IconButton>
         Profile Settings
       </Typography>
-      <Typography color="textDisabled">
+      <Typography color="textDisabled" sx={fontBodySX()}>
         Manage your account details and preferences.
       </Typography>
       <Grid2 container spacing={2} mt={5}>
@@ -57,16 +59,11 @@ const Profile = () => {
             <Card variant="elevation" sx={cardSX()}>
               <CardContent sx={cardContentSX()}>
                 <Avatar sx={avatartSX()}>WJ</Avatar>
-
-                <Button size="small" sx={buttonTextSX()}>
-                  Edit
-                </Button>
-
-                <Typography variant="h6" fontWeight="bold">
+                <Button>Edit</Button>
+                <Typography sx={fontBodySX()} fontWeight="bold">
                   Wan Jafar
                 </Typography>
-
-                <Typography color="text.secondary">
+                <Typography sx={fontBodySX()} color="text.secondary">
                   wan.jafar1@gmail.com
                 </Typography>
               </CardContent>
@@ -75,10 +72,12 @@ const Profile = () => {
         </Grid2>
         <Grid2 size={{ xs: 12, md: 8 }}>
           <Box component={"div"}>
-            <Typography variant="h5" fontWeight={"bold"}>
+            <Typography mb={2} sx={fontLabelSx()} fontWeight={"bold"}>
               Personal Information
             </Typography>
-            <Divider sx={dividerLineSX()} />
+
+            <Divider />
+
             <form>
               <Stack
                 direction={{ xs: "column", md: "row" }}
@@ -106,19 +105,19 @@ const Profile = () => {
                 </Button>
               </Stack>
             </form>
-            <Typography variant="h5" fontWeight={"bold"}>
+            <Typography mb={2} sx={fontLabelSx()} fontWeight={"bold"}>
               Security
             </Typography>
             <Divider sx={dividerLineSX()} />
             <Stack
-              direction={{ xs: "column", md: "row" }}
+              direction={"row"}
               justifyContent={"space-between"}
               alignItems={"center"}
               spacing={3}
               mt={5}
               mb={3}
             >
-              <Typography color="textDisabled">
+              <Typography sx={fontBodySX()} color="textDisabled">
                 Update your password for enhanced security.
               </Typography>
               <Button

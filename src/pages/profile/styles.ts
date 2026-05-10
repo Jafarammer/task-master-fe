@@ -21,8 +21,14 @@ export const cardContentSX = (): SxProps<Theme> => (theme) => ({
 });
 
 export const avatartSX = (): SxProps<Theme> => (theme) => ({
-  width: 100,
-  height: 100,
+  width: {
+    xs: 40,
+    sm: 80,
+  },
+  height: {
+    xs: 40,
+    sm: 80,
+  },
   mb: 2,
 });
 
@@ -36,5 +42,31 @@ export const dividerLineSX = (): SxProps<Theme> => (theme) => ({
 });
 
 export const formLabelSX = (): SxProps<Theme> => (theme) => ({
-  mb: 2,
+  mb: 1,
+  fontSize: {
+    xs: "12px",
+    sm: "16px",
+  },
+});
+
+export const fontBodySX = (): SxProps<Theme> => (theme) => ({
+  fontSize: {
+    xs: "12px",
+    sm: "16px",
+  },
+});
+
+export const fontTitleSX = (): SxProps<Theme> => (theme) => ({
+  fontWeight: "bold",
+  fontSize: {
+    xs: "1.5rem",
+    sm: "2rem",
+  },
+});
+
+export const fontLabelSx = (): SxProps<Theme> => (theme) => ({
+  fontSize: {
+    xs: "1rem",
+    sm: "1.5rem",
+  },
 });

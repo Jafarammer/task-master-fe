@@ -32,8 +32,6 @@ import {
   cardListContentSX,
   fontTitleSX,
   storageIconSX,
-  buttonSx,
-  buttonTitleSX,
 } from "./styles";
 
 const Trash = () => {
@@ -61,7 +59,6 @@ const Trash = () => {
           variant="outlined"
           color="error"
           startIcon={<DeleteSweepOutlined />}
-          sx={buttonTitleSX()}
         >
           Empty Trash
         </Button>
@@ -153,15 +150,10 @@ const Trash = () => {
                     sm: "row",
                   }}
                 >
-                  <Button
-                    sx={buttonSx()}
-                    variant="outlined"
-                    startIcon={<RestoreOutlined />}
-                  >
+                  <Button variant="outlined" startIcon={<RestoreOutlined />}>
                     Restore
                   </Button>
                   <Button
-                    sx={buttonSx()}
                     variant="outlined"
                     color="error"
                     startIcon={<DeleteForeverOutlined />}
