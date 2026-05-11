@@ -1,28 +1,52 @@
 import { Theme, SxProps } from "@mui/material/styles";
 
-export const titleSx = (): SxProps<Theme> => ({
-  fontSize: { xs: "1.25rem", sm: "2rem" },
-  fontWeight: 700,
-  whiteSpace: "nowrap",
-  overflow: "hidden",
-  textOverflow: "ellipsis",
-  maxWidth: "75%",
+export const fontBodySX = (): SxProps<Theme> => (theme) => ({
+  fontSize: {
+    xs: "12px",
+    sm: "16px",
+  },
 });
 
-export const chipStatusSx = (): SxProps<Theme> => ({
-  borderRadius: "4px",
-  color: "white",
+export const fontTitleSX = (): SxProps<Theme> => (theme) => ({
   fontWeight: "bold",
-  flexShrink: 0,
+  fontSize: {
+    xs: "1.5rem",
+    sm: "2rem",
+  },
 });
 
-export const chipProritySx = (): SxProps<Theme> => ({
-  fontWeight: "bold",
-  borderRadius: "4px",
-  mt: 0.5,
+export const fontLabelSx = (): SxProps<Theme> => (theme) => ({
+  fontSize: {
+    xs: "1rem",
+    sm: "1.5rem",
+  },
 });
 
-export const buttonActionSx = (): SxProps<Theme> => ({
-  fontWeight: "bold",
-  textTransform: "none",
+export const cardActionSX = (): SxProps<Theme> => (theme) => ({
+  borderRadius: 6,
+  border: "1px solid #08CB00",
+  p: 2,
+});
+
+export const cardDetailSX = (): SxProps<Theme> => (theme) => ({
+  borderRadius: 6,
+  p: 2,
+});
+
+export const iconButtonSX = (): SxProps<Theme> => (theme) => ({
+  ":hover": {
+    backgroundColor: "transparent",
+  },
+});
+
+export const chipSX = (): SxProps<Theme> => (theme) => ({
+  borderRadius: 6,
+  width: "152px",
+  fontSize: {
+    xs: "12px",
+    sm: "16px",
+  },
+  "@media (max-width:600px)": {
+    width: "120px",
+  },
 });

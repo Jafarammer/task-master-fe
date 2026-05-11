@@ -24,7 +24,17 @@ const DeleteConfirmDialog: React.FC<Props> = ({
   onConfirm,
 }) => {
   return (
-    <Dialog open={open} onClose={onClose} maxWidth={"sm"} fullWidth>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth={"sm"}
+      fullWidth
+      PaperProps={{
+        sx: {
+          borderRadius: 6,
+        },
+      }}
+    >
       <DialogContent sx={{ p: 4, position: "relative" }}>
         {/* Close Button */}
         <IconButton

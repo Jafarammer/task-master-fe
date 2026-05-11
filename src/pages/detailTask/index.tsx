@@ -2,23 +2,26 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import {
   Box,
-  Divider,
   Card,
   CardContent,
-  CardActions,
   Button,
   Typography,
   Stack,
   Chip,
   IconButton,
+  Grid2,
+  ButtonGroup,
 } from "@mui/material";
+import { ArrowBackIos, CalendarTodayOutlined } from "@mui/icons-material";
 import {
-  CheckCircleOutline,
-  EditOutlined,
-  DeleteOutline,
-  ArrowBackIos,
-} from "@mui/icons-material";
-import { titleSx, chipStatusSx, chipProritySx, buttonActionSx } from "./styles";
+  cardActionSX,
+  iconButtonSX,
+  fontBodySX,
+  fontTitleSX,
+  fontLabelSx,
+  chipSX,
+  cardDetailSX,
+} from "./styles";
 import dayjs from "dayjs";
 import { DeleteConfirmDialog } from "../../components";
 import useMyTask from "../../hooks/useMyTask";
@@ -56,131 +59,98 @@ const DetailTask = () => {
   }, [id]);
 
   return (
-    <Box mt={4} px={{ xs: 1, sm: 3 }}>
-      <IconButton
-        sx={{ mb: 3 }}
-        onClick={() => navigate(`/my-task?filter=${filterParams}`)}
-      >
-        <ArrowBackIos />
-      </IconButton>
-      <Card sx={{ width: "100%" }}>
-        <CardContent>
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between"
-            spacing={2}
-            mb={3}
-          >
-            <Typography sx={titleSx()}>{data?.title}</Typography>
-
-            <Chip
-              label={data?.is_completed === true ? "Complete" : "Pending"}
-              color={data?.is_completed === true ? "primary" : "warning"}
-              size="small"
-              variant="filled"
-              sx={chipStatusSx()}
-            />
-          </Stack>
-          <Typography variant="body2" color="text.secondary" mb={2}>
-            {data?.description}
-          </Typography>
-
-          <Divider />
-
-          <Typography variant="h6" my={2}>
-            Details
-          </Typography>
-
-          <Stack direction="row" justifyContent="space-between" spacing={4}>
-            <Box width="100%">
-              <Typography variant="body2" color="text.secondary">
-                Due Date
-              </Typography>
-              <Typography fontWeight={600}>
-                {dayjs(data?.due_date).format("MMMM D, YYYY")}
-              </Typography>
-            </Box>
-            <Box width="100%">
-              <Typography variant="body2" color="text.secondary">
-                Priority
-              </Typography>
-              <Chip
-                label={data?.priority}
-                color={
-                  data?.priority ? getPriorityColor(data.priority) : "default"
-                }
-                size="small"
-                variant="outlined"
-                sx={chipProritySx()}
-              />
-            </Box>
-          </Stack>
-        </CardContent>
-
-        <CardActions
-          sx={{
-            px: 2,
-            py: 2,
-          }}
+    <Box component={"div"}>
+      <Typography fontWeight={"bold"} sx={fontTitleSX()}>
+        <IconButton
+          sx={iconButtonSX()}
+          onClick={() => navigate(`/my-task?filter=${filterParams}`)}
         >
-          <Stack
-            direction={{ xs: "column", lg: "row" }}
-            spacing={2}
-            width="100%"
-            justifyContent="space-between"
-          >
-            <Stack
-              direction={{ xs: "column", lg: "row" }}
-              spacing={2}
-              width={{ xs: "100%", lg: "40%" }}
-            >
-              <Button
-                fullWidth
-                variant="contained"
-                startIcon={<CheckCircleOutline />}
-                sx={buttonActionSx()}
-                disabled={data?.is_completed}
-                onClick={() => {
-                  if (!id) return;
-                  onUpdateStatus("detail", id, true);
-                  navigate(`/my-task?filter=${filterParams}`);
-                }}
-              >
-                Mark as Complete
-              </Button>
+          <ArrowBackIos />
+        </IconButton>
+        Detail Task
+      </Typography>
+      <Typography sx={fontBodySX()} color="textDisabled">
+        Manage your details task and preferences.
+      </Typography>
+      <Grid2 container spacing={2} mt={5}>
+        <Grid2 size={{ xs: 12, md: 8 }}>
+          <Box component={"div"}>
+            <Card variant="elevation" sx={cardDetailSX()}>
+              <CardContent>
+                <Stack direction={"row"} spacing={2} mb={3}>
+                  <Chip
+                    label={`Priority ${data?.priority}`}
+                    color={
+                      data?.priority
+                        ? getPriorityColor(data.priority)
+                        : "default"
+                    }
+                    variant="outlined"
+                    sx={chipSX()}
+                  />
+                  <Chip
+                    label={`Status ${data?.is_completed === true ? "Complete" : "Pending"}`}
+                    color={data?.is_completed === true ? "primary" : "warning"}
+                    variant="outlined"
+                    sx={chipSX()}
+                  />
+                </Stack>
+                <Typography fontWeight={"bold"} sx={fontLabelSx()}>
+                  {data?.title}
+                </Typography>
+                <Typography color="textDisabled" sx={fontBodySX()}>
+                  {data?.description}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Box>
+        </Grid2>
+        <Grid2 size={{ xs: 12, md: 4 }}>
+          <Box component={"div"}>
+            <Card variant="elevation" sx={cardActionSX()}>
+              <CardContent>
+                <Typography sx={fontBodySX()} fontWeight={"bold"}>
+                  Meta Information
+                </Typography>
+                <Stack direction="row" alignItems="center" spacing={1} my={2}>
+                  <CalendarTodayOutlined sx={fontLabelSx()} color="disabled" />
+                  <Typography
+                    fontWeight={500}
+                    sx={fontBodySX()}
+                    color="textDisabled"
+                  >
+                    Due Date: {dayjs(data?.due_date).format("MMMM D, YYYY")}
+                  </Typography>
+                </Stack>
 
-              <Button
-                fullWidth
-                variant="contained"
-                color="inherit"
-                startIcon={<EditOutlined />}
-                sx={buttonActionSx()}
-                onClick={() => navigate(`/task/update/${id}`)}
-              >
-                Edit Task
-              </Button>
-            </Stack>
+                <Stack justifyContent={"center"} alignItems={"center"} mt={5}>
+                  <ButtonGroup
+                    variant="contained"
+                    size="small"
+                    color="secondary"
+                  >
+                    <Button
+                      disabled={data?.is_completed}
+                      onClick={() => {
+                        if (!id) return;
+                        onUpdateStatus("detail", id, true);
+                        navigate(`/my-task?filter=${filterParams}`);
+                      }}
+                    >
+                      Completed
+                    </Button>
+                    <Button onClick={() => navigate(`/task/update/${id}`)}>
+                      Edit
+                    </Button>
+                    <Button onClick={openConfirmDelete}>Delete</Button>
+                  </ButtonGroup>
+                </Stack>
+              </CardContent>
+            </Card>
+          </Box>
+        </Grid2>
+      </Grid2>
 
-            <Stack
-              direction={{ xs: "column", lg: "row" }}
-              spacing={2}
-              width={{ xs: "100%", lg: "20%" }}
-            >
-              <Button
-                fullWidth
-                variant="contained"
-                color="error"
-                startIcon={<DeleteOutline />}
-                sx={buttonActionSx()}
-                onClick={openConfirmDelete}
-              >
-                Delete Task
-              </Button>
-            </Stack>
-          </Stack>
-        </CardActions>
-      </Card>
       {/* pop up */}
       <DeleteConfirmDialog
         open={confirmDelete}
