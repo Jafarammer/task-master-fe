@@ -77,7 +77,15 @@ const Header = () => {
               gap: 2,
             }}
           >
-            <Typography variant="body2">
+            <Typography
+              variant="body2"
+              fontWeight={"bold"}
+              sx={{
+                "@media (max-width:600px)": {
+                  display: "none",
+                },
+              }}
+            >
               {items?.data?.first_name} {items?.data?.last_name}
             </Typography>
             <Tooltip title="Open Setting">
