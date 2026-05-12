@@ -9,6 +9,16 @@ import {
 } from "@mui/material";
 import { Cancel } from "@mui/icons-material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import {
+  fontBodySX,
+  fontLabelSx,
+  logoLabelSX,
+  fontTitleSX,
+  buttonSX,
+  iconButtonSX,
+  dialogContentSX,
+  paperPropsSX,
+} from "./DeleteConfirmDialog.style";
 
 type Props = {
   open: boolean;
@@ -30,40 +40,25 @@ const DeleteConfirmDialog: React.FC<Props> = ({
       maxWidth={"sm"}
       fullWidth
       PaperProps={{
-        sx: {
-          borderRadius: 6,
-        },
+        sx: paperPropsSX(),
       }}
     >
-      <DialogContent sx={{ p: 4, position: "relative" }}>
+      <DialogContent sx={dialogContentSX()}>
         {/* Close Button */}
-        <IconButton
-          onClick={onClose}
-          sx={{ position: "absolute", top: 12, right: 12 }}
-        >
-          <Cancel />
+        <IconButton onClick={onClose} sx={iconButtonSX()}>
+          <Cancel color="disabled" />
         </IconButton>
 
         {/* Icon */}
         <Box display="flex" justifyContent="center" mb={2}>
-          <Box
-            sx={{
-              width: 64,
-              height: 64,
-              borderRadius: "50%",
-              backgroundColor: "#fdebea",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <DeleteOutlineIcon sx={{ color: "#d32f2f", fontSize: 34 }} />
+          <Box sx={logoLabelSX()}>
+            <DeleteOutlineIcon color="error" sx={fontTitleSX()} />
           </Box>
         </Box>
 
         {/* Title */}
         <Typography
-          variant="h6"
+          sx={fontLabelSx()}
           fontWeight="bold"
           textAlign="center"
           gutterBottom
@@ -74,8 +69,8 @@ const DeleteConfirmDialog: React.FC<Props> = ({
         {/* Description */}
         <Typography
           textAlign="center"
-          color="text.secondary"
-          fontSize={14}
+          color="textDisabled"
+          sx={fontBodySX()}
           mb={4}
         >
           This action cannot be undone. The following task will be permanently
@@ -86,16 +81,9 @@ const DeleteConfirmDialog: React.FC<Props> = ({
         <Box display="flex" gap={2} justifyContent="center">
           <Button
             variant="contained"
+            color="inherit"
             onClick={onClose}
-            sx={{
-              backgroundColor: "#eee",
-              color: "#000",
-              minWidth: 120,
-              "&:hover": {
-                backgroundColor: "#e0e0e0",
-              },
-              fontWeight: "bold",
-            }}
+            sx={buttonSX()}
           >
             Cancel
           </Button>
@@ -104,7 +92,7 @@ const DeleteConfirmDialog: React.FC<Props> = ({
             variant="contained"
             color="error"
             onClick={onConfirm}
-            sx={{ minWidth: 120, fontWeight: "bold" }}
+            sx={buttonSX()}
           >
             Delete
           </Button>
