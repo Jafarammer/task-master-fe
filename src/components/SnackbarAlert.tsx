@@ -2,6 +2,7 @@ import { Snackbar, Alert, IconButton } from "@mui/material";
 import { Cancel } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { hideSnackbar } from "../features/components/snackbarSlice";
+import { alertSX } from "./SnackbarAlert.style";
 
 const SnackbarAlert = () => {
   const dispatch = useAppDispatch();
@@ -16,10 +17,10 @@ const SnackbarAlert = () => {
       <Alert
         severity={color}
         variant="filled"
-        sx={{ width: "100%", color: "white" }}
+        sx={alertSX()}
         action={
           <IconButton size="small" onClick={() => dispatch(hideSnackbar())}>
-            <Cancel fontSize="small" sx={{ color: "white" }} />
+            <Cancel fontSize="small" />
           </IconButton>
         }
       >
