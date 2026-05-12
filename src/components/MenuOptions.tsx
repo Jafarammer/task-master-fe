@@ -14,6 +14,7 @@ import {
   Settings,
   FolderDelete,
 } from "@mui/icons-material";
+import { fontBodySX, fontLabelSx } from "../global.styles";
 
 type Props = {
   anchorEl: HTMLElement | null;
@@ -39,54 +40,64 @@ const MenuOptions: React.FC<Props> = ({
   onTrash,
 }) => {
   return (
-    <Menu anchorEl={anchorEl} open={open} onClose={onClose} sx={{ mt: "12px" }}>
+    <Menu
+      anchorEl={anchorEl}
+      open={open}
+      onClose={onClose}
+      sx={{ mt: "12px", borderRadius: 6 }}
+      PaperProps={{
+        sx: {
+          borderRadius: 2,
+        },
+      }}
+    >
       <MenuList>
         {onEdit && (
           <MenuItem onClick={onEdit}>
             <ListItemIcon>
-              <Edit color="info" fontSize="small" />
+              <Edit color="info" sx={fontLabelSx()} />
             </ListItemIcon>
-            <ListItemText>Edit</ListItemText>
+            <ListItemText sx={fontBodySX()}>Edit</ListItemText>
           </MenuItem>
         )}
         {onDetail && (
           <MenuItem onClick={onDetail}>
             <ListItemIcon>
-              <Info color="inherit" fontSize="small" />
+              <Info color="inherit" sx={fontLabelSx()} />
             </ListItemIcon>
-            <ListItemText>Detail</ListItemText>
+            <ListItemText sx={fontBodySX()}>Detail</ListItemText>
           </MenuItem>
         )}
         {onDelete && (
           <MenuItem onClick={onDelete}>
             <ListItemIcon>
-              <Delete color="error" fontSize="small" />
+              <Delete color="error" sx={fontLabelSx()} />
             </ListItemIcon>
-            <ListItemText>Delete</ListItemText>
+            <ListItemText sx={fontBodySX()}>Delete</ListItemText>
           </MenuItem>
         )}
         {onSetting && (
           <MenuItem onClick={onSetting}>
             <ListItemIcon>
-              <Settings color="primary" fontSize="small" />
+              <Settings color="primary" sx={fontLabelSx()} />
             </ListItemIcon>
-            <ListItemText>Setting</ListItemText>
+            <ListItemText sx={fontBodySX()}>Setting</ListItemText>
           </MenuItem>
         )}
         {onTrash && (
           <MenuItem onClick={onTrash}>
             <ListItemIcon>
-              <FolderDelete color="error" fontSize="small" />
+              <FolderDelete color="error" sx={fontLabelSx()} />
             </ListItemIcon>
-            <ListItemText>Trash</ListItemText>
+            <ListItemText sx={fontBodySX()}>Trash</ListItemText>
           </MenuItem>
         )}
         {onLogout && (
           <MenuItem onClick={onLogout}>
             <ListItemIcon>
-              <Logout color="primary" fontSize="small" />
+              <Logout color="primary" sx={fontLabelSx()} />
             </ListItemIcon>
-            <ListItemText>Logout</ListItemText>
+            <ListItemText sx={fontBodySX()}>Logout</ListItemText>
           </MenuItem>
         )}
       </MenuList>
