@@ -14,7 +14,7 @@ import {
   Box,
 } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
-import { getTaskItemSx, chipSx } from "./styles";
+import { getTaskItemSx, chipSx, fontBodySX, fontLabelSx } from "./styles";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { fetchAllTask } from "../../features/myTask/myTaskThunk";
 // custome hooks
@@ -124,7 +124,7 @@ const AllTask = ({ params, search }: Props) => {
         />
       )}
       {showSkeleton && items.length !== 0 && (
-        <List sx={{ m: 0 }}>
+        <List>
           {Array.from({ length: items.length || pagination.limit }).map(
             (_, index) => (
               <ListTaskSkeleton key={index} />
@@ -133,7 +133,7 @@ const AllTask = ({ params, search }: Props) => {
         </List>
       )}
       {items.length > 0 && !showSkeleton && (
-        <List sx={{ m: 0 }}>
+        <List>
           {items?.map((task, index): any => (
             <ListItem
               key={task._id}
@@ -143,7 +143,7 @@ const AllTask = ({ params, search }: Props) => {
                   edge="end"
                   onClick={(e) => onOpenMenu(e, task._id, task.title)}
                 >
-                  <MoreVert />
+                  <MoreVert sx={fontLabelSx()} />
                 </IconButton>
               }
             >
@@ -169,11 +169,11 @@ const AllTask = ({ params, search }: Props) => {
                       variant="outlined"
                       sx={chipSx()}
                     />
-                    <Typography variant="h6">{task.title}</Typography>
+                    <Typography sx={fontLabelSx()}>{task.title}</Typography>
                   </Stack>
                 }
                 secondary={
-                  <Typography variant="caption" color="textDisabled">
+                  <Typography sx={fontBodySX()} mt={1} color="textDisabled">
                     Due : {task.due_date}
                   </Typography>
                 }

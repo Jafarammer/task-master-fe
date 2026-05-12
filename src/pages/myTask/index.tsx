@@ -11,7 +11,7 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { Search } from "@mui/icons-material";
-import { toggleGroupSx } from "./styles";
+import { toggleGroupSx, fontBodySX, fontLabelSx, fontTitleSX } from "./styles";
 import AllTask from "./AllTask";
 import CompletedTask from "./CompletedTask";
 import PendingTask from "./PendingTask";
@@ -30,7 +30,7 @@ const MyTask = () => {
   // function event
   const onChangeToggle = (
     _event: React.MouseEvent<HTMLElement>,
-    newValue: ParamsFilter | null
+    newValue: ParamsFilter | null,
   ) => {
     if (!newValue) return;
     setParams(newValue);
@@ -58,22 +58,19 @@ const MyTask = () => {
   }, [search]);
 
   return (
-    <Box>
+    <Box component={"div"}>
       <Stack
         direction="row"
         spacing={2}
-        sx={{
-          justifyContent: "space-between",
-          alignItems: "center",
-          my: 4,
-        }}
+        justifyContent={"space-between"}
+        alignItems={"center"}
+        my={4}
       >
-        <Typography variant="h4" fontWeight={"bold"} letterSpacing={1}>
+        <Typography sx={fontTitleSX()} fontWeight={"bold"} letterSpacing={1}>
           My Tasks
         </Typography>
         <Button
           variant="contained"
-          sx={{ fontWeight: "bold" }}
           onClick={() => navigate(`/task/create?filter=${params}`)}
         >
           + Add New Task{" "}
@@ -83,11 +80,13 @@ const MyTask = () => {
       <Stack
         direction={{ xs: "column", sm: "row" }}
         spacing={2}
-        sx={{
-          justifyContent: { xs: "center", sm: "flex-start" },
-          alignItems: "center",
-          width: "100%",
+        width={"100%"}
+        justifyContent={{
+          xs: "center",
+          sm: "flex-start",
         }}
+        alignItems={"center"}
+        mb={4}
       >
         <TextField
           placeholder="Search tasks..."
@@ -96,7 +95,7 @@ const MyTask = () => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <Search />
+                <Search sx={fontLabelSx()} />
               </InputAdornment>
             ),
           }}
@@ -122,7 +121,7 @@ const MyTask = () => {
           </ToggleButton>
         </ToggleButtonGroup>
       </Stack>
-      <Box sx={{ mt: 4 }}>
+      <Box component={"div"}>
         {params === "all" && (
           <AllTask params={params} search={debouncedSearch} />
         )}

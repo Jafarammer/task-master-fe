@@ -16,7 +16,10 @@ export const toggleGroupSx = (): SxProps<Theme> => (theme) => ({
     border: "none",
     borderRadius: "8px",
     px: { xs: 1, sm: 3 },
-    fontSize: 14,
+    fontSize: {
+      xs: "12px",
+      sm: "16px",
+    },
     color:
       theme.palette.mode === "dark"
         ? "rgba(255,255,255,0.7)"
@@ -57,6 +60,39 @@ export const getTaskItemSx =
   });
 
 export const chipSx = (): SxProps<Theme> => ({
-  width: "68px",
-  borderRadius: "4px",
+  borderRadius: 2,
+  width: "100px",
+  fontSize: {
+    xs: "12px",
+    sm: "16px",
+  },
+  "@media (max-width:600px)": {
+    width: "64px",
+  },
+});
+
+export const fontBodySX = (): SxProps<Theme> => (theme) => ({
+  fontSize: {
+    xs: "12px",
+    sm: "16px",
+  },
+});
+
+export const fontTitleSX = (): SxProps<Theme> => (theme) => ({
+  fontWeight: "bold",
+  fontSize: {
+    xs: "1.5rem",
+    sm: "2rem",
+  },
+});
+
+export const fontLabelSx = (): SxProps<Theme> => (theme) => ({
+  fontSize: {
+    xs: "1rem",
+    sm: "1.5rem",
+  },
+});
+
+export const listSx = (): SxProps<Theme> => (theme) => ({
+  m: 0,
 });

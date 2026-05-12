@@ -15,7 +15,7 @@ import {
   Box,
 } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
-import { getTaskItemSx, chipSx } from "./styles";
+import { getTaskItemSx, chipSx, fontBodySX, fontLabelSx } from "./styles";
 import { fetchPendingTask } from "../../features/myTask/myTaskThunk";
 // reusable components
 import { MenuOptions, EmptyState, DeleteConfirmDialog } from "../../components";
@@ -114,7 +114,7 @@ const PendingTask = ({ params, search }: Props) => {
   }, [loading]);
 
   return (
-    <Box>
+    <Box component={"div"}>
       {/* content */}
       {items.length === 0 && (
         <EmptyState
@@ -123,7 +123,7 @@ const PendingTask = ({ params, search }: Props) => {
         />
       )}
       {showSkeleton && items.length !== 0 && (
-        <List sx={{ m: 0 }}>
+        <List>
           {Array.from({ length: items.length || pagination.limit }).map(
             (_, index) => (
               <ListTaskSkeleton key={index} />
@@ -132,7 +132,7 @@ const PendingTask = ({ params, search }: Props) => {
         </List>
       )}
       {items.length > 0 && !showSkeleton && (
-        <List sx={{ m: 0 }}>
+        <List>
           {items?.map((task, index) => (
             <ListItem
               key={task._id}
@@ -143,7 +143,7 @@ const PendingTask = ({ params, search }: Props) => {
                   aria-label="more"
                   onClick={(e) => onOpenMenu(e, task._id, task.title)}
                 >
-                  <MoreVert />
+                  <MoreVert sx={fontLabelSx()} />
                 </IconButton>
               }
             >
@@ -171,10 +171,14 @@ const PendingTask = ({ params, search }: Props) => {
                       variant="outlined"
                       sx={chipSx()}
                     />
-                    <Typography variant="h6">{task.title}</Typography>
+                    <Typography sx={fontLabelSx()}>{task.title}</Typography>
                   </Stack>
                 }
-                secondary={<Typography>Due {task.due_date}</Typography>}
+                secondary={
+                  <Typography sx={fontBodySX()} mt={1} color="textDisabled">
+                    Due {task.due_date}
+                  </Typography>
+                }
               />
             </ListItem>
           ))}

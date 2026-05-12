@@ -40,7 +40,7 @@ export const iconButtonSX = (): SxProps<Theme> => (theme) => ({
 });
 
 export const chipSX = (): SxProps<Theme> => (theme) => ({
-  borderRadius: 6,
+  borderRadius: 2,
   width: "152px",
   fontSize: {
     xs: "12px",
