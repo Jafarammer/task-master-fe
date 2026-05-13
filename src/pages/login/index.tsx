@@ -77,7 +77,7 @@ const Login = () => {
         <form onSubmit={formikLogin.handleSubmit}>
           <FormControl fullWidth sx={formControlSX()}>
             <TextField
-              placeholder="Username or Email"
+              placeholder="Email"
               size="small"
               name="email"
               value={formikLogin.values.email}
