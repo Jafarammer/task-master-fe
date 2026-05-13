@@ -18,6 +18,7 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { ArrowBackIos, Visibility, VisibilityOff } from "@mui/icons-material";
+import useProfile from "../../hooks/useProfile";
 import { parseParams } from "../../helpers/filterParamsHelper";
 import { ShowPassword } from "../../types/profile";
 // styles
@@ -38,6 +39,8 @@ const Profile = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const filterParams = parseParams(searchParams.get("filter"));
+  // hooks
+  const { formikUpdateProfile, loading } = useProfile();
   // useState
   const [open, setOpen] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<ShowPassword>({
@@ -45,6 +48,7 @@ const Profile = () => {
     newPassword: false,
     confirmPassword: false,
   });
+  const [isUpdate, setIsUpdate] = useState<boolean>(false);
   // function event
   const onTogglePassword = (field: keyof ShowPassword) => {
     setShowPassword((prev) => ({
@@ -95,7 +99,7 @@ const Profile = () => {
 
             <Divider />
 
-            <form>
+            <form onSubmit={formikUpdateProfile.handleSubmit}>
               <Stack
                 direction={{ xs: "column", md: "row" }}
                 mt={5}
@@ -104,11 +108,53 @@ const Profile = () => {
               >
                 <FormControl fullWidth>
                   <FormLabel sx={formLabelSX()}>Full Name</FormLabel>
-                  <TextField value={"Wan Jafar"} size="small" />
+                  <TextField
+                    name="fullName"
+                    value={formikUpdateProfile.values.fullName}
+                    size="small"
+                    onChange={formikUpdateProfile.handleChange}
+                    onBlur={formikUpdateProfile.handleBlur}
+                    error={
+                      !!formikUpdateProfile.touched.fullName &&
+                      !!formikUpdateProfile.errors.fullName
+                    }
+                    slotProps={{
+                      input: {
+                        readOnly: !isUpdate,
+                      },
+                    }}
+                  />
+                  {formikUpdateProfile.touched.fullName &&
+                    formikUpdateProfile.errors.fullName && (
+                      <FormHelperText error>
+                        {formikUpdateProfile.errors.fullName}
+                      </FormHelperText>
+                    )}
                 </FormControl>
                 <FormControl fullWidth>
                   <FormLabel sx={formLabelSX()}> Email</FormLabel>
-                  <TextField value={"wan.jafar1@gmail.com"} size="small" />
+                  <TextField
+                    name="email"
+                    value={formikUpdateProfile.values.email}
+                    size="small"
+                    onChange={formikUpdateProfile.handleChange}
+                    onBlur={formikUpdateProfile.handleBlur}
+                    error={
+                      !!formikUpdateProfile.touched.email &&
+                      !!formikUpdateProfile.errors.email
+                    }
+                    slotProps={{
+                      input: {
+                        readOnly: !isUpdate,
+                      },
+                    }}
+                  />
+                  {formikUpdateProfile.touched.email &&
+                    formikUpdateProfile.errors.email && (
+                      <FormHelperText error>
+                        {formikUpdateProfile.errors.email}
+                      </FormHelperText>
+                    )}
                 </FormControl>
               </Stack>
               <Stack
@@ -116,9 +162,34 @@ const Profile = () => {
                 justifyContent={"right"}
                 alignItems={"center"}
                 mb={3}
+                gap={2}
               >
-                <Button variant="contained" color="primary">
-                  Update Profile
+                {isUpdate && (
+                  <Button
+                    variant="contained"
+                    color="inherit"
+                    onClick={() => {
+                      formikUpdateProfile.resetForm();
+                      setIsUpdate(false);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                )}
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => setIsUpdate(true)}
+                  type={isUpdate ? "submit" : "button"}
+                  disabled={
+                    loading ||
+                    (isUpdate &&
+                      (!formikUpdateProfile.dirty ||
+                        !formikUpdateProfile.isValid))
+                  }
+                >
+                  {isUpdate && "Save"}
+                  {!isUpdate && "Update Profile"}
                 </Button>
               </Stack>
             </form>

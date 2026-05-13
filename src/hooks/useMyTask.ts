@@ -34,7 +34,6 @@ const useMyTask = (): useMyTaskReturn => {
   // hooks
   const notify = useSnackbarAlert();
   // useState
-  // useState
   const [loading, setLoading] = useState<boolean>(false);
   const [detailTask, setDetailTask] = useState<MyTaskPayload | null>(null);
   // formik
