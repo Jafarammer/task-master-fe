@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, MouseEventHandler } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   Box,
@@ -15,9 +15,11 @@ import {
   Card,
   CardContent,
   Avatar,
+  InputAdornment,
 } from "@mui/material";
-import { ArrowBackIos } from "@mui/icons-material";
+import { ArrowBackIos, Visibility, VisibilityOff } from "@mui/icons-material";
 import { parseParams } from "../../helpers/filterParamsHelper";
+import { ShowPassword } from "../../types/profile";
 // styles
 import {
   iconButtonSX,
@@ -38,6 +40,21 @@ const Profile = () => {
   const filterParams = parseParams(searchParams.get("filter"));
   // useState
   const [open, setOpen] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<ShowPassword>({
+    currentPassword: false,
+    newPassword: false,
+    confirmPassword: false,
+  });
+  // function event
+  const onTogglePassword = (field: keyof ShowPassword) => {
+    setShowPassword((prev) => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
+  };
+  const onMousePassword: MouseEventHandler<HTMLButtonElement> = (event) => {
+    event.preventDefault();
+  };
 
   return (
     <Box component={"div"}>
@@ -131,7 +148,32 @@ const Profile = () => {
             {open && (
               <form>
                 <FormControl fullWidth sx={{ mt: 3 }}>
-                  <TextField placeholder="Current Password" size="small" />
+                  <TextField
+                    placeholder="Current Password"
+                    size="small"
+                    type={showPassword.currentPassword ? "text" : "password"}
+                    slotProps={{
+                      input: {
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() =>
+                                onTogglePassword("currentPassword")
+                              }
+                              onMouseDown={onMousePassword}
+                              onMouseUp={onMousePassword}
+                            >
+                              {showPassword.currentPassword ? (
+                                <VisibilityOff sx={fontBodySX()} />
+                              ) : (
+                                <Visibility sx={fontBodySX()} />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      },
+                    }}
+                  />
                 </FormControl>
                 <Stack
                   direction={{ xs: "column", md: "row" }}
@@ -139,10 +181,58 @@ const Profile = () => {
                   mt={3}
                 >
                   <FormControl fullWidth>
-                    <TextField placeholder="New Password" size="small" />
+                    <TextField
+                      placeholder="New Password"
+                      size="small"
+                      type={showPassword.newPassword ? "text" : "password"}
+                      slotProps={{
+                        input: {
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                onClick={() => onTogglePassword("newPassword")}
+                                onMouseDown={onMousePassword}
+                                onMouseUp={onMousePassword}
+                              >
+                                {showPassword.newPassword ? (
+                                  <VisibilityOff sx={fontBodySX()} />
+                                ) : (
+                                  <Visibility sx={fontBodySX()} />
+                                )}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        },
+                      }}
+                    />
                   </FormControl>
                   <FormControl fullWidth>
-                    <TextField placeholder="Confirm Password" size="small" />
+                    <TextField
+                      placeholder="Confirm Password"
+                      size="small"
+                      type={showPassword.confirmPassword ? "text" : "password"}
+                      slotProps={{
+                        input: {
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                onClick={() =>
+                                  onTogglePassword("confirmPassword")
+                                }
+                                onMouseDown={onMousePassword}
+                                onMouseUp={onMousePassword}
+                              >
+                                {showPassword.confirmPassword ? (
+                                  <VisibilityOff sx={fontBodySX()} />
+                                ) : (
+                                  <Visibility sx={fontBodySX()} />
+                                )}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        },
+                      }}
+                    />
                   </FormControl>
                 </Stack>
                 <Stack
