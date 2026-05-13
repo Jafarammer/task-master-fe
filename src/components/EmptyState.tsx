@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Typography, Button } from "@mui/material";
+import { fontLabelSx, fontBodySX } from "../global.styles";
 import EmptyImage from "../assets/empty.svg?react";
 
 type EmptyStateProps = {
@@ -21,25 +22,23 @@ const EmptyState: React.FC<EmptyStateProps> = ({
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
-      height="60vh"
+      height={{
+        xs: "50vh",
+        sm: "60vh",
+      }}
       textAlign="center"
       gap={2}
       mb={3}
     >
       <EmptyImage style={{ width: "100%" }} />
-      <Typography variant="h6" fontWeight="bold">
+      <Typography sx={fontLabelSx()} fontWeight="bold">
         {title}
       </Typography>
-      <Typography variant="body2" color="text.secondary">
+      <Typography sx={fontBodySX()} color="textDisabled">
         {description}
       </Typography>
       {buttonText && onAction && (
-        <Button
-          variant="contained"
-          size="small"
-          sx={{ mt: 2, fontWeight: "bold" }}
-          onClick={onAction}
-        >
+        <Button variant="contained" size="small" onClick={onAction}>
           {buttonText}
         </Button>
       )}

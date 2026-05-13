@@ -1,5 +1,6 @@
 import { useState, MouseEventHandler } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useAppSelector } from "../../app/hooks";
 import {
   Box,
   Typography,
@@ -39,6 +40,8 @@ const Profile = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const filterParams = parseParams(searchParams.get("filter"));
+  // redux
+  const { items } = useAppSelector((state) => state.profile);
   // hooks
   const { formikUpdateProfile, loading } = useProfile();
   // useState
@@ -79,13 +82,15 @@ const Profile = () => {
           <Box component={"div"}>
             <Card variant="elevation" sx={cardSX()}>
               <CardContent sx={cardContentSX()}>
-                <Avatar sx={avatartSX()}>WJ</Avatar>
+                <Avatar sx={avatartSX()}>
+                  {items?.data?.fullName.charAt(0).toUpperCase()}
+                </Avatar>
                 <Button>Edit</Button>
                 <Typography sx={fontBodySX()} fontWeight="bold">
-                  Wan Jafar
+                  {items?.data.fullName}
                 </Typography>
                 <Typography sx={fontBodySX()} color="text.secondary">
-                  wan.jafar1@gmail.com
+                  {items?.data.email}
                 </Typography>
               </CardContent>
             </Card>
