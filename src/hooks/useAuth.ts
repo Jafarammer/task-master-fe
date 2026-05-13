@@ -72,8 +72,7 @@ const useAuth = (): UseAuthReturn => {
 
   const formikRegister = useFormik<RegisterPayload>({
     initialValues: {
-      firstName: "",
-      lastName: "",
+      fullName: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -83,8 +82,7 @@ const useAuth = (): UseAuthReturn => {
       try {
         setLoading(true);
         const payload = {
-          firstName: values.firstName,
-          lastName: values.lastName,
+          fullName: values.fullName,
           email: values.email,
           password: values.password,
         };

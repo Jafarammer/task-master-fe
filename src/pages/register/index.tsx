@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, MouseEventHandler } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import {
   Container,
@@ -14,44 +14,25 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import useAuth from "../../hooks/useAuth";
+import { ShowPassword } from "../../types/auth";
 import { containerSx, fontBodySX, fontTitleSX, formControlSX } from "./styles";
 
 const Register = () => {
   // hooks
   const { formikRegister, loading } = useAuth();
   // useState
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [showConfirmPassword, setShowConfirmPassword] =
-    useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<ShowPassword>({
+    password: false,
+    confirmPassword: false,
+  });
   // fnction event
-  const onClickShowPassword: React.MouseEventHandler<
-    HTMLButtonElement
-  > = () => {
-    setShowPassword((prev) => !prev);
+  const onTogglePassword = (field: keyof ShowPassword) => {
+    setShowPassword((prev) => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
   };
-  const onMouseDownPassword: React.MouseEventHandler<HTMLButtonElement> = (
-    event,
-  ) => {
-    event.preventDefault();
-  };
-  const onMouseUpPassword: React.MouseEventHandler<HTMLButtonElement> = (
-    event,
-  ) => {
-    event.preventDefault();
-  };
-  const onClickShowConfirmPassword: React.MouseEventHandler<
-    HTMLButtonElement
-  > = () => {
-    setShowConfirmPassword((prev) => !prev);
-  };
-  const onMouseDownConfirmPassword: React.MouseEventHandler<
-    HTMLButtonElement
-  > = (event) => {
-    event.preventDefault();
-  };
-  const onMouseUpConfirmPassword: React.MouseEventHandler<HTMLButtonElement> = (
-    event,
-  ) => {
+  const onMousePassword: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.preventDefault();
   };
 
@@ -74,43 +55,22 @@ const Register = () => {
         <form onSubmit={formikRegister.handleSubmit}>
           <FormControl fullWidth sx={formControlSX()}>
             <TextField
-              placeholder="First Name"
+              placeholder="Full Name"
               size="small"
-              name="firstName"
+              name="fullName"
               type="text"
-              value={formikRegister.values.firstName}
+              value={formikRegister.values.fullName}
               onChange={formikRegister.handleChange}
               onBlur={formikRegister.handleBlur}
               error={
-                !!formikRegister.touched.firstName &&
-                !!formikRegister.errors.firstName
+                !!formikRegister.touched.fullName &&
+                !!formikRegister.errors.fullName
               }
             />
-            {formikRegister.touched.firstName &&
-              formikRegister.errors.firstName && (
+            {formikRegister.touched.fullName &&
+              formikRegister.errors.fullName && (
                 <FormHelperText error>
-                  {formikRegister.errors.firstName}
-                </FormHelperText>
-              )}
-          </FormControl>
-          <FormControl fullWidth sx={formControlSX()}>
-            <TextField
-              placeholder="Last Name"
-              size="small"
-              name="lastName"
-              type="text"
-              value={formikRegister.values.lastName}
-              onChange={formikRegister.handleChange}
-              onBlur={formikRegister.handleBlur}
-              error={
-                !!formikRegister.touched.lastName &&
-                !!formikRegister.errors.lastName
-              }
-            />
-            {formikRegister.touched.lastName &&
-              formikRegister.errors.lastName && (
-                <FormHelperText error>
-                  {formikRegister.errors.lastName}
+                  {formikRegister.errors.fullName}
                 </FormHelperText>
               )}
           </FormControl>
@@ -138,7 +98,7 @@ const Register = () => {
               placeholder="Password"
               size="small"
               name="password"
-              type={showPassword ? "text" : "password"}
+              type={showPassword.password ? "text" : "password"}
               value={formikRegister.values.password}
               onChange={formikRegister.handleChange}
               onBlur={formikRegister.handleBlur}
@@ -152,11 +112,11 @@ const Register = () => {
                     <InputAdornment position="end">
                       <IconButton
                         edge="end"
-                        onClick={onClickShowPassword}
-                        onMouseDown={onMouseDownPassword}
-                        onMouseUp={onMouseUpPassword}
+                        onClick={() => onTogglePassword("password")}
+                        onMouseDown={onMousePassword}
+                        onMouseUp={onMousePassword}
                       >
-                        {showPassword ? (
+                        {showPassword.password ? (
                           <VisibilityOff sx={fontBodySX()} />
                         ) : (
                           <Visibility sx={fontBodySX()} />
@@ -179,7 +139,7 @@ const Register = () => {
               placeholder="Confirm Password"
               size="small"
               name="confirmPassword"
-              type={showConfirmPassword ? "text" : "password"}
+              type={showPassword.confirmPassword ? "text" : "password"}
               value={formikRegister.values.confirmPassword}
               onChange={formikRegister.handleChange}
               onBlur={formikRegister.handleBlur}
@@ -193,11 +153,11 @@ const Register = () => {
                     <InputAdornment position="end">
                       <IconButton
                         edge="end"
-                        onClick={onClickShowConfirmPassword}
-                        onMouseDown={onMouseDownConfirmPassword}
-                        onMouseUp={onMouseUpConfirmPassword}
+                        onClick={() => onTogglePassword("confirmPassword")}
+                        onMouseDown={onMousePassword}
+                        onMouseUp={onMousePassword}
                       >
-                        {showConfirmPassword ? (
+                        {showPassword.confirmPassword ? (
                           <VisibilityOff sx={fontBodySX()} />
                         ) : (
                           <Visibility sx={fontBodySX()} />

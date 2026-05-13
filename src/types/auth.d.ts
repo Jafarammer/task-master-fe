@@ -9,8 +9,7 @@ export type LoginResponse = {
 };
 
 export type RegisterPayload = {
-  firstName: string;
-  lastName: string;
+  fullName: string;
   email: string;
   password: string;
   confirmPassword?: string;
@@ -18,4 +17,9 @@ export type RegisterPayload = {
 
 export type RegisterResponse = {
   message: string;
+};
+
+export type ShowPassword = {
+  password: boolean;
+  confirmPassword: boolean;
 };

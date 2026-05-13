@@ -10,10 +10,7 @@ export const loginSchema = Yup.object().shape({
 });
 
 export const registerSchema = Yup.object().shape({
-  firstName: Yup.string().required("First name is required field!"),
-
-  lastName: Yup.string().required("Last name is required field!"),
-
+  fullName: Yup.string().required("Full name is required field!"),
   email: Yup.string()
     .email("Invalid email format")
     .required("Email is required field!"),
