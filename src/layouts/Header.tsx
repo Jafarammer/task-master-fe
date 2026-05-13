@@ -86,14 +86,11 @@ const Header = () => {
                 },
               }}
             >
-              {items?.data?.first_name} {items?.data?.last_name}
+              {items?.data?.fullName}
             </Typography>
             <Tooltip title="Open Setting">
               <IconButton onClick={onOpenMenu} sx={{ p: 0 }}>
-                <Avatar>
-                  {items?.data?.first_name.charAt(0).toUpperCase()}
-                  {items?.data?.last_name.charAt(0).toUpperCase()}
-                </Avatar>
+                <Avatar>{items?.data?.fullName.charAt(0).toUpperCase()}</Avatar>
               </IconButton>
             </Tooltip>
             <MenuOptions

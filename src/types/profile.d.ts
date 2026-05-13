@@ -1,6 +1,6 @@
 export interface IProfileData {
-  first_name: string;
-  last_name: string;
+  fullName: string;
+  email: string;
 }
 
 export interface IProfileResponse {

@@ -8,7 +8,7 @@ export const fetchProfile = createAsyncThunk<
   { rejectValue: string }
 >("profile/fetch", async (_, { rejectWithValue }) => {
   try {
-    const res = await api.get<IProfileResponse>(`/users/profile`);
+    const res = await api.get<IProfileResponse>(`/profile`);
     return res.data as IProfileResponse;
   } catch (error: any) {
     return rejectWithValue(
