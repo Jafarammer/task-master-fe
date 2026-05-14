@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchProfile } from "./profileThunk";
+import { fetchProfile, updateProfile } from "./profileThunk";
 import { IProfileResponse } from "../../types/profile";
 
 interface IProfileState {
@@ -38,6 +38,20 @@ const profileSlice = createSlice({
         state.loading = false;
         state.items = null;
         state.error = action.error.message || "Failed to load data!";
+      })
+      .addCase(updateProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = action.payload;
+        state.error = null;
+      })
+      .addCase(updateProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.items = null;
+        state.error = action.error.message || "Failed to update profile!";
       });
   },
 });

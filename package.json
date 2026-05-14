@@ -17,6 +17,7 @@
     "@mui/material": "^6.5.0",
     "@mui/x-date-pickers": "^7.29.4",
     "@reduxjs/toolkit": "^2.9.0",
+    "axios": "^1.16.1",
     "dayjs": "^1.11.19",
     "formik": "^2.4.6",
     "localforage": "^1.10.0",

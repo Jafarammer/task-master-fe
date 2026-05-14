@@ -4,6 +4,8 @@ export interface IProfileData {
 }
 
 export interface IProfileResponse {
+  message: string;
+  requireRelogin: boolean;
   data: IProfileData;
 }
 

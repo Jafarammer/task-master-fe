@@ -43,7 +43,7 @@ const Profile = () => {
   // redux
   const { items } = useAppSelector((state) => state.profile);
   // hooks
-  const { formikUpdateProfile, loading } = useProfile();
+  const { formikUpdateProfile, loading, setIsUpdate, isUpdate } = useProfile();
   // useState
   const [open, setOpen] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<ShowPassword>({
@@ -51,7 +51,6 @@ const Profile = () => {
     newPassword: false,
     confirmPassword: false,
   });
-  const [isUpdate, setIsUpdate] = useState<boolean>(false);
   // function event
   const onTogglePassword = (field: keyof ShowPassword) => {
     setShowPassword((prev) => ({
@@ -87,10 +86,10 @@ const Profile = () => {
                 </Avatar>
                 <Button>Edit</Button>
                 <Typography sx={fontBodySX()} fontWeight="bold">
-                  {items?.data.fullName}
+                  {items?.data?.fullName}
                 </Typography>
                 <Typography sx={fontBodySX()} color="text.secondary">
-                  {items?.data.email}
+                  {items?.data?.email}
                 </Typography>
               </CardContent>
             </Card>
@@ -192,6 +191,7 @@ const Profile = () => {
                       (!formikUpdateProfile.dirty ||
                         !formikUpdateProfile.isValid))
                   }
+                  loading={loading}
                 >
                   {isUpdate && "Save"}
                   {!isUpdate && "Update Profile"}
