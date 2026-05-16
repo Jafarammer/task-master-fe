@@ -13,7 +13,7 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import useLogout from "../hooks/useLogout";
 import { useNavigate } from "react-router-dom";
 import { fetchProfile } from "../features/profile/profileThunk";
-import { headerTitleSx, containerSx, toolbarSx } from "./styles";
+import { headerTitleSx, containerSx, toolbarSx, avatartSX } from "./styles";
 // custome components
 import { MenuOptions } from "../components";
 // type declaration
@@ -90,7 +90,10 @@ const Header = () => {
             </Typography>
             <Tooltip title="Open Setting">
               <IconButton onClick={onOpenMenu} sx={{ p: 0 }}>
-                <Avatar>{items?.data?.fullName.charAt(0).toUpperCase()}</Avatar>
+                <Avatar sx={avatartSX()} src={items?.data?.profilePicture}>
+                  {!items?.data?.profilePicture &&
+                    items?.data?.fullName.charAt(0).toUpperCase()}
+                </Avatar>
               </IconButton>
             </Tooltip>
             <MenuOptions

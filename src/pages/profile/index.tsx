@@ -17,6 +17,7 @@ import {
   CardContent,
   Avatar,
   InputAdornment,
+  CircularProgress,
 } from "@mui/material";
 import { ArrowBackIos, Visibility, VisibilityOff } from "@mui/icons-material";
 import useProfile from "../../hooks/useProfile";
@@ -43,7 +44,15 @@ const Profile = () => {
   // redux
   const { items } = useAppSelector((state) => state.profile);
   // hooks
-  const { formikUpdateProfile, loading, setIsUpdate, isUpdate } = useProfile();
+  const {
+    formikUpdateProfile,
+    loading,
+    setIsUpdate,
+    isUpdate,
+    fileInputRef,
+    onChangePicture,
+    loadingUpdatePicture,
+  } = useProfile();
   // useState
   const [open, setOpen] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<ShowPassword>({
@@ -81,10 +90,26 @@ const Profile = () => {
           <Box component={"div"}>
             <Card variant="elevation" sx={cardSX()}>
               <CardContent sx={cardContentSX()}>
-                <Avatar sx={avatartSX()}>
-                  {items?.data?.fullName.charAt(0).toUpperCase()}
-                </Avatar>
-                <Button>Edit</Button>
+                {loadingUpdatePicture && <CircularProgress />}
+                {!loadingUpdatePicture && (
+                  <Avatar sx={avatartSX()} src={items?.data?.profilePicture}>
+                    {!items?.data?.profilePicture &&
+                      items?.data?.fullName.charAt(0).toUpperCase()}
+                  </Avatar>
+                )}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  hidden
+                  accept="image/*"
+                  onChange={onChangePicture}
+                />
+                <Button
+                  disabled={loadingUpdatePicture}
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  Edit
+                </Button>
                 <Typography sx={fontBodySX()} fontWeight="bold">
                   {items?.data?.fullName}
                 </Typography>

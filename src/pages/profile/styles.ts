@@ -30,6 +30,7 @@ export const avatartSX = (): SxProps<Theme> => (theme) => ({
     sm: 80,
   },
   mb: 2,
+  border: "1px solid #A0A0A0",
 });
 
 export const buttonTextSX = (): SxProps<Theme> => (theme) => ({

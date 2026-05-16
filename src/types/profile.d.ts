@@ -1,6 +1,7 @@
 export interface IProfileData {
   fullName: string;
   email: string;
+  profilePicture: string;
 }
 
 export interface IProfileResponse {
@@ -12,6 +13,10 @@ export interface IProfileResponse {
 export interface IUpdateProfilePayload {
   fullName: string;
   email: string;
+}
+
+export interface IUpdateProfilePicturePayload {
+  profilePicture: File;
 }
 
 export type ShowPassword = {

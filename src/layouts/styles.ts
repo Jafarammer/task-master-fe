@@ -20,3 +20,7 @@ export const toolbarSx = (): SxProps<Theme> => ({
   justifyContent: "space-between",
   alignItems: "center",
 });
+
+export const avatartSX = (): SxProps<Theme> => (theme) => ({
+  border: "1px solid #A0A0A0",
+});

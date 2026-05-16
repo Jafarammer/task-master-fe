@@ -1,7 +1,15 @@
-import { useState, Dispatch, SetStateAction } from "react";
+import {
+  useState,
+  Dispatch,
+  SetStateAction,
+  useRef,
+  ChangeEventHandler,
+  RefObject,
+} from "react";
 import { useFormik, FormikProps } from "formik";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { updateProfile } from "../features/profile/profileThunk";
+import { updateProfile, fetchProfile } from "../features/profile/profileThunk";
+import { updateProfilePicture } from "../services/profileService";
 import useSnackbarAlert from "./useSnackbarAlert";
 import { validations } from "../validations";
 import { IUpdateProfilePayload } from "../types/profile";
@@ -12,6 +20,9 @@ type useProfileReturn = {
   loading: boolean;
   isUpdate: boolean;
   setIsUpdate: Dispatch<SetStateAction<boolean>>;
+  fileInputRef: RefObject<HTMLInputElement>;
+  onChangePicture: ChangeEventHandler<HTMLInputElement>;
+  loadingUpdatePicture: boolean;
 };
 
 const useProfile = (): useProfileReturn => {
@@ -24,6 +35,10 @@ const useProfile = (): useProfileReturn => {
   // useState
   const [loading, setLoading] = useState<boolean>(false);
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
+  const [loadingUpdatePicture, setloadingUpdatePicture] =
+    useState<boolean>(false);
+  // reff
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   // formik
   const formikUpdateProfile = useFormik<IUpdateProfilePayload>({
     enableReinitialize: true,
@@ -52,12 +67,40 @@ const useProfile = (): useProfileReturn => {
       }
     },
   });
+  // function event
+  const onChangePicture: ChangeEventHandler<HTMLInputElement> = async (
+    event,
+  ) => {
+    try {
+      setloadingUpdatePicture(true);
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      const payload = {
+        profilePicture: file,
+      };
+
+      const response = await updateProfilePicture(payload);
+      notify(response.message, "success");
+      dispatch(fetchProfile());
+    } catch (error: any) {
+      notify(
+        error.response?.data?.message || "Failed to update profile picture",
+        "error",
+      );
+    } finally {
+      setloadingUpdatePicture(false);
+    }
+  };
 
   return {
     formikUpdateProfile,
     loading,
     isUpdate,
     setIsUpdate,
+    fileInputRef,
+    onChangePicture,
+    loadingUpdatePicture,
   };
 };
 
