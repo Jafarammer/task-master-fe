@@ -1,4 +1,4 @@
-import { useState, MouseEventHandler } from "react";
+import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 import {
@@ -6,23 +6,19 @@ import {
   Typography,
   Grid2,
   Divider,
-  TextField,
-  FormControl,
-  FormHelperText,
-  FormLabel,
   Stack,
   Button,
   IconButton,
   Card,
   CardContent,
   Avatar,
-  InputAdornment,
   CircularProgress,
 } from "@mui/material";
-import { ArrowBackIos, Visibility, VisibilityOff } from "@mui/icons-material";
+import { ArrowBackIos } from "@mui/icons-material";
 import useProfile from "../../hooks/useProfile";
 import { parseParams } from "../../helpers/filterParamsHelper";
-import { ShowPassword } from "../../types/profile";
+import FormPersonalInformation from "./FormPersonalInformation";
+import FormSecurity from "./FormSecurity";
 // styles
 import {
   iconButtonSX,
@@ -30,7 +26,6 @@ import {
   cardContentSX,
   avatartSX,
   dividerLineSX,
-  formLabelSX,
   fontBodySX,
   fontLabelSx,
   fontTitleSX,
@@ -44,34 +39,9 @@ const Profile = () => {
   // redux
   const { items } = useAppSelector((state) => state.profile);
   // hooks
-  const {
-    formikUpdateProfile,
-    loading,
-    setIsUpdate,
-    isUpdate,
-    fileInputRef,
-    onChangePicture,
-    loadingUpdatePicture,
-    formikUpdateProfilePasswrod,
-    laodingUpdatePassword,
-  } = useProfile();
+  const { fileInputRef, onChangePicture, loadingUpdatePicture } = useProfile();
   // useState
   const [open, setOpen] = useState<boolean>(false);
-  const [showPassword, setShowPassword] = useState<ShowPassword>({
-    currentPassword: false,
-    newPassword: false,
-    confirmPassword: false,
-  });
-  // function event
-  const onTogglePassword = (field: keyof ShowPassword) => {
-    setShowPassword((prev) => ({
-      ...prev,
-      [field]: !prev[field],
-    }));
-  };
-  const onMousePassword: MouseEventHandler<HTMLButtonElement> = (event) => {
-    event.preventDefault();
-  };
 
   return (
     <Box component={"div"}>
@@ -129,102 +99,8 @@ const Profile = () => {
             </Typography>
 
             <Divider />
+            <FormPersonalInformation />
 
-            <form onSubmit={formikUpdateProfile.handleSubmit}>
-              <Stack
-                direction={{ xs: "column", md: "row" }}
-                mt={5}
-                mb={3}
-                spacing={4}
-              >
-                <FormControl fullWidth>
-                  <FormLabel sx={formLabelSX()}>Full Name</FormLabel>
-                  <TextField
-                    name="fullName"
-                    value={formikUpdateProfile.values.fullName}
-                    size="small"
-                    onChange={formikUpdateProfile.handleChange}
-                    onBlur={formikUpdateProfile.handleBlur}
-                    error={
-                      !!formikUpdateProfile.touched.fullName &&
-                      !!formikUpdateProfile.errors.fullName
-                    }
-                    slotProps={{
-                      input: {
-                        readOnly: !isUpdate,
-                      },
-                    }}
-                  />
-                  {formikUpdateProfile.touched.fullName &&
-                    formikUpdateProfile.errors.fullName && (
-                      <FormHelperText error>
-                        {formikUpdateProfile.errors.fullName}
-                      </FormHelperText>
-                    )}
-                </FormControl>
-                <FormControl fullWidth>
-                  <FormLabel sx={formLabelSX()}> Email</FormLabel>
-                  <TextField
-                    name="email"
-                    value={formikUpdateProfile.values.email}
-                    size="small"
-                    onChange={formikUpdateProfile.handleChange}
-                    onBlur={formikUpdateProfile.handleBlur}
-                    error={
-                      !!formikUpdateProfile.touched.email &&
-                      !!formikUpdateProfile.errors.email
-                    }
-                    slotProps={{
-                      input: {
-                        readOnly: !isUpdate,
-                      },
-                    }}
-                  />
-                  {formikUpdateProfile.touched.email &&
-                    formikUpdateProfile.errors.email && (
-                      <FormHelperText error>
-                        {formikUpdateProfile.errors.email}
-                      </FormHelperText>
-                    )}
-                </FormControl>
-              </Stack>
-              <Stack
-                direction={"row"}
-                justifyContent={"right"}
-                alignItems={"center"}
-                mb={3}
-                gap={2}
-              >
-                {isUpdate && (
-                  <Button
-                    variant="contained"
-                    color="inherit"
-                    onClick={() => {
-                      formikUpdateProfile.resetForm();
-                      setIsUpdate(false);
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                )}
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => setIsUpdate(true)}
-                  type={isUpdate ? "submit" : "button"}
-                  disabled={
-                    loading ||
-                    (isUpdate &&
-                      (!formikUpdateProfile.dirty ||
-                        !formikUpdateProfile.isValid))
-                  }
-                  loading={loading}
-                >
-                  {isUpdate && "Save"}
-                  {!isUpdate && "Update Profile"}
-                </Button>
-              </Stack>
-            </form>
             <Typography mb={2} sx={fontLabelSx()} fontWeight={"bold"}>
               Security
             </Typography>
@@ -248,167 +124,7 @@ const Profile = () => {
                 Change Password
               </Button>
             </Stack>
-            {open && (
-              <form onSubmit={formikUpdateProfilePasswrod.handleSubmit}>
-                <FormControl fullWidth sx={{ mt: 3 }}>
-                  <TextField
-                    name="currentPassword"
-                    placeholder="Current Password"
-                    size="small"
-                    type={showPassword.currentPassword ? "text" : "password"}
-                    value={formikUpdateProfilePasswrod.values.currentPassword}
-                    onChange={formikUpdateProfilePasswrod.handleChange}
-                    onBlur={formikUpdateProfilePasswrod.handleBlur}
-                    error={
-                      !!formikUpdateProfilePasswrod.touched.currentPassword &&
-                      !!formikUpdateProfilePasswrod.errors.currentPassword
-                    }
-                    slotProps={{
-                      input: {
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <IconButton
-                              onClick={() =>
-                                onTogglePassword("currentPassword")
-                              }
-                              onMouseDown={onMousePassword}
-                              onMouseUp={onMousePassword}
-                            >
-                              {showPassword.currentPassword ? (
-                                <VisibilityOff sx={fontBodySX()} />
-                              ) : (
-                                <Visibility sx={fontBodySX()} />
-                              )}
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      },
-                    }}
-                  />
-                  {formikUpdateProfilePasswrod.touched.currentPassword &&
-                    formikUpdateProfilePasswrod.errors.currentPassword && (
-                      <FormHelperText error>
-                        {formikUpdateProfilePasswrod.errors.currentPassword}
-                      </FormHelperText>
-                    )}
-                </FormControl>
-                <Stack
-                  direction={{ xs: "column", md: "row" }}
-                  spacing={4}
-                  mt={3}
-                >
-                  <FormControl fullWidth>
-                    <TextField
-                      name="newPassword"
-                      placeholder="New Password"
-                      size="small"
-                      value={formikUpdateProfilePasswrod.values.newPassword}
-                      type={showPassword.newPassword ? "text" : "password"}
-                      onChange={formikUpdateProfilePasswrod.handleChange}
-                      onBlur={formikUpdateProfilePasswrod.handleBlur}
-                      error={
-                        !!formikUpdateProfilePasswrod.touched.newPassword &&
-                        !!formikUpdateProfilePasswrod.errors.newPassword
-                      }
-                      slotProps={{
-                        input: {
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <IconButton
-                                onClick={() => onTogglePassword("newPassword")}
-                                onMouseDown={onMousePassword}
-                                onMouseUp={onMousePassword}
-                              >
-                                {showPassword.newPassword ? (
-                                  <VisibilityOff sx={fontBodySX()} />
-                                ) : (
-                                  <Visibility sx={fontBodySX()} />
-                                )}
-                              </IconButton>
-                            </InputAdornment>
-                          ),
-                        },
-                      }}
-                    />
-                    {formikUpdateProfilePasswrod.touched.newPassword &&
-                      formikUpdateProfilePasswrod.errors.newPassword && (
-                        <FormHelperText error>
-                          {formikUpdateProfilePasswrod.errors.newPassword}
-                        </FormHelperText>
-                      )}
-                  </FormControl>
-                  <FormControl fullWidth>
-                    <TextField
-                      name="confirmPassword"
-                      placeholder="Confirm Password"
-                      size="small"
-                      value={formikUpdateProfilePasswrod.values.confirmPassword}
-                      type={showPassword.confirmPassword ? "text" : "password"}
-                      onChange={formikUpdateProfilePasswrod.handleChange}
-                      onBlur={formikUpdateProfilePasswrod.handleBlur}
-                      error={
-                        !!formikUpdateProfilePasswrod.touched.confirmPassword &&
-                        !!formikUpdateProfilePasswrod.errors.confirmPassword
-                      }
-                      slotProps={{
-                        input: {
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <IconButton
-                                onClick={() =>
-                                  onTogglePassword("confirmPassword")
-                                }
-                                onMouseDown={onMousePassword}
-                                onMouseUp={onMousePassword}
-                              >
-                                {showPassword.confirmPassword ? (
-                                  <VisibilityOff sx={fontBodySX()} />
-                                ) : (
-                                  <Visibility sx={fontBodySX()} />
-                                )}
-                              </IconButton>
-                            </InputAdornment>
-                          ),
-                        },
-                      }}
-                    />
-                    {formikUpdateProfilePasswrod.touched.confirmPassword &&
-                      formikUpdateProfilePasswrod.errors.confirmPassword && (
-                        <FormHelperText error>
-                          {formikUpdateProfilePasswrod.errors.confirmPassword}
-                        </FormHelperText>
-                      )}
-                  </FormControl>
-                </Stack>
-                <Stack
-                  direction={"row"}
-                  justifyContent={"right"}
-                  alignItems={"center"}
-                  my={3}
-                  gap={2}
-                >
-                  <Button
-                    variant="contained"
-                    color="inherit"
-                    onClick={() => setOpen(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    type="submit"
-                    loading={laodingUpdatePassword}
-                    variant="contained"
-                    disabled={
-                      laodingUpdatePassword ||
-                      !formikUpdateProfilePasswrod.dirty ||
-                      !formikUpdateProfilePasswrod.isValid
-                    }
-                  >
-                    Save Password
-                  </Button>
-                </Stack>
-              </form>
-            )}
+            {open && <FormSecurity setOpen={setOpen} />}
           </Box>
         </Grid2>
       </Grid2>
