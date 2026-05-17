@@ -9,10 +9,16 @@ import {
 import { useFormik, FormikProps } from "formik";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { updateProfile, fetchProfile } from "../features/profile/profileThunk";
-import { updateProfilePicture } from "../services/profileService";
+import {
+  updateProfilePicture,
+  updateProfilePassword,
+} from "../services/profileService";
 import useSnackbarAlert from "./useSnackbarAlert";
 import { validations } from "../validations";
-import { IUpdateProfilePayload } from "../types/profile";
+import {
+  IUpdateProfilePayload,
+  IUpdateProfilePasswordPayload,
+} from "../types/profile";
 import useLogout from "./useLogout";
 
 type useProfileReturn = {
@@ -23,6 +29,8 @@ type useProfileReturn = {
   fileInputRef: RefObject<HTMLInputElement>;
   onChangePicture: ChangeEventHandler<HTMLInputElement>;
   loadingUpdatePicture: boolean;
+  formikUpdateProfilePasswrod: FormikProps<IUpdateProfilePasswordPayload>;
+  laodingUpdatePassword: boolean;
 };
 
 const useProfile = (): useProfileReturn => {
@@ -36,6 +44,8 @@ const useProfile = (): useProfileReturn => {
   const [loading, setLoading] = useState<boolean>(false);
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
   const [loadingUpdatePicture, setloadingUpdatePicture] =
+    useState<boolean>(false);
+  const [laodingUpdatePassword, setLoadingUpdatePassword] =
     useState<boolean>(false);
   // reff
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -60,10 +70,38 @@ const useProfile = (): useProfileReturn => {
           onLogout();
         }
       } catch (error: any) {
-        notify(error.error?.response?.data?.message, "error");
+        notify(error?.response?.data?.message, "error");
       } finally {
         setLoading(false);
         setIsUpdate(false);
+      }
+    },
+  });
+  const formikUpdateProfilePasswrod = useFormik<IUpdateProfilePasswordPayload>({
+    enableReinitialize: true,
+    initialValues: {
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    },
+    validationSchema: validations.updateProfilePassword,
+    onSubmit: async (values): Promise<void> => {
+      try {
+        setLoadingUpdatePassword(true);
+        const payload = {
+          currentPassword: values.currentPassword,
+          newPassword: values.newPassword,
+          confirmPassword: values.confirmPassword,
+        };
+        const response = await updateProfilePassword(payload);
+        notify(response.message, "success");
+        if (response.requireRelogin) {
+          onLogout();
+        }
+      } catch (error: any) {
+        notify(error?.response?.data?.message, "error");
+      } finally {
+        setLoadingUpdatePassword(false);
       }
     },
   });
@@ -101,6 +139,8 @@ const useProfile = (): useProfileReturn => {
     fileInputRef,
     onChangePicture,
     loadingUpdatePicture,
+    formikUpdateProfilePasswrod,
+    laodingUpdatePassword,
   };
 };
 

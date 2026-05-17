@@ -2,6 +2,7 @@ import api from "../app/api";
 import {
   IProfileResponse,
   IUpdateProfilePicturePayload,
+  IUpdateProfilePasswordPayload,
 } from "../types/profile";
 
 export const updateProfilePicture = async (
@@ -16,5 +17,15 @@ export const updateProfilePicture = async (
     },
   });
 
+  return res.data;
+};
+
+export const updateProfilePassword = async (
+  payload: IUpdateProfilePasswordPayload,
+): Promise<IProfileResponse> => {
+  const res = await api.patch<IProfileResponse>(
+    "/auth/change-password",
+    payload,
+  );
   return res.data;
 };

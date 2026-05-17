@@ -19,6 +19,12 @@ export interface IUpdateProfilePicturePayload {
   profilePicture: File;
 }
 
+export interface IUpdateProfilePasswordPayload {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
 export type ShowPassword = {
   currentPassword: boolean;
   newPassword: boolean;

@@ -52,6 +52,8 @@ const Profile = () => {
     fileInputRef,
     onChangePicture,
     loadingUpdatePicture,
+    formikUpdateProfilePasswrod,
+    laodingUpdatePassword,
   } = useProfile();
   // useState
   const [open, setOpen] = useState<boolean>(false);
@@ -247,12 +249,20 @@ const Profile = () => {
               </Button>
             </Stack>
             {open && (
-              <form>
+              <form onSubmit={formikUpdateProfilePasswrod.handleSubmit}>
                 <FormControl fullWidth sx={{ mt: 3 }}>
                   <TextField
+                    name="currentPassword"
                     placeholder="Current Password"
                     size="small"
                     type={showPassword.currentPassword ? "text" : "password"}
+                    value={formikUpdateProfilePasswrod.values.currentPassword}
+                    onChange={formikUpdateProfilePasswrod.handleChange}
+                    onBlur={formikUpdateProfilePasswrod.handleBlur}
+                    error={
+                      !!formikUpdateProfilePasswrod.touched.currentPassword &&
+                      !!formikUpdateProfilePasswrod.errors.currentPassword
+                    }
                     slotProps={{
                       input: {
                         endAdornment: (
@@ -275,6 +285,12 @@ const Profile = () => {
                       },
                     }}
                   />
+                  {formikUpdateProfilePasswrod.touched.currentPassword &&
+                    formikUpdateProfilePasswrod.errors.currentPassword && (
+                      <FormHelperText error>
+                        {formikUpdateProfilePasswrod.errors.currentPassword}
+                      </FormHelperText>
+                    )}
                 </FormControl>
                 <Stack
                   direction={{ xs: "column", md: "row" }}
@@ -283,9 +299,17 @@ const Profile = () => {
                 >
                   <FormControl fullWidth>
                     <TextField
+                      name="newPassword"
                       placeholder="New Password"
                       size="small"
+                      value={formikUpdateProfilePasswrod.values.newPassword}
                       type={showPassword.newPassword ? "text" : "password"}
+                      onChange={formikUpdateProfilePasswrod.handleChange}
+                      onBlur={formikUpdateProfilePasswrod.handleBlur}
+                      error={
+                        !!formikUpdateProfilePasswrod.touched.newPassword &&
+                        !!formikUpdateProfilePasswrod.errors.newPassword
+                      }
                       slotProps={{
                         input: {
                           endAdornment: (
@@ -306,12 +330,26 @@ const Profile = () => {
                         },
                       }}
                     />
+                    {formikUpdateProfilePasswrod.touched.newPassword &&
+                      formikUpdateProfilePasswrod.errors.newPassword && (
+                        <FormHelperText error>
+                          {formikUpdateProfilePasswrod.errors.newPassword}
+                        </FormHelperText>
+                      )}
                   </FormControl>
                   <FormControl fullWidth>
                     <TextField
+                      name="confirmPassword"
                       placeholder="Confirm Password"
                       size="small"
+                      value={formikUpdateProfilePasswrod.values.confirmPassword}
                       type={showPassword.confirmPassword ? "text" : "password"}
+                      onChange={formikUpdateProfilePasswrod.handleChange}
+                      onBlur={formikUpdateProfilePasswrod.handleBlur}
+                      error={
+                        !!formikUpdateProfilePasswrod.touched.confirmPassword &&
+                        !!formikUpdateProfilePasswrod.errors.confirmPassword
+                      }
                       slotProps={{
                         input: {
                           endAdornment: (
@@ -334,6 +372,12 @@ const Profile = () => {
                         },
                       }}
                     />
+                    {formikUpdateProfilePasswrod.touched.confirmPassword &&
+                      formikUpdateProfilePasswrod.errors.confirmPassword && (
+                        <FormHelperText error>
+                          {formikUpdateProfilePasswrod.errors.confirmPassword}
+                        </FormHelperText>
+                      )}
                   </FormControl>
                 </Stack>
                 <Stack
@@ -341,8 +385,27 @@ const Profile = () => {
                   justifyContent={"right"}
                   alignItems={"center"}
                   my={3}
+                  gap={2}
                 >
-                  <Button variant="contained">Save Password</Button>
+                  <Button
+                    variant="contained"
+                    color="inherit"
+                    onClick={() => setOpen(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="submit"
+                    loading={laodingUpdatePassword}
+                    variant="contained"
+                    disabled={
+                      laodingUpdatePassword ||
+                      !formikUpdateProfilePasswrod.dirty ||
+                      !formikUpdateProfilePasswrod.isValid
+                    }
+                  >
+                    Save Password
+                  </Button>
                 </Stack>
               </form>
             )}
