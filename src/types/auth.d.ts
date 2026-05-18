@@ -23,3 +23,21 @@ export type ShowPassword = {
   password: boolean;
   confirmPassword: boolean;
 };
+
+export type ForgotPasswordPayload = {
+  email: string;
+};
+
+export type ForgotPasswordResponse = {
+  message: string;
+};
+
+export type ResetPasswordPayload = {
+  token: string;
+  newPassword: string;
+  confirmPassword: string;
+};
+
+export type ResetPasswordResponse = {
+  message: string;
+};

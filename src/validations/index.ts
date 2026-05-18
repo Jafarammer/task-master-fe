@@ -1,4 +1,9 @@
-import { loginSchema, registerSchema } from "./authSchema";
+import {
+  loginSchema,
+  registerSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
+} from "./authSchema";
 import { myTaskSchema } from "./myTaskSchema";
 import {
   updateProfileSchema,
@@ -11,4 +16,6 @@ export const validations = {
   myTask: myTaskSchema,
   updateProfile: updateProfileSchema,
   updateProfilePassword: updateProfilePasswordSchema,
+  resetPassword: resetPasswordSchema,
+  forgotPassword: forgotPasswordSchema,
 };

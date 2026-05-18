@@ -27,3 +27,23 @@ export const registerSchema = Yup.object().shape({
     .oneOf([Yup.ref("password")], "Passwords must match")
     .required("Confirm password is required field!"),
 });
+
+export const forgotPasswordSchema = Yup.object().shape({
+  email: Yup.string()
+    .email("Invalid email format")
+    .required("Email is required field!"),
+});
+
+export const resetPasswordSchema = Yup.object().shape({
+  newPassword: Yup.string()
+    .min(8, "Password must be at least 8 characters")
+    .matches(/[A-Z]/, "At least 1 uppercase letter")
+    .matches(/[a-z]/, "At least 1 lowercase letter")
+    .matches(/[0-9]/, "At least 1 number")
+    .matches(/[@$!%*?&]/, "At least 1 special character")
+    .required("New Password is required field!"),
+
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("newPassword")], "Passwords must match")
+    .required("Confirm Password is required field!"),
+});

@@ -1,21 +1,35 @@
 import { useState } from "react";
 import { useFormik, FormikProps } from "formik";
 import { useCookies } from "react-cookie";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import useSnackbarAlert from "./useSnackbarAlert";
-import { LoginPayload, RegisterPayload } from "../types/auth";
+import {
+  LoginPayload,
+  RegisterPayload,
+  ForgotPasswordPayload,
+  ResetPasswordPayload,
+} from "../types/auth";
 import { validations } from "../validations";
-import { loginUser, registerUser } from "../services/authService";
+import {
+  loginUser,
+  registerUser,
+  forgotPassword,
+  resetPassword,
+} from "../services/authService";
 
 type UseAuthReturn = {
   formikLogin: FormikProps<LoginPayload>;
   formikRegister: FormikProps<RegisterPayload>;
+  formikForgotPassword: FormikProps<ForgotPasswordPayload>;
+  formikResetPassword: FormikProps<ResetPasswordPayload>;
   loading: boolean;
 };
 
 const useAuth = (): UseAuthReturn => {
   // router
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
   // hooks
   const [cookies, setCookie] = useCookies(["token"]);
   const notify = useSnackbarAlert();
@@ -100,10 +114,63 @@ const useAuth = (): UseAuthReturn => {
     },
   });
 
+  const formikForgotPassword = useFormik<ForgotPasswordPayload>({
+    enableReinitialize: true,
+    initialValues: {
+      email: "",
+    },
+    validationSchema: validations.forgotPassword,
+    onSubmit: async (values): Promise<void> => {
+      try {
+        setLoading(true);
+        const payload = {
+          email: values.email,
+        };
+        const response = await forgotPassword(payload);
+        notify(response.message, "success");
+        formikForgotPassword.resetForm();
+      } catch (error: any) {
+        notify(error?.response?.data?.message, "error");
+      } finally {
+        setLoading(false);
+      }
+    },
+  });
+
+  const formikResetPassword = useFormik<ResetPasswordPayload>({
+    enableReinitialize: true,
+    initialValues: {
+      token: searchParams.get("token") ?? "",
+      newPassword: "",
+      confirmPassword: "",
+    },
+    validationSchema: validations.resetPassword,
+    onSubmit: async (values): Promise<void> => {
+      try {
+        setLoading(true);
+        const payload = {
+          token: values.token,
+          newPassword: values.newPassword,
+          confirmPassword: values.confirmPassword,
+        };
+        const response = await resetPassword(payload);
+        notify(response.message, "success");
+        navigate("/login");
+      } catch (error: any) {
+        notify(error?.response?.data?.message, "error");
+        navigate("/login");
+      } finally {
+        setLoading(false);
+      }
+    },
+  });
+
   return {
     loading,
     formikLogin,
     formikRegister,
+    formikForgotPassword,
+    formikResetPassword,
   };
 };
 
