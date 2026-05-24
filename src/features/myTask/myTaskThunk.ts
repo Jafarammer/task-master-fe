@@ -1,79 +1,86 @@
 import api from "../../app/api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  IApiParams,
+  IApiResponse,
+  IApiErrorResponse,
+} from "../../interfaces/commonInterface";
+import { IMyTaskData } from "../../interfaces/myTaskInterface";
 import { IMyTaskParams, IMyTaskResponse } from "../../types/myTask";
 
 export const fetchAllTask = createAsyncThunk<
-  IMyTaskResponse,
-  IMyTaskParams | undefined,
-  { rejectValue: string }
+  IApiResponse<IMyTaskData[]>,
+  IApiParams,
+  { rejectValue: IApiErrorResponse }
 >("allTask/fetch", async (params, { rejectWithValue }) => {
   try {
     const {
       page = 1,
       limit = 1,
-      sort_by = "createdAt",
+      sortBy = "createdAt",
       order = "desc",
-      search = "",
-    } = params || {};
+      query = "",
+    } = params as IApiParams;
 
     const response = await api.get("/task", {
-      params: { page, limit, sort_by, order, search },
+      params: { page, limit, sortBy, order, query },
     });
 
-    return response.data as IMyTaskResponse;
+    return response.data;
   } catch (error: any) {
-    return rejectWithValue(
-      error.response?.data?.message || "Failed to fetch tasks",
-    );
+    return rejectWithValue({
+      message: error.response?.data?.message || "Failed to fetch tasks",
+    });
   }
 });
 
 export const fetchCompletedTask = createAsyncThunk<
-  IMyTaskResponse,
-  IMyTaskParams | undefined,
-  { rejectValue: string }
+  IApiResponse<IMyTaskData[]>,
+  IApiParams,
+  { rejectValue: IApiErrorResponse }
 >("completedTask/fetch", async (params, { rejectWithValue }) => {
   try {
     const {
       page = 1,
       limit = 5,
-      sort_by = "createdAt",
+      sortBy = "createdAt",
       order = "desc",
-      search = "",
-    } = params || {};
+      query = "",
+    } = params as IApiParams;
 
     const response = await api.get("/task/completed", {
-      params: { page, limit, sort_by, order, search },
+      params: { page, limit, sortBy, order, query },
     });
-    return response.data as IMyTaskResponse;
+    return response.data;
   } catch (error: any) {
-    return rejectWithValue(
-      error.response?.data?.message || "Failed to fetch tasks completed",
-    );
+    return rejectWithValue({
+      message:
+        error.response?.data?.message || "Failed to fetch tasks completed",
+    });
   }
 });
 
 export const fetchPendingTask = createAsyncThunk<
-  IMyTaskResponse,
-  IMyTaskParams | undefined,
-  { rejectValue: string }
+  IApiResponse<IMyTaskData[]>,
+  IApiParams,
+  { rejectValue: IApiErrorResponse }
 >("pendingTask/fetch", async (params, { rejectWithValue }) => {
   try {
     const {
       page = 1,
       limit = 5,
-      sort_by = "createdAt",
+      sortBy = "createdAt",
       order = "desc",
-      search = "",
-    } = params || {};
+      query = "",
+    } = params as IApiParams;
 
     const response = await api.get("/task/pending", {
-      params: { page, limit, sort_by, order, search },
+      params: { page, limit, sortBy, order, query },
     });
-    return response.data as IMyTaskResponse;
+    return response.data;
   } catch (error: any) {
-    return rejectWithValue(
-      error.response?.data?.message || "Failed to fetch tasks completed",
-    );
+    return rejectWithValue({
+      message: error.response?.data?.message || "Failed to fetch tasks pending",
+    });
   }
 });

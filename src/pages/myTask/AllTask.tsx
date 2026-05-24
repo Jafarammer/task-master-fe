@@ -39,7 +39,7 @@ const AllTask = ({ params, search }: Props) => {
   const navigate = useNavigate();
   // redux
   const dispatch = useAppDispatch();
-  const { items, meta_data, loading, error } = useAppSelector(
+  const { tasks, metaData, loading, error } = useAppSelector(
     (state) => state.myTasks,
   );
   // hooks
@@ -96,7 +96,7 @@ const AllTask = ({ params, search }: Props) => {
       fetchAllTask({
         page: pagination.page,
         limit: pagination.limit,
-        search: search,
+        query: search,
       }),
     );
   }, [dispatch, pagination, search]);
@@ -117,31 +117,31 @@ const AllTask = ({ params, search }: Props) => {
   return (
     <Box>
       {/* content */}
-      {items.length === 0 && (
+      {tasks?.length === 0 && (
         <EmptyState
           buttonText="Create Task"
           onAction={() => navigate("/task/create")}
         />
       )}
-      {showSkeleton && items.length !== 0 && (
+      {showSkeleton && tasks?.length !== 0 && (
         <List>
-          {Array.from({ length: items.length || pagination.limit }).map(
+          {Array.from({ length: tasks?.length || pagination.limit }).map(
             (_, index) => (
               <ListTaskSkeleton key={index} />
             ),
           )}
         </List>
       )}
-      {items.length > 0 && !showSkeleton && (
+      {(tasks || []).length > 0 && !showSkeleton && (
         <List>
-          {items?.map((task, index): any => (
+          {tasks?.map((task, index): any => (
             <ListItem
-              key={task._id}
-              sx={getTaskItemSx(index, items.length)}
+              key={index}
+              sx={getTaskItemSx(index, tasks?.length)}
               secondaryAction={
                 <IconButton
                   edge="end"
-                  onClick={(e) => onOpenMenu(e, task._id, task.title)}
+                  onClick={(e) => onOpenMenu(e, task.id, task.title)}
                 >
                   <MoreVert sx={fontLabelSx()} />
                 </IconButton>
@@ -149,8 +149,8 @@ const AllTask = ({ params, search }: Props) => {
             >
               <ListItemIcon>
                 <Checkbox
-                  checked={task.is_completed}
-                  onChange={() => onChecked("all", task._id, task.is_completed)}
+                  checked={task.isCompleted}
+                  onChange={() => onChecked("all", task.id, task.isCompleted)}
                 />
               </ListItemIcon>
               <ListItemText
@@ -169,12 +169,12 @@ const AllTask = ({ params, search }: Props) => {
                       variant="outlined"
                       sx={chipSx()}
                     />
-                    <Typography sx={fontLabelSx()}>{task.title}</Typography>
+                    <Typography sx={fontBodySX()}>{task.title}</Typography>
                   </Stack>
                 }
                 secondary={
                   <Typography sx={fontBodySX()} mt={1} color="textDisabled">
-                    Due : {task.due_date}
+                    Due : {task.dueDate}
                   </Typography>
                 }
               />
@@ -182,11 +182,11 @@ const AllTask = ({ params, search }: Props) => {
           ))}
         </List>
       )}
-      {showSkeleton && items.length !== 0 && <PaginationSkeleton />}
-      {!showSkeleton && items.length !== 0 && (
+      {showSkeleton && tasks?.length !== 0 && <PaginationSkeleton />}
+      {!showSkeleton && tasks?.length !== 0 && (
         <Stack direction={"row"} justifyContent={"center"} my={3}>
           <Pagination
-            count={meta_data.total_pages}
+            count={metaData?.totalPages}
             page={pagination.page}
             onChange={(_, value) => setPagination({ page: value, limit: 5 })}
             shape="rounded"

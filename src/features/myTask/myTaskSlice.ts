@@ -4,23 +4,24 @@ import {
   fetchCompletedTask,
   fetchPendingTask,
 } from "./myTaskThunk";
-import { IMyTaskResponse } from "../../types/myTask";
+import { IApiResponse } from "../../interfaces/commonInterface";
+import { IMyTaskData } from "../../interfaces/myTaskInterface";
 
 interface MyTaskState {
-  items: IMyTaskResponse["data"];
-  meta_data: IMyTaskResponse["meta_data"];
+  tasks: IApiResponse<IMyTaskData[]>["data"];
+  metaData: IApiResponse["metaData"];
   loading: boolean;
   error: string | null;
   activeTab: "all" | "completed" | "pending";
 }
 
 const initialState: MyTaskState = {
-  items: [],
-  meta_data: {
+  tasks: [],
+  metaData: {
     page: 1,
     limit: 5,
     total: 0,
-    total_pages: 0,
+    totalPages: 0,
   },
   loading: false,
   error: null,
@@ -34,18 +35,18 @@ const pendingReducer = (state: MyTaskState) => {
 
 const fulFilledReducer = (
   state: MyTaskState,
-  action: PayloadAction<IMyTaskResponse>,
+  action: PayloadAction<IApiResponse<IMyTaskData[]>>,
 ) => {
   state.loading = false;
-  state.items = action.payload.data;
-  state.meta_data = action.payload.meta_data;
+  state.tasks = action.payload.data;
+  state.metaData = action.payload.metaData;
   state.error = null;
 };
 
 const rejectedReducer = (state: MyTaskState, action: any) => {
   state.loading = false;
-  state.items = [];
-  state.error = action.error.message || "Failed to load data!";
+  state.tasks = [];
+  state.error = action.payload?.message || "Failed to load data!";
 };
 
 const myTaskSlice = createSlice({
@@ -53,12 +54,12 @@ const myTaskSlice = createSlice({
   initialState,
   reducers: {
     logOutMyTask: (state) => {
-      state.items = [];
-      state.meta_data = {
+      state.tasks = [];
+      state.metaData = {
         page: 1,
         limit: 5,
         total: 0,
-        total_pages: 0,
+        totalPages: 0,
       };
       state.loading = false;
       state.error = null;
