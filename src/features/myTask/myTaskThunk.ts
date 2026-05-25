@@ -2,14 +2,12 @@ import api from "../../app/api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   IApiParams,
-  IApiResponse,
   IApiErrorResponse,
 } from "../../interfaces/commonInterface";
-import { IMyTaskData } from "../../interfaces/myTaskInterface";
-import { IMyTaskParams, IMyTaskResponse } from "../../types/myTask";
+import { IMyTaskResponse } from "../../interfaces/myTaskInterface";
 
 export const fetchAllTask = createAsyncThunk<
-  IApiResponse<IMyTaskData[]>,
+  IMyTaskResponse,
   IApiParams,
   { rejectValue: IApiErrorResponse }
 >("allTask/fetch", async (params, { rejectWithValue }) => {
@@ -29,13 +27,14 @@ export const fetchAllTask = createAsyncThunk<
     return response.data;
   } catch (error: any) {
     return rejectWithValue({
-      message: error.response?.data?.message || "Failed to fetch tasks",
+      message:
+        error.response?.data?.message || "Failed to fetch tasks completed",
     });
   }
 });
 
 export const fetchCompletedTask = createAsyncThunk<
-  IApiResponse<IMyTaskData[]>,
+  IMyTaskResponse,
   IApiParams,
   { rejectValue: IApiErrorResponse }
 >("completedTask/fetch", async (params, { rejectWithValue }) => {
@@ -61,7 +60,7 @@ export const fetchCompletedTask = createAsyncThunk<
 });
 
 export const fetchPendingTask = createAsyncThunk<
-  IApiResponse<IMyTaskData[]>,
+  IMyTaskResponse,
   IApiParams,
   { rejectValue: IApiErrorResponse }
 >("pendingTask/fetch", async (params, { rejectWithValue }) => {

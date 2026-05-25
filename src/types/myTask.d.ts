@@ -1,14 +1,10 @@
 export interface IMyTaskData {
-  _id: string;
-  user_id: string;
+  id: string;
   title: string;
   description: string;
-  due_date: string;
+  dueDate: string;
   priority: "low" | "medium" | "high";
-  is_completed: boolean;
-  deleted_at: string | null;
-  createdAt: string;
-  updatedAt: string;
+  isCompleted: boolean;
 }
 
 export interface IMyTaskParams {
@@ -21,11 +17,11 @@ export interface IMyTaskParams {
 
 export interface IMyTaskResponse {
   data: IMyTaskData[];
-  meta_data: {
+  metaData: {
     page: number;
     limit: number;
     total: number;
-    total_pages: number;
+    totalPages: number;
   };
 }
 

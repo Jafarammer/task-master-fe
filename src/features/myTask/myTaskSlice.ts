@@ -4,12 +4,11 @@ import {
   fetchCompletedTask,
   fetchPendingTask,
 } from "./myTaskThunk";
-import { IApiResponse } from "../../interfaces/commonInterface";
-import { IMyTaskData } from "../../interfaces/myTaskInterface";
+import { IMyTaskResponse } from "../../interfaces/myTaskInterface";
 
 interface MyTaskState {
-  tasks: IApiResponse<IMyTaskData[]>["data"];
-  metaData: IApiResponse["metaData"];
+  tasks: IMyTaskResponse["data"];
+  metaData: IMyTaskResponse["metaData"];
   loading: boolean;
   error: string | null;
   activeTab: "all" | "completed" | "pending";
@@ -35,7 +34,7 @@ const pendingReducer = (state: MyTaskState) => {
 
 const fulFilledReducer = (
   state: MyTaskState,
-  action: PayloadAction<IApiResponse<IMyTaskData[]>>,
+  action: PayloadAction<IMyTaskResponse>,
 ) => {
   state.loading = false;
   state.tasks = action.payload.data;
