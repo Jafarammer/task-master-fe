@@ -2,11 +2,11 @@ export interface IProfileData {
   fullName: string;
   email: string;
   profilePicture: string;
+  requireRelogin?: boolean;
 }
 
 export interface IProfileResponse {
   message: string;
-  requireRelogin: boolean;
   data: IProfileData;
 }
 
@@ -24,9 +24,3 @@ export interface IUpdateProfilePasswordPayload {
   newPassword: string;
   confirmPassword: string;
 }
-
-export type ShowPassword = {
-  currentPassword: boolean;
-  newPassword: boolean;
-  confirmPassword: boolean;
-};

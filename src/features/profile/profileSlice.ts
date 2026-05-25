@@ -1,15 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchProfile, updateProfile } from "./profileThunk";
-import { IProfileResponse } from "../../types/profile";
+import { IProfileData } from "../../interfaces/profileInterface";
 
 interface IProfileState {
-  items: IProfileResponse | null;
+  profiles: IProfileData | null;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: IProfileState = {
-  items: null,
+  profiles: null,
   loading: false,
   error: null,
 };
@@ -19,7 +19,7 @@ const profileSlice = createSlice({
   initialState,
   reducers: {
     logoutProfile: (state) => {
-      state.items = null;
+      state.profiles = null;
       state.loading = false;
       state.error = null;
     },
@@ -31,12 +31,12 @@ const profileSlice = createSlice({
       })
       .addCase(fetchProfile.fulfilled, (state, action) => {
         state.loading = false;
-        state.items = action.payload;
+        state.profiles = action.payload.data;
         state.error = null;
       })
       .addCase(fetchProfile.rejected, (state, action) => {
         state.loading = false;
-        state.items = null;
+        state.profiles = null;
         state.error = action.error.message || "Failed to load data!";
       })
       .addCase(updateProfile.pending, (state) => {
@@ -45,12 +45,12 @@ const profileSlice = createSlice({
       })
       .addCase(updateProfile.fulfilled, (state, action) => {
         state.loading = false;
-        state.items = action.payload;
+        state.profiles = action.payload.data;
         state.error = null;
       })
       .addCase(updateProfile.rejected, (state, action) => {
         state.loading = false;
-        state.items = null;
+        state.profiles = null;
         state.error = action.error.message || "Failed to update profile!";
       });
   },

@@ -37,7 +37,7 @@ const Profile = () => {
   const [searchParams] = useSearchParams();
   const filterParams = parseParams(searchParams.get("filter"));
   // redux
-  const { items } = useAppSelector((state) => state.profile);
+  const { profiles } = useAppSelector((state) => state.profile);
   // hooks
   const { fileInputRef, onChangePicture, loadingUpdatePicture } = useProfile();
   // useState
@@ -64,9 +64,9 @@ const Profile = () => {
               <CardContent sx={cardContentSX()}>
                 {loadingUpdatePicture && <CircularProgress />}
                 {!loadingUpdatePicture && (
-                  <Avatar sx={avatartSX()} src={items?.data?.profilePicture}>
-                    {!items?.data?.profilePicture &&
-                      items?.data?.fullName.charAt(0).toUpperCase()}
+                  <Avatar sx={avatartSX()} src={profiles?.profilePicture}>
+                    {!profiles?.profilePicture &&
+                      profiles?.fullName.charAt(0).toUpperCase()}
                   </Avatar>
                 )}
                 <input
@@ -83,10 +83,10 @@ const Profile = () => {
                   Edit
                 </Button>
                 <Typography sx={fontBodySX()} fontWeight="bold">
-                  {items?.data?.fullName}
+                  {profiles?.fullName}
                 </Typography>
                 <Typography sx={fontBodySX()} color="text.secondary">
-                  {items?.data?.email}
+                  {profiles?.email}
                 </Typography>
               </CardContent>
             </Card>

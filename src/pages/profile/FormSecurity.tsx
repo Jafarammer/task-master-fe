@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import useProfile from "../../hooks/useProfile";
-import { ShowPassword } from "../../types/profile";
+import { TShowPassword } from "../../types/common";
 // styles
 import { fontBodySX } from "./styles";
 
@@ -22,13 +22,13 @@ const FormSecurity = ({ setOpen }: Props) => {
   // hooks
   const { formikUpdateProfilePasswrod, laodingUpdatePassword } = useProfile();
   // useState
-  const [showPassword, setShowPassword] = useState<ShowPassword>({
+  const [showPassword, setShowPassword] = useState<TShowPassword>({
     currentPassword: false,
-    newPassword: false,
+    password: false,
     confirmPassword: false,
   });
   // function event
-  const onTogglePassword = (field: keyof ShowPassword) => {
+  const onTogglePassword = (field: keyof TShowPassword) => {
     setShowPassword((prev) => ({
       ...prev,
       [field]: !prev[field],
@@ -86,7 +86,7 @@ const FormSecurity = ({ setOpen }: Props) => {
             placeholder="New Password"
             size="small"
             value={formikUpdateProfilePasswrod.values.newPassword}
-            type={showPassword.newPassword ? "text" : "password"}
+            type={showPassword.password ? "text" : "password"}
             onChange={formikUpdateProfilePasswrod.handleChange}
             onBlur={formikUpdateProfilePasswrod.handleBlur}
             error={
@@ -98,11 +98,11 @@ const FormSecurity = ({ setOpen }: Props) => {
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton
-                      onClick={() => onTogglePassword("newPassword")}
+                      onClick={() => onTogglePassword("password")}
                       onMouseDown={onMousePassword}
                       onMouseUp={onMousePassword}
                     >
-                      {showPassword.newPassword ? (
+                      {showPassword.password ? (
                         <VisibilityOff sx={fontBodySX()} />
                       ) : (
                         <Visibility sx={fontBodySX()} />

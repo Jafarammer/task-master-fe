@@ -11,7 +11,7 @@ import {
   IconButton,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { ShowPassword } from "../../types/auth";
+import { TShowPassword } from "../../types/common";
 import useAuth from "../../hooks/useAuth";
 // styles
 import {
@@ -26,12 +26,12 @@ const ResetPassword = () => {
   // hooks
   const { loading, formikResetPassword } = useAuth();
   // useState
-  const [showPassword, setShowPassword] = useState<ShowPassword>({
+  const [showPassword, setShowPassword] = useState<TShowPassword>({
     password: false,
     confirmPassword: false,
   });
   // function event
-  const onTogglePassword = (filed: keyof ShowPassword) => {
+  const onTogglePassword = (filed: keyof TShowPassword) => {
     setShowPassword((prev) => ({
       ...prev,
       [filed]: !prev[filed],

@@ -36,7 +36,7 @@ type useProfileReturn = {
 const useProfile = (): useProfileReturn => {
   // redux
   const dispatch = useAppDispatch();
-  const { items } = useAppSelector((state) => state.profile);
+  const { profiles } = useAppSelector((state) => state.profile);
   // hooks
   const notify = useSnackbarAlert();
   const { onLogout } = useLogout();
@@ -53,8 +53,8 @@ const useProfile = (): useProfileReturn => {
   const formikUpdateProfile = useFormik<IUpdateProfilePayload>({
     enableReinitialize: true,
     initialValues: {
-      fullName: items?.data?.fullName ?? "",
-      email: items?.data?.email ?? "",
+      fullName: profiles?.fullName ?? "",
+      email: profiles?.email ?? "",
     },
     validationSchema: validations.updateProfile,
     onSubmit: async (values): Promise<void> => {
@@ -66,7 +66,7 @@ const useProfile = (): useProfileReturn => {
         };
         const res = await dispatch(updateProfile(payload)).unwrap();
         notify(res.message, "success");
-        if (res.requireRelogin) {
+        if (res.data.requireRelogin) {
           onLogout();
         }
       } catch (error: any) {
@@ -95,11 +95,11 @@ const useProfile = (): useProfileReturn => {
         };
         const response = await updateProfilePassword(payload);
         notify(response.message, "success");
-        if (response.requireRelogin) {
+        if (response.data.requireRelogin) {
           onLogout();
         }
       } catch (error: any) {
-        notify(error?.response?.data?.message, "error");
+        notify("Failed to update password", "error");
       } finally {
         setLoadingUpdatePassword(false);
       }
@@ -122,10 +122,7 @@ const useProfile = (): useProfileReturn => {
       notify(response.message, "success");
       dispatch(fetchProfile());
     } catch (error: any) {
-      notify(
-        error.response?.data?.message || "Failed to update profile picture",
-        "error",
-      );
+      notify("Failed to update profile picture", "error");
     } finally {
       setloadingUpdatePicture(false);
     }

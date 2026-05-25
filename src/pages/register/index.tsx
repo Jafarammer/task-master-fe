@@ -14,19 +14,19 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import useAuth from "../../hooks/useAuth";
-import { ShowPassword } from "../../types/auth";
+import { TShowPassword } from "../../types/common";
 import { containerSx, fontBodySX, fontTitleSX, formControlSX } from "./styles";
 
 const Register = () => {
   // hooks
   const { formikRegister, loading } = useAuth();
   // useState
-  const [showPassword, setShowPassword] = useState<ShowPassword>({
+  const [showPassword, setShowPassword] = useState<TShowPassword>({
     password: false,
     confirmPassword: false,
   });
   // fnction event
-  const onTogglePassword = (field: keyof ShowPassword) => {
+  const onTogglePassword = (field: keyof TShowPassword) => {
     setShowPassword((prev) => ({
       ...prev,
       [field]: !prev[field],

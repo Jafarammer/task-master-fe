@@ -24,7 +24,7 @@ const Header = () => {
   const navigate = useNavigate();
   // redux
   const dispatch = useAppDispatch();
-  const { items, loading, error } = useAppSelector((state) => state.profile);
+  const { profiles, loading, error } = useAppSelector((state) => state.profile);
   // hooks
   const { onLogout } = useLogout();
   // useState
@@ -86,13 +86,13 @@ const Header = () => {
                 },
               }}
             >
-              {items?.data?.fullName}
+              {profiles?.fullName}
             </Typography>
             <Tooltip title="Open Setting">
               <IconButton onClick={onOpenMenu} sx={{ p: 0 }}>
-                <Avatar sx={avatartSX()} src={items?.data?.profilePicture}>
-                  {!items?.data?.profilePicture &&
-                    items?.data?.fullName.charAt(0).toUpperCase()}
+                <Avatar sx={avatartSX()} src={profiles?.profilePicture}>
+                  {!profiles?.profilePicture &&
+                    profiles?.fullName.charAt(0).toUpperCase()}
                 </Avatar>
               </IconButton>
             </Tooltip>

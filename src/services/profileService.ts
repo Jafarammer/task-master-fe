@@ -3,7 +3,7 @@ import {
   IProfileResponse,
   IUpdateProfilePicturePayload,
   IUpdateProfilePasswordPayload,
-} from "../types/profile";
+} from "../interfaces/profileInterface";
 
 export const updateProfilePicture = async (
   payload: IUpdateProfilePicturePayload,
@@ -11,7 +11,7 @@ export const updateProfilePicture = async (
   const formData = new FormData();
   formData.append("profilePicture", payload.profilePicture);
 
-  const res = await api.patch<IProfileResponse>("/profile/picture", formData, {
+  const res = await api.patch("/profile/picture", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
