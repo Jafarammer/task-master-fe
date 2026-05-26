@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import {
   Box,
   Typography,
@@ -108,11 +108,11 @@ const Task = () => {
             <FormControl fullWidth>
               <DatePicker
                 value={
-                  formik.values.due_date ? dayjs(formik.values.due_date) : null
+                  formik.values.dueDate ? dayjs(formik.values.dueDate) : null
                 }
                 onChange={(value) => {
                   formik.setFieldValue(
-                    "due_date",
+                    "dueDate",
                     value ? value.format("YYYY-MM-DD") : "",
                     true,
                   );
@@ -123,14 +123,14 @@ const Task = () => {
                   textField: {
                     size: "small",
                     error: Boolean(
-                      formik.touched.due_date && formik.errors.due_date,
+                      formik.touched.dueDate && formik.errors.dueDate,
                     ),
                   },
                 }}
                 format="YYYY-MM-DD"
               />
-              {formik.touched.due_date && formik.errors.due_date && (
-                <FormHelperText error>{formik.errors.due_date}</FormHelperText>
+              {formik.touched.dueDate && formik.errors.dueDate && (
+                <FormHelperText error>{formik.errors.dueDate}</FormHelperText>
               )}
             </FormControl>
 

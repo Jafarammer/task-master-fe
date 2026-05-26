@@ -25,7 +25,10 @@ import {
 import dayjs from "dayjs";
 import { DeleteConfirmDialog } from "../../components";
 import useMyTask from "../../hooks/useMyTask";
-import { TaskDetailResponse } from "../../types/myTask";
+import {
+  IMyTaskDetailResponse,
+  IMyTaskData,
+} from "../../interfaces/myTaskInterface";
 import { fetchDetailTask } from "../../services/myTaskService";
 // helper
 import { parseParams } from "../../helpers/filterParamsHelper";
@@ -37,12 +40,12 @@ const DetailTask = () => {
   const [searchParams] = useSearchParams();
   const filterParams = parseParams(searchParams.get("filter"));
   // hooks
-  const { onDeleteTask, onUpdateStatus } = useMyTask();
+  const { onSoftDeleteTask, onUpdateStatus } = useMyTask();
   // useState
-  const [data, setData] = useState<TaskDetailResponse["data"] | null>(null);
+  const [data, setData] = useState<IMyTaskData | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
   // function event
-  const getPriorityColor = (p: TaskDetailResponse["data"]["priority"]) =>
+  const getPriorityColor = (p: IMyTaskDetailResponse["data"]["priority"]) =>
     p === "high" ? "error" : p === "medium" ? "warning" : "success";
   const openConfirmDelete = (): void => {
     setConfirmDelete(true);
@@ -89,8 +92,8 @@ const DetailTask = () => {
                     sx={chipSX()}
                   />
                   <Chip
-                    label={`Status ${data?.is_completed === true ? "Complete" : "Pending"}`}
-                    color={data?.is_completed === true ? "primary" : "warning"}
+                    label={`Status ${data?.isCompleted === true ? "Complete" : "Pending"}`}
+                    color={data?.isCompleted === true ? "primary" : "warning"}
                     variant="outlined"
                     sx={chipSX()}
                   />
@@ -106,7 +109,7 @@ const DetailTask = () => {
           </Box>
         </Grid2>
         <Grid2 size={{ xs: 12, md: 4 }}>
-          <Box component={"div"}>
+          <Box component={"div"} mb={3}>
             <Card variant="elevation" sx={cardActionSX()}>
               <CardContent>
                 <Typography sx={fontBodySX()} fontWeight={"bold"}>
@@ -119,7 +122,7 @@ const DetailTask = () => {
                     sx={fontBodySX()}
                     color="textDisabled"
                   >
-                    Due Date: {dayjs(data?.due_date).format("MMMM D, YYYY")}
+                    Due Date: {dayjs(data?.dueDate).format("MMMM D, YYYY")}
                   </Typography>
                 </Stack>
 
@@ -130,7 +133,7 @@ const DetailTask = () => {
                     color="secondary"
                   >
                     <Button
-                      disabled={data?.is_completed}
+                      disabled={data?.isCompleted}
                       onClick={() => {
                         if (!id) return;
                         onUpdateStatus("detail", id, true);
@@ -158,9 +161,9 @@ const DetailTask = () => {
         taskName={data?.title ?? ""}
         onConfirm={() => {
           if (!id) return;
-          onDeleteTask("detail", id);
+          onSoftDeleteTask("detail", id);
+          navigate(`/my-task?filter=${filterParams}`);
           closeConfirmDelete();
-          navigate("/my-task");
         }}
       />
     </Box>

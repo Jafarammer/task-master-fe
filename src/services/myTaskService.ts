@@ -1,42 +1,48 @@
 import api from "../app/api";
 import {
-  UpdateStatusPaylod,
-  MyTaskPayload,
-  MyTaskResponse,
-  TaskDetailResponse,
-} from "../types/myTask";
+  IMyTaskPayload,
+  IMyTaskDetailResponse,
+  IUpdateStatusPayload,
+} from "../interfaces/myTaskInterface";
 
 export const createTask = async (
-  payload: MyTaskPayload,
-): Promise<MyTaskResponse> => {
-  const res = await api.post<MyTaskResponse>("/task", payload);
+  payload: IMyTaskPayload,
+): Promise<{ message: string }> => {
+  const res = await api.post("/task", payload);
   return res.data;
 };
 
 export const updateTask = async (
   id: string,
-  payload: MyTaskPayload,
-): Promise<MyTaskResponse> => {
-  const res = await api.patch<MyTaskResponse>(`/task/${id}`, payload);
+  payload: IMyTaskPayload,
+): Promise<{ message: string }> => {
+  const res = await api.patch(`/task/${id}`, payload);
   return res.data;
 };
 
 export const updateStatusTask = async (
   id: string,
-  payload: UpdateStatusPaylod,
-): Promise<MyTaskResponse> => {
-  const res = await api.patch<MyTaskResponse>(`/task/status/${id}`, payload);
+  payload: IUpdateStatusPayload,
+): Promise<{ message: string }> => {
+  const res = await api.patch(`/task/status/${id}`, payload);
   return res.data;
 };
 
-export const deleteTask = async (id: string): Promise<MyTaskResponse> => {
-  const res = await api.delete<MyTaskResponse>(`/task/hard/${id}`);
+export const deleteTask = async (id: string): Promise<{ message: string }> => {
+  const res = await api.delete(`/task/soft/${id}`);
   return res.data;
 };
 
 export const fetchDetailTask = async (
   id: string,
-): Promise<TaskDetailResponse> => {
-  const res = await api.get<TaskDetailResponse>(`/task/detail/${id}`);
+): Promise<IMyTaskDetailResponse> => {
+  const res = await api.get(`/task/detail/${id}`);
+  return res.data;
+};
+
+export const softDeleteTask = async (
+  id: string,
+): Promise<{ message: string }> => {
+  const res = await api.delete(`/task/soft/${id}`);
   return res.data;
 };

@@ -43,7 +43,7 @@ const PendingTask = ({ params, search }: Props) => {
     (state) => state.myTasks,
   );
   // hooks
-  const { onDeleteTask, onGetDetailTask, onUpdateStatus, onGetEditTask } =
+  const { onSoftDeleteTask, onGetDetailTask, onUpdateStatus, onGetEditTask } =
     useMyTask();
   // useState
   const [menu, setMenu] = useState<MenuState>({
@@ -220,7 +220,7 @@ const PendingTask = ({ params, search }: Props) => {
         taskName={menu.context?.title ?? ""}
         onClose={closeConfirmDelete}
         onConfirm={() => {
-          onDeleteTask("pending", menu.context.id);
+          onSoftDeleteTask("pending", menu.context.id);
           closeConfirmDelete();
         }}
       />

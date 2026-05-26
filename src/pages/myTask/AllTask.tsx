@@ -43,7 +43,7 @@ const AllTask = ({ params, search }: Props) => {
     (state) => state.myTasks,
   );
   // hooks
-  const { onDeleteTask, onGetDetailTask, onUpdateStatus, onGetEditTask } =
+  const { onSoftDeleteTask, onGetDetailTask, onUpdateStatus, onGetEditTask } =
     useMyTask();
   // useState
   const [menu, setMenu] = useState<MenuState>({
@@ -218,7 +218,7 @@ const AllTask = ({ params, search }: Props) => {
         taskName={menu.context?.title ?? ""}
         onClose={closeConfirmDelete}
         onConfirm={() => {
-          onDeleteTask("all", menu.context.id);
+          onSoftDeleteTask("all", menu.context.id);
           closeConfirmDelete();
         }}
       />

@@ -18,7 +18,7 @@ import { validations } from "../validations";
 import {
   IUpdateProfilePayload,
   IUpdateProfilePasswordPayload,
-} from "../types/profile";
+} from "../interfaces/profileInterface";
 import useLogout from "./useLogout";
 
 type useProfileReturn = {

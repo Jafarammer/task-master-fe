@@ -9,10 +9,24 @@ export interface IMyTaskData {
 
 export interface IMyTaskResponse {
   data: IMyTaskData[];
-  metaData: {
+  metaData?: {
     page: number;
     limit: number;
     total: number;
     totalPages: number;
   };
+}
+export interface IMyTaskPayload {
+  title: string;
+  description: string;
+  dueDate: string;
+  priority: string;
+}
+
+export interface IUpdateStatusPayload {
+  isCompleted: boolean;
+}
+
+export interface IMyTaskDetailResponse {
+  data: IMyTaskData;
 }

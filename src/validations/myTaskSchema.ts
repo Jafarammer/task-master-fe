@@ -3,7 +3,7 @@ import * as Yup from "yup";
 export const myTaskSchema = Yup.object({
   title: Yup.string().required("Title is required field!"),
   description: Yup.string().required("Description is required field!"),
-  due_date: Yup.string()
+  dueDate: Yup.string()
     .required("Date is required field!")
     .test("not-past", "Date must be today or later", (value) => {
       if (!value) return false;
