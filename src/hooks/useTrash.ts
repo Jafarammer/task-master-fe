@@ -1,6 +1,10 @@
-import { useState, Dispatch, SetStateAction } from "react";
+import { useState, Dispatch, SetStateAction, useEffect } from "react";
 import { useAppDispatch } from "../app/hooks";
-import { hardDeleteTask, restoreTask } from "../services/trashService";
+import {
+  hardDeleteTask,
+  restoreTask,
+  hardDeleteTaskMany,
+} from "../services/trashService";
 import { fetchTrash, fetchTrashStatistics } from "../features/trash/trashthunk";
 import useSnackbarAlert from "./useSnackbarAlert";
 import { TLoadingType, TPagination } from "../types/common";
@@ -13,6 +17,7 @@ type useTrashReturn = {
   loading: TLoadingType;
   onHardDeleteSingle: (id: string) => void;
   onRestoreTask: (id: string) => void;
+  onHardDeleteMany: () => void;
 };
 
 const useTrash = (): useTrashReturn => {
@@ -51,6 +56,26 @@ const useTrash = (): useTrashReturn => {
     }
   };
 
+  const onHardDeleteMany = async () => {
+    try {
+      setLoading({ context: "singleDelete", open: true });
+      const response = await hardDeleteTaskMany();
+      notify(response.message, "success");
+      dispatch(
+        fetchTrash({
+          page: pagination.page,
+          limit: pagination.limit,
+          query: search,
+        }),
+      );
+      dispatch(fetchTrashStatistics());
+    } catch (error: any) {
+      notify("Empty trash failed", "error");
+    } finally {
+      setLoading({ context: "", open: false });
+    }
+  };
+
   const onRestoreTask = async (id: string) => {
     try {
       setLoading({ context: "restore", open: true });
@@ -71,6 +96,18 @@ const useTrash = (): useTrashReturn => {
     }
   };
 
+  // useEffect
+  useEffect(() => {
+    dispatch(
+      fetchTrash({
+        page: pagination.page,
+        limit: pagination.limit,
+        query: search,
+      }),
+    );
+    dispatch(fetchTrashStatistics());
+  }, [dispatch, pagination, search]);
+
   return {
     search,
     setSearch,
@@ -79,6 +116,7 @@ const useTrash = (): useTrashReturn => {
     loading,
     onHardDeleteSingle,
     onRestoreTask,
+    onHardDeleteMany,
   };
 };
 

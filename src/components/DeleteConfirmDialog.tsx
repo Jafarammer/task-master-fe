@@ -25,6 +25,8 @@ type Props = {
   taskName: string;
   onClose: () => void;
   onConfirm: () => void;
+  title?: string;
+  description?: string;
 };
 
 const DeleteConfirmDialog: React.FC<Props> = ({
@@ -32,6 +34,8 @@ const DeleteConfirmDialog: React.FC<Props> = ({
   taskName,
   onClose,
   onConfirm,
+  title = "Are you sure you want to delete this task?",
+  description = `This action cannot be undone. The following task will be permanently deleted: "${taskName}"`,
 }) => {
   return (
     <Dialog
@@ -63,7 +67,7 @@ const DeleteConfirmDialog: React.FC<Props> = ({
           textAlign="center"
           gutterBottom
         >
-          Are you sure you want to delete this task?
+          {title}
         </Typography>
 
         {/* Description */}
@@ -73,8 +77,7 @@ const DeleteConfirmDialog: React.FC<Props> = ({
           sx={fontBodySX()}
           mb={4}
         >
-          This action cannot be undone. The following task will be permanently
-          deleted: <b>"{taskName}"</b>
+          {description}
         </Typography>
 
         {/* Action Buttons */}

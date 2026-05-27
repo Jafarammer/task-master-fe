@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { useAppSelector } from "../../app/hooks";
 import {
   Box,
   Typography,
@@ -26,7 +26,6 @@ import {
   CalendarTodayOutlined,
   Storage,
   Search,
-  MoreVert,
 } from "@mui/icons-material";
 import { parseParams } from "../../helpers/filterParamsHelper";
 import {
@@ -42,13 +41,9 @@ import {
   chipSx,
 } from "./styles";
 // reusable components
-import { EmptyState, DeleteConfirmDialog } from "../../components";
+import { EmptyState, DeleteConfirmDialog, ExpandText } from "../../components";
 import ListTaskTrashSkeleton from "./listTaskTrashSkeleton";
 import PaginationSkeleton from "../../components/PaginationSkeleton";
-import {
-  fetchTrash,
-  fetchTrashStatistics,
-} from "../../features/trash/trashthunk";
 import useTrash from "../../hooks/useTrash";
 
 const Trash = () => {
@@ -57,7 +52,6 @@ const Trash = () => {
   const [searchParams] = useSearchParams();
   const filterParams = parseParams(searchParams.get("filter"));
   // redux
-  const dispatch = useAppDispatch();
   const { trashTask, metaData, loading, error, statistics } = useAppSelector(
     (state) => state.trash,
   );
@@ -69,33 +63,26 @@ const Trash = () => {
     setPagination,
     onHardDeleteSingle,
     onRestoreTask,
+    onHardDeleteMany,
   } = useTrash();
   // useState
   const [showSkeleton, setShowSkeleton] = useState<boolean>(false);
-  const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
+  const [confirmDelete, setConfirmDelete] = useState<{
+    context: string;
+    open: boolean;
+  }>({ context: "", open: false });
   const [contextTask, setContextTask] = useState<{ id: string; title: string }>(
     { id: "", title: "" },
   );
   // function event
-  const openConfirmDelete = (): void => {
-    setConfirmDelete(true);
+  const openConfirmDelete = (context: string): void => {
+    setConfirmDelete({ context, open: true });
   };
   const closeConfirmDelete = (): void => {
     setContextTask({ id: "", title: "" });
-    setConfirmDelete(false);
+    setConfirmDelete({ context: "", open: false });
   };
   // useEffect
-  useEffect(() => {
-    dispatch(
-      fetchTrash({
-        page: pagination.page,
-        limit: pagination.limit,
-        query: search,
-      }),
-    );
-    dispatch(fetchTrashStatistics());
-  }, [dispatch, pagination, search]);
-
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
     if (loading) {
@@ -129,6 +116,7 @@ const Trash = () => {
           variant="outlined"
           color="error"
           startIcon={<DeleteSweepOutlined />}
+          onClick={() => openConfirmDelete("deleteMany")}
         >
           Empty Trash
         </Button>
@@ -280,8 +268,80 @@ const Trash = () => {
                   <ListItem
                     key={index}
                     sx={getTaskItemSx(index, trashTask.length)}
-                    secondaryAction={
-                      <Stack direction={"row"} gap={2}>
+                  >
+                    <Box
+                      width="100%"
+                      display="flex"
+                      justifyContent="space-between"
+                      alignItems="flex-start"
+                      gap={2}
+                      flexDirection={{
+                        xs: "column",
+                        md: "row",
+                      }}
+                    >
+                      <ListItemText
+                        primary={
+                          <Stack
+                            direction="row"
+                            spacing={2}
+                            alignItems="center"
+                          >
+                            <Chip
+                              label={trash.priority}
+                              color={
+                                trash.priority === "low"
+                                  ? "success"
+                                  : trash.priority === "medium"
+                                    ? "warning"
+                                    : "error"
+                              }
+                              size="small"
+                              variant="outlined"
+                              sx={chipSx()}
+                            />
+
+                            <Typography sx={fontBodySX()}>
+                              {trash.title.length > 20
+                                ? trash.title.slice(0, 20) + "..."
+                                : trash.title}
+                            </Typography>
+                          </Stack>
+                        }
+                        secondary={
+                          <Box component="div">
+                            <Stack
+                              direction="row"
+                              alignItems="center"
+                              spacing={1}
+                              my={2}
+                            >
+                              <CalendarTodayOutlined
+                                sx={fontBodySX()}
+                                color="disabled"
+                              />
+
+                              <Typography
+                                fontWeight={500}
+                                sx={fontBodySX()}
+                                color="textDisabled"
+                              >
+                                Due: {trash.dueDate}
+                              </Typography>
+                            </Stack>
+
+                            <ExpandText text={trash.description} />
+                          </Box>
+                        }
+                      />
+
+                      <Stack
+                        direction={"row"}
+                        mb={2}
+                        gap={2}
+                        flexShrink={0}
+                        pt={1}
+                      >
                         <Button
                           loading={loading}
                           disabled={loading}
@@ -290,6 +350,7 @@ const Trash = () => {
                         >
                           Restore
                         </Button>
+
                         <Button
                           variant="contained"
                           color="error"
@@ -298,61 +359,15 @@ const Trash = () => {
                               id: trash.id,
                               title: trash.title,
                             });
-                            openConfirmDelete();
+
+                            openConfirmDelete("deleteSingle");
                           }}
                           loading={loading}
                         >
                           Delete
                         </Button>
                       </Stack>
-                    }
-                  >
-                    <ListItemText
-                      primary={
-                        <Stack
-                          direction={"row"}
-                          spacing={2}
-                          alignItems={"center"}
-                        >
-                          <Chip
-                            label={trash.priority}
-                            color={
-                              trash.priority === "low"
-                                ? "success"
-                                : trash.priority === "medium"
-                                  ? "warning"
-                                  : "error"
-                            }
-                            size="small"
-                            variant="outlined"
-                            sx={chipSx()}
-                          />
-                          <Typography sx={fontBodySX()}>
-                            {trash.title}
-                          </Typography>
-                        </Stack>
-                      }
-                      secondary={
-                        <Stack
-                          direction="row"
-                          alignItems="center"
-                          spacing={1}
-                          mt={2}
-                        >
-                          <CalendarTodayOutlined
-                            sx={fontBodySX()}
-                            color="disabled"
-                          />
-                          <Typography
-                            fontWeight={500}
-                            sx={fontBodySX()}
-                            color="textDisabled"
-                          >
-                            Due: {trash.dueDate}
-                          </Typography>
-                        </Stack>
-                      }
-                    />
+                    </Box>
                   </ListItem>
                 ))}
               </List>
@@ -376,13 +391,29 @@ const Trash = () => {
       </Grid2>
       {/* pop up */}
       <DeleteConfirmDialog
-        open={confirmDelete}
-        taskName={contextTask?.title ?? ""}
+        open={confirmDelete.open}
+        taskName={
+          confirmDelete.context === "deleteSingle" ? contextTask.title : ""
+        }
         onClose={closeConfirmDelete}
         onConfirm={() => {
-          onHardDeleteSingle(contextTask.id);
+          if (confirmDelete.context === "deleteSingle") {
+            onHardDeleteSingle(contextTask.id);
+          } else {
+            onHardDeleteMany();
+          }
           closeConfirmDelete();
         }}
+        title={
+          confirmDelete.context !== "deleteSingle"
+            ? "Are you sure you want to empty trash?"
+            : undefined
+        }
+        description={
+          confirmDelete.context !== "deleteSingle"
+            ? "This action cannot be undone. The selected tasks will be permanently deleted."
+            : undefined
+        }
       />
     </Box>
   );
