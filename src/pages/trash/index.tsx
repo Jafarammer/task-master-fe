@@ -1,5 +1,6 @@
-import React from "react";
+import { useState, useEffect, MouseEvent } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   Box,
   Typography,
@@ -12,33 +13,118 @@ import {
   Avatar,
   Divider,
   Pagination,
+  InputAdornment,
+  TextField,
+  List,
+  ListItem,
+  ListItemText,
+  Chip,
 } from "@mui/material";
 import {
   ArrowBackIos,
   DeleteSweepOutlined,
   CalendarTodayOutlined,
-  DeleteForeverOutlined,
-  RestoreOutlined,
   Storage,
+  Search,
+  MoreVert,
 } from "@mui/icons-material";
 import { parseParams } from "../../helpers/filterParamsHelper";
 import {
   iconButtonSX,
   cardSX,
-  cardListSX,
   cardContentSX,
   avatartSX,
   fontBodySX,
-  cardListContentSX,
   fontTitleSX,
   storageIconSX,
+  fontLabelSx,
+  getTaskItemSx,
+  chipSx,
 } from "./styles";
+// reusable components
+import { MenuOptions, EmptyState, DeleteConfirmDialog } from "../../components";
+import ListTaskTrashSkeleton from "./listTaskTrashSkeleton";
+import PaginationSkeleton from "../../components/PaginationSkeleton";
+import { TPagination, TMenuState } from "../../types/common";
+import { fetchTrash } from "../../features/trash/trashthunk";
 
 const Trash = () => {
   // router
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const filterParams = parseParams(searchParams.get("filter"));
+  // redux
+  const dispatch = useAppDispatch();
+  const { trashTask, metaData, loading, error } = useAppSelector(
+    (state) => state.trash,
+  );
+  // useState
+  const [search, setSearch] = useState<string>("");
+  const [showSkeleton, setShowSkeleton] = useState<boolean>(false);
+  const [pagination, setPagination] = useState<TPagination>({
+    page: 1,
+    limit: 5,
+  });
+  const [menu, setMenu] = useState<TMenuState>({
+    anchorEl: null,
+    open: false,
+    context: null,
+  });
+  const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
+  // function event
+  const onOpenMenu = (
+    event: MouseEvent<HTMLButtonElement>,
+    id: string,
+    title: string,
+  ): void => {
+    setMenu({
+      anchorEl: event.currentTarget,
+      open: true,
+      context: {
+        id,
+        title,
+      },
+    });
+  };
+  const onCloseMenu = () => {
+    setMenu((prev) => ({
+      ...prev,
+      anchorEl: null,
+      open: false,
+    }));
+  };
+  const openConfirmDelete = (): void => {
+    setConfirmDelete(true);
+    onCloseMenu();
+  };
+  const closeConfirmDelete = (): void => {
+    setConfirmDelete(false);
+    onCloseMenu();
+  };
+  // useEffect
+  useEffect(() => {
+    dispatch(
+      fetchTrash({
+        page: pagination.page,
+        limit: pagination.limit,
+        query: search,
+      }),
+    );
+  }, [dispatch, pagination, search]);
+
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+    if (loading) {
+      setShowSkeleton(true);
+    } else {
+      timer = setTimeout(() => {
+        setShowSkeleton(false);
+      }, 400);
+    }
+
+    return () => clearTimeout(timer);
+  }, [loading]);
+
   return (
     <Box component={"div"}>
       <Stack
@@ -122,58 +208,126 @@ const Trash = () => {
         </Grid2>
         <Grid2 size={{ xs: 12, md: 8 }}>
           <Box component={"div"}>
-            <Card sx={cardListSX()}>
-              <CardContent sx={cardListContentSX()}>
-                <Stack spacing={1}>
-                  <Typography
-                    sx={fontBodySX()}
-                    lineHeight={1.2}
-                    fontWeight={"bold"}
+            <TextField
+              placeholder="Search tasks..."
+              size="small"
+              fullWidth
+              sx={{ mb: 3 }}
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Search sx={fontLabelSx()} />
+                    </InputAdornment>
+                  ),
+                },
+              }}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            {trashTask.length === 0 && <EmptyState />}
+            {showSkeleton && trashTask?.length !== 0 && (
+              <List>
+                {Array.from({
+                  length: trashTask?.length || pagination.limit,
+                }).map((_, index) => (
+                  <ListTaskTrashSkeleton key={index} />
+                ))}
+              </List>
+            )}
+            {trashTask.length > 0 && !showSkeleton && (
+              <List>
+                {trashTask.map((trash, index): any => (
+                  <ListItem
+                    key={index}
+                    sx={getTaskItemSx(index, trashTask.length)}
+                    secondaryAction={
+                      <IconButton
+                        edge="end"
+                        onClick={(e) => onOpenMenu(e, trash.id, trash.title)}
+                      >
+                        <MoreVert sx={fontLabelSx()} />
+                      </IconButton>
+                    }
                   >
-                    Draft Desain Landing Page
-                  </Typography>
-                  <Stack direction="row" alignItems="center" spacing={1}>
-                    <CalendarTodayOutlined sx={fontBodySX()} color="disabled" />
-                    <Typography
-                      fontWeight={500}
-                      sx={fontBodySX()}
-                      color="textDisabled"
-                    >
-                      Due: 18 Jan 2024
-                    </Typography>
-                  </Stack>
-                </Stack>
-                <Stack
-                  spacing={2}
-                  direction={{
-                    xs: "column",
-                    sm: "row",
-                  }}
-                >
-                  <Button variant="outlined" startIcon={<RestoreOutlined />}>
-                    Restore
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    startIcon={<DeleteForeverOutlined />}
-                  >
-                    Delete
-                  </Button>
-                </Stack>
-              </CardContent>
-            </Card>
-            <Stack direction={"row"} justifyContent={"center"} my={3}>
-              <Pagination
-                count={200}
-                page={1}
-                shape="rounded"
-                color="primary"
-              />
-            </Stack>
+                    <ListItemText
+                      primary={
+                        <Stack
+                          direction={"row"}
+                          spacing={2}
+                          alignItems={"center"}
+                        >
+                          <Chip
+                            label={trash.priority}
+                            color={
+                              trash.priority === "low"
+                                ? "success"
+                                : trash.priority === "medium"
+                                  ? "warning"
+                                  : "error"
+                            }
+                            size="small"
+                            variant="outlined"
+                            sx={chipSx()}
+                          />
+                          <Typography sx={fontBodySX()}>
+                            {trash.title}
+                          </Typography>
+                        </Stack>
+                      }
+                      secondary={
+                        <Stack direction="row" alignItems="center" spacing={1}>
+                          <CalendarTodayOutlined
+                            sx={fontBodySX()}
+                            color="disabled"
+                          />
+                          <Typography
+                            fontWeight={500}
+                            sx={fontBodySX()}
+                            color="textDisabled"
+                          >
+                            Due: {trash.dueDate}
+                          </Typography>
+                        </Stack>
+                      }
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            )}
+            {showSkeleton && trashTask?.length !== 0 && <PaginationSkeleton />}
+            {!showSkeleton && trashTask.length !== 0 && (
+              <Stack direction={"row"} justifyContent={"center"} my={3}>
+                <Pagination
+                  count={metaData?.totalPages}
+                  page={pagination.page}
+                  onChange={(_, value) =>
+                    setPagination({ page: value, limit: 5 })
+                  }
+                  shape="rounded"
+                  color="primary"
+                />
+              </Stack>
+            )}
           </Box>
         </Grid2>
       </Grid2>
+      {/* pop up */}
+      <MenuOptions
+        anchorEl={menu.anchorEl}
+        open={menu.open}
+        onClose={onCloseMenu}
+        onDelete={openConfirmDelete}
+      />
+      <DeleteConfirmDialog
+        open={confirmDelete}
+        taskName={menu.context?.title ?? ""}
+        onClose={closeConfirmDelete}
+        onConfirm={() => {
+          // onSoftDeleteTask("all", menu.context.id);
+          closeConfirmDelete();
+        }}
+      />
     </Box>
   );
 };

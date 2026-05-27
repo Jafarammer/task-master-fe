@@ -132,9 +132,9 @@ const AllTask = ({ params, search }: Props) => {
           )}
         </List>
       )}
-      {(tasks || []).length > 0 && !showSkeleton && (
+      {tasks.length > 0 && !showSkeleton && (
         <List>
-          {tasks?.map((task, index): any => (
+          {tasks?.map((task, index) => (
             <ListItem
               key={index}
               sx={getTaskItemSx(index, tasks?.length)}

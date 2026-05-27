@@ -131,7 +131,7 @@ const PendingTask = ({ params, search }: Props) => {
           )}
         </List>
       )}
-      {(tasks || []).length > 0 && !showSkeleton && (
+      {tasks.length > 0 && !showSkeleton && (
         <List>
           {tasks?.map((task, index) => (
             <ListItem

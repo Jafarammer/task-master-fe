@@ -11,7 +11,7 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { Search } from "@mui/icons-material";
-import { toggleGroupSx, fontBodySX, fontLabelSx, fontTitleSX } from "./styles";
+import { toggleGroupSx, fontLabelSx, fontTitleSX } from "./styles";
 import AllTask from "./AllTask";
 import CompletedTask from "./CompletedTask";
 import PendingTask from "./PendingTask";
@@ -92,12 +92,14 @@ const MyTask = () => {
           placeholder="Search tasks..."
           size="small"
           fullWidth
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Search sx={fontLabelSx()} />
-              </InputAdornment>
-            ),
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Search sx={fontLabelSx()} />
+                </InputAdornment>
+              ),
+            },
           }}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
