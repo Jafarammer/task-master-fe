@@ -1,6 +1,6 @@
 import { useState, Dispatch, SetStateAction } from "react";
 import { useAppDispatch } from "../app/hooks";
-import { hardDeleteTask } from "../services/trashService";
+import { hardDeleteTask, restoreTask } from "../services/trashService";
 import { fetchTrash, fetchTrashStatistics } from "../features/trash/trashthunk";
 import useSnackbarAlert from "./useSnackbarAlert";
 import { TLoadingType, TPagination } from "../types/common";
@@ -12,6 +12,7 @@ type useTrashReturn = {
   setPagination: Dispatch<SetStateAction<TPagination>>;
   loading: TLoadingType;
   onHardDeleteSingle: (id: string) => void;
+  onRestoreTask: (id: string) => void;
 };
 
 const useTrash = (): useTrashReturn => {
@@ -50,6 +51,26 @@ const useTrash = (): useTrashReturn => {
     }
   };
 
+  const onRestoreTask = async (id: string) => {
+    try {
+      setLoading({ context: "restore", open: true });
+      const response = await restoreTask(id);
+      notify(response.message, "success");
+      dispatch(
+        fetchTrash({
+          page: pagination.page,
+          limit: pagination.limit,
+          query: search,
+        }),
+      );
+      dispatch(fetchTrashStatistics());
+    } catch (error: any) {
+      notify("Restore task failed", "error");
+    } finally {
+      setLoading({ context: "", open: false });
+    }
+  };
+
   return {
     search,
     setSearch,
@@ -57,6 +78,7 @@ const useTrash = (): useTrashReturn => {
     setPagination,
     loading,
     onHardDeleteSingle,
+    onRestoreTask,
   };
 };
 

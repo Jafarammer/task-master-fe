@@ -62,8 +62,14 @@ const Trash = () => {
     (state) => state.trash,
   );
   // hooks
-  const { search, setSearch, pagination, setPagination, onHardDeleteSingle } =
-    useTrash();
+  const {
+    search,
+    setSearch,
+    pagination,
+    setPagination,
+    onHardDeleteSingle,
+    onRestoreTask,
+  } = useTrash();
   // useState
   const [showSkeleton, setShowSkeleton] = useState<boolean>(false);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
@@ -276,7 +282,14 @@ const Trash = () => {
                     sx={getTaskItemSx(index, trashTask.length)}
                     secondaryAction={
                       <Stack direction={"row"} gap={2}>
-                        <Button variant="contained">Restore</Button>
+                        <Button
+                          loading={loading}
+                          disabled={loading}
+                          variant="contained"
+                          onClick={() => onRestoreTask(trash.id)}
+                        >
+                          Restore
+                        </Button>
                         <Button
                           variant="contained"
                           color="error"
