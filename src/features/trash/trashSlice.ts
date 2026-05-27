@@ -1,12 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchTrash } from "./trashthunk";
-import { ITrashResponse } from "../../interfaces/trashInterface";
+import { fetchTrash, fetchTrashStatistics } from "./trashthunk";
+import {
+  ITrashResponse,
+  ITrashStatisticsResponse,
+} from "../../interfaces/trashInterface";
 
 interface TrashState {
   trashTask: ITrashResponse["data"];
   metaData: ITrashResponse["metaData"];
+  statistics: ITrashStatisticsResponse["data"] | null;
   loading: boolean;
+  loadingStatistic: boolean;
   error: string | null;
+  errorStatistic: string | null;
 }
 
 const initialState: TrashState = {
@@ -17,8 +23,11 @@ const initialState: TrashState = {
     total: 0,
     totalPages: 0,
   },
+  statistics: null,
   loading: false,
+  loadingStatistic: false,
   error: null,
+  errorStatistic: null,
 };
 
 const trashSlice = createSlice({
@@ -33,8 +42,11 @@ const trashSlice = createSlice({
         total: 0,
         totalPages: 0,
       };
+      state.statistics = null;
       state.loading = false;
+      state.loadingStatistic = false;
       state.error = null;
+      state.errorStatistic = null;
     },
   },
   extraReducers: (builder) => {
@@ -53,6 +65,21 @@ const trashSlice = createSlice({
         state.loading = false;
         state.trashTask = [];
         state.error = action.payload?.message || "Failed to load data trash";
+      })
+      .addCase(fetchTrashStatistics.pending, (state) => {
+        state.loadingStatistic = true;
+        state.errorStatistic = null;
+      })
+      .addCase(fetchTrashStatistics.fulfilled, (state, action) => {
+        state.loadingStatistic = false;
+        state.statistics = action.payload.data;
+        state.errorStatistic = null;
+      })
+      .addCase(fetchTrashStatistics.rejected, (state, action) => {
+        state.loadingStatistic = false;
+        state.statistics = null;
+        state.errorStatistic =
+          action.payload?.message || "Failed to load data trash statistics";
       });
   },
 });

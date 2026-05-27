@@ -4,7 +4,10 @@ import {
   IApiErrorResponse,
   IApiParams,
 } from "../../interfaces/commonInterface";
-import { ITrashResponse } from "../../interfaces/trashInterface";
+import {
+  ITrashResponse,
+  ITrashStatisticsResponse,
+} from "../../interfaces/trashInterface";
 
 export const fetchTrash = createAsyncThunk<
   ITrashResponse,
@@ -28,6 +31,22 @@ export const fetchTrash = createAsyncThunk<
   } catch (error: any) {
     return rejectWithValue({
       message: error.response?.data?.message || "Failed to fetch trash",
+    });
+  }
+});
+
+export const fetchTrashStatistics = createAsyncThunk<
+  ITrashStatisticsResponse,
+  void,
+  { rejectValue: IApiErrorResponse }
+>("trashStatistics/fetch", async (_, { rejectWithValue }) => {
+  try {
+    const response = await api.get("/task/trash/statistics");
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue({
+      message:
+        error.response?.data?.message || "Failed to fetch trash statistics",
     });
   }
 });

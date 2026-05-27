@@ -46,7 +46,10 @@ import { MenuOptions, EmptyState, DeleteConfirmDialog } from "../../components";
 import ListTaskTrashSkeleton from "./listTaskTrashSkeleton";
 import PaginationSkeleton from "../../components/PaginationSkeleton";
 import { TPagination, TMenuState } from "../../types/common";
-import { fetchTrash } from "../../features/trash/trashthunk";
+import {
+  fetchTrash,
+  fetchTrashStatistics,
+} from "../../features/trash/trashthunk";
 
 const Trash = () => {
   // router
@@ -55,7 +58,7 @@ const Trash = () => {
   const filterParams = parseParams(searchParams.get("filter"));
   // redux
   const dispatch = useAppDispatch();
-  const { trashTask, metaData, loading, error } = useAppSelector(
+  const { trashTask, metaData, loading, error, statistics } = useAppSelector(
     (state) => state.trash,
   );
   // useState
@@ -110,6 +113,7 @@ const Trash = () => {
         query: search,
       }),
     );
+    dispatch(fetchTrashStatistics());
   }, [dispatch, pagination, search]);
 
   useEffect(() => {
@@ -139,7 +143,7 @@ const Trash = () => {
           >
             <ArrowBackIos />
           </IconButton>
-          Tasks Deleted
+          Trash
         </Typography>
         <Button
           variant="outlined"
@@ -164,6 +168,7 @@ const Trash = () => {
                   Trash Statistics
                 </Typography>
                 <Stack spacing={2} width={"100%"} mt={2}>
+                  {/* total items */}
                   <Stack
                     direction="row"
                     justifyContent="space-between"
@@ -178,12 +183,48 @@ const Trash = () => {
                     </Typography>
 
                     <Typography fontWeight={"bold"} sx={fontBodySX()}>
-                      12
+                      {statistics?.totalItems}
+                    </Typography>
+                  </Stack>
+                  {/* trash items */}
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Typography
+                      fontWeight={500}
+                      sx={fontBodySX()}
+                      color="textDisabled"
+                    >
+                      Trash Item
+                    </Typography>
+
+                    <Typography fontWeight={"bold"} sx={fontBodySX()}>
+                      {statistics?.trashItems}
+                    </Typography>
+                  </Stack>
+                  {/* active item */}
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Typography
+                      fontWeight={500}
+                      sx={fontBodySX()}
+                      color="textDisabled"
+                    >
+                      Active Item
+                    </Typography>
+
+                    <Typography fontWeight={"bold"} sx={fontBodySX()}>
+                      {statistics?.activeItems}
                     </Typography>
                   </Stack>
 
                   <Divider />
-
+                  {/* used storage */}
                   <Stack
                     direction="row"
                     justifyContent="space-between"
@@ -198,7 +239,25 @@ const Trash = () => {
                     </Typography>
 
                     <Typography fontWeight={"bold"} sx={fontBodySX()}>
-                      4.2 MB
+                      {statistics?.usedStorage}
+                    </Typography>
+                  </Stack>
+                  {/* max storage */}
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Typography
+                      fontWeight={500}
+                      sx={fontBodySX()}
+                      color="textDisabled"
+                    >
+                      Maximal Storage Used
+                    </Typography>
+
+                    <Typography fontWeight={"bold"} sx={fontBodySX()}>
+                      {statistics?.maxStorage}
                     </Typography>
                   </Stack>
                 </Stack>
@@ -276,7 +335,12 @@ const Trash = () => {
                         </Stack>
                       }
                       secondary={
-                        <Stack direction="row" alignItems="center" spacing={1}>
+                        <Stack
+                          direction="row"
+                          alignItems="center"
+                          spacing={1}
+                          mt={2}
+                        >
                           <CalendarTodayOutlined
                             sx={fontBodySX()}
                             color="disabled"

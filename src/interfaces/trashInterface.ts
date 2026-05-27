@@ -7,6 +7,15 @@ export interface ITrashData {
   isCompleted: boolean;
 }
 
+export interface ITrashDataStatistics {
+  totalItems: number;
+  trashItems: number;
+  activeItems: number;
+  usedStorage: string;
+  maxStorage: string;
+  percentage?: number;
+}
+
 export interface ITrashResponse {
   data: ITrashData[];
   metaData?: {
@@ -15,4 +24,9 @@ export interface ITrashResponse {
     total: number;
     totalPages: number;
   };
+}
+
+export interface ITrashStatisticsResponse {
+  data: ITrashDataStatistics;
+  message: string;
 }
