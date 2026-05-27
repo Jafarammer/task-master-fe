@@ -14,3 +14,8 @@ export type TMenuState = {
   open: boolean;
   context?: any;
 };
+
+export type TLoadingType = {
+  context: string;
+  open: boolean;
+};

@@ -1,4 +1,4 @@
-import { useState, useEffect, MouseEvent } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
@@ -42,14 +42,14 @@ import {
   chipSx,
 } from "./styles";
 // reusable components
-import { MenuOptions, EmptyState, DeleteConfirmDialog } from "../../components";
+import { EmptyState, DeleteConfirmDialog } from "../../components";
 import ListTaskTrashSkeleton from "./listTaskTrashSkeleton";
 import PaginationSkeleton from "../../components/PaginationSkeleton";
-import { TPagination, TMenuState } from "../../types/common";
 import {
   fetchTrash,
   fetchTrashStatistics,
 } from "../../features/trash/trashthunk";
+import useTrash from "../../hooks/useTrash";
 
 const Trash = () => {
   // router
@@ -61,48 +61,22 @@ const Trash = () => {
   const { trashTask, metaData, loading, error, statistics } = useAppSelector(
     (state) => state.trash,
   );
+  // hooks
+  const { search, setSearch, pagination, setPagination, onHardDeleteSingle } =
+    useTrash();
   // useState
-  const [search, setSearch] = useState<string>("");
   const [showSkeleton, setShowSkeleton] = useState<boolean>(false);
-  const [pagination, setPagination] = useState<TPagination>({
-    page: 1,
-    limit: 5,
-  });
-  const [menu, setMenu] = useState<TMenuState>({
-    anchorEl: null,
-    open: false,
-    context: null,
-  });
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
+  const [contextTask, setContextTask] = useState<{ id: string; title: string }>(
+    { id: "", title: "" },
+  );
   // function event
-  const onOpenMenu = (
-    event: MouseEvent<HTMLButtonElement>,
-    id: string,
-    title: string,
-  ): void => {
-    setMenu({
-      anchorEl: event.currentTarget,
-      open: true,
-      context: {
-        id,
-        title,
-      },
-    });
-  };
-  const onCloseMenu = () => {
-    setMenu((prev) => ({
-      ...prev,
-      anchorEl: null,
-      open: false,
-    }));
-  };
   const openConfirmDelete = (): void => {
     setConfirmDelete(true);
-    onCloseMenu();
   };
   const closeConfirmDelete = (): void => {
+    setContextTask({ id: "", title: "" });
     setConfirmDelete(false);
-    onCloseMenu();
   };
   // useEffect
   useEffect(() => {
@@ -301,12 +275,23 @@ const Trash = () => {
                     key={index}
                     sx={getTaskItemSx(index, trashTask.length)}
                     secondaryAction={
-                      <IconButton
-                        edge="end"
-                        onClick={(e) => onOpenMenu(e, trash.id, trash.title)}
-                      >
-                        <MoreVert sx={fontLabelSx()} />
-                      </IconButton>
+                      <Stack direction={"row"} gap={2}>
+                        <Button variant="contained">Restore</Button>
+                        <Button
+                          variant="contained"
+                          color="error"
+                          onClick={() => {
+                            setContextTask({
+                              id: trash.id,
+                              title: trash.title,
+                            });
+                            openConfirmDelete();
+                          }}
+                          loading={loading}
+                        >
+                          Delete
+                        </Button>
+                      </Stack>
                     }
                   >
                     <ListItemText
@@ -377,18 +362,12 @@ const Trash = () => {
         </Grid2>
       </Grid2>
       {/* pop up */}
-      <MenuOptions
-        anchorEl={menu.anchorEl}
-        open={menu.open}
-        onClose={onCloseMenu}
-        onDelete={openConfirmDelete}
-      />
       <DeleteConfirmDialog
         open={confirmDelete}
-        taskName={menu.context?.title ?? ""}
+        taskName={contextTask?.title ?? ""}
         onClose={closeConfirmDelete}
         onConfirm={() => {
-          // onSoftDeleteTask("all", menu.context.id);
+          onHardDeleteSingle(contextTask.id);
           closeConfirmDelete();
         }}
       />
