@@ -9,10 +9,6 @@ import { store, persistor } from "./app/store";
 import App from "./App";
 import AppThemeProvider from "./AppThemeProvider";
 import { CookiesProvider } from "react-cookie";
-import "./index.css";
-import { initApiClient } from "@task-master/core-fe";
-
-initApiClient(import.meta.env.VITE_API_URL);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -29,5 +25,5 @@ createRoot(document.getElementById("root")!).render(
         </PersistGate>
       </Provider>
     </CookiesProvider>
-  </StrictMode>
+  </StrictMode>,
 );

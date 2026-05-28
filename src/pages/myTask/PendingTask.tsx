@@ -18,14 +18,17 @@ import { MoreVert } from "@mui/icons-material";
 import { getTaskItemSx, chipSx, fontBodySX, fontLabelSx } from "./styles";
 import { fetchPendingTask } from "../../features/myTask/myTaskThunk";
 // reusable components
-import { MenuOptions, EmptyState, DeleteConfirmDialog } from "../../components";
+import {
+  MenuOptions,
+  EmptyState,
+  DeleteConfirmDialog,
+  PaginationSkeleton,
+  ListTaskSkeleton,
+} from "../../components";
 // custome hooks
 import useMyTask from "../../hooks/useMyTask";
 // type declaration
-import { MenuState, PaginationState } from "../../types/global";
-// skeleton
-import ListTaskSkeleton from "./ListTaskSkeleton";
-import PaginationSkeleton from "./PaginationSkeleton";
+import { TMenuState, TPagination } from "../../types/common";
 // helper
 import { ParamsFilter } from "../../helpers/filterParamsHelper";
 
@@ -46,12 +49,12 @@ const PendingTask = ({ params, search }: Props) => {
   const { onSoftDeleteTask, onGetDetailTask, onUpdateStatus, onGetEditTask } =
     useMyTask();
   // useState
-  const [menu, setMenu] = useState<MenuState>({
+  const [menu, setMenu] = useState<TMenuState>({
     anchorEl: null,
     open: false,
     context: null,
   });
-  const [pagination, setPagination] = useState<PaginationState>({
+  const [pagination, setPagination] = useState<TPagination>({
     page: 1,
     limit: 5,
   });

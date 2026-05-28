@@ -1,45 +1,35 @@
 import api from "../app/api";
 import {
-  LoginPayload,
-  LoginResponse,
-  RegisterPayload,
-  RegisterResponse,
-  ForgotPasswordPayload,
-  ForgotPasswordResponse,
-  ResetPasswordPayload,
-  ResetPasswordResponse,
-} from "../types/auth";
+  ILoginPayload,
+  IRegisterPayload,
+  IForgotPasswordPayload,
+  IResetPasswordPayload,
+} from "../interfaces/authInterface";
 
 export const loginUser = async (
-  payload: LoginPayload,
-): Promise<LoginResponse> => {
-  const res = await api.post<LoginResponse>("/auth/login", payload);
+  payload: ILoginPayload,
+): Promise<{ accessToken: string; message: string }> => {
+  const res = await api.post("/auth/login", payload);
   return res.data;
 };
 
 export const registerUser = async (
-  payload: RegisterPayload,
-): Promise<RegisterResponse> => {
-  const res = await api.post<RegisterResponse>("/auth/register", payload);
+  payload: IRegisterPayload,
+): Promise<{ message: string }> => {
+  const res = await api.post("/auth/register", payload);
   return res.data;
 };
 
 export const forgotPassword = async (
-  payload: ForgotPasswordPayload,
-): Promise<ForgotPasswordResponse> => {
-  const res = await api.post<ForgotPasswordResponse>(
-    "/auth/forgot-password",
-    payload,
-  );
+  payload: IForgotPasswordPayload,
+): Promise<{ message: string }> => {
+  const res = await api.post("/auth/forgot-password", payload);
   return res.data;
 };
 
 export const resetPassword = async (
-  payload: ResetPasswordPayload,
-): Promise<ResetPasswordResponse> => {
-  const res = await api.post<ResetPasswordResponse>(
-    "/auth/reset-password",
-    payload,
-  );
+  payload: IResetPasswordPayload,
+): Promise<{ message: string }> => {
+  const res = await api.post("/auth/reset-password", payload);
   return res.data;
 };

@@ -1,16 +1,16 @@
 import { useAppDispatch } from "../app/hooks";
 import { showSnackbar } from "../features/components/snackbarSlice";
-import { SnackbarState } from "../types/global";
+import { TSnackbarState } from "../types/common";
 
 type useSnackbarAlertReturn = (
   message: string,
-  color?: SnackbarState["color"],
+  color?: TSnackbarState["color"],
 ) => void;
 
 const useSnackbarAlert = (): useSnackbarAlertReturn => {
   const dispatch = useAppDispatch();
 
-  return (message: string, color?: SnackbarState["color"]) => {
+  return (message: string, color?: TSnackbarState["color"]) => {
     dispatch(showSnackbar({ message, color }));
   };
 };

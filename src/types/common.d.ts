@@ -19,3 +19,9 @@ export type TLoadingType = {
   context: string;
   open: boolean;
 };
+
+export type TSnackbarState = {
+  open: boolean;
+  color: "success" | "error" | "info" | "warning";
+  message: string;
+};

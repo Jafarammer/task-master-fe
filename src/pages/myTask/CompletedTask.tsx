@@ -20,12 +20,15 @@ import { fetchCompletedTask } from "../../features/myTask/myTaskThunk";
 // custome hooks
 import useMyTask from "../../hooks/useMyTask";
 // reusable components
-import { MenuOptions, EmptyState, DeleteConfirmDialog } from "../../components";
+import {
+  MenuOptions,
+  EmptyState,
+  DeleteConfirmDialog,
+  PaginationSkeleton,
+  ListTaskSkeleton,
+} from "../../components";
 // type declaration
-import { MenuState, PaginationState } from "../../types/global";
-// skeleton
-import ListTaskSkeleton from "./ListTaskSkeleton";
-import PaginationSkeleton from "./PaginationSkeleton";
+import { TMenuState, TPagination } from "../../types/common";
 // helper
 import { ParamsFilter } from "../../helpers/filterParamsHelper";
 
@@ -46,12 +49,12 @@ const CompletedTask = ({ params, search }: Props) => {
   const { onSoftDeleteTask, onGetDetailTask, onUpdateStatus, onGetEditTask } =
     useMyTask();
   // useState
-  const [menu, setMenu] = useState<MenuState>({
+  const [menu, setMenu] = useState<TMenuState>({
     anchorEl: null,
     open: false,
     context: null,
   });
-  const [pagination, setPagination] = useState<PaginationState>({
+  const [pagination, setPagination] = useState<TPagination>({
     page: 1,
     limit: 5,
   });
@@ -132,7 +135,7 @@ const CompletedTask = ({ params, search }: Props) => {
           )}
         </List>
       )}
-      {tasks.length > 0 && !showSkeleton && (
+      {tasks?.length > 0 && !showSkeleton && (
         <List>
           {tasks?.map((task, index) => (
             <ListItem

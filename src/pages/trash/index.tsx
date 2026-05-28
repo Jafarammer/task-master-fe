@@ -41,9 +41,13 @@ import {
   chipSx,
 } from "./styles";
 // reusable components
-import { EmptyState, DeleteConfirmDialog, ExpandText } from "../../components";
-import ListTaskTrashSkeleton from "./listTaskTrashSkeleton";
-import PaginationSkeleton from "../../components/PaginationSkeleton";
+import {
+  EmptyState,
+  DeleteConfirmDialog,
+  ExpandText,
+  PaginationSkeleton,
+  ListTaskSkeleton,
+} from "../../components";
 import useTrash from "../../hooks/useTrash";
 
 const Trash = () => {
@@ -122,7 +126,7 @@ const Trash = () => {
         </Button>
       </Stack>
       <Typography sx={fontBodySX()} color="textDisabled">
-        Items in the trash will be automatically deleted after 30 days.
+        Restore tasks or permanently delete them from trash.
       </Typography>
       <Grid2 container spacing={2} mt={5}>
         <Grid2 size={{ xs: 12, md: 4 }}>
@@ -258,13 +262,13 @@ const Trash = () => {
                 {Array.from({
                   length: trashTask?.length || pagination.limit,
                 }).map((_, index) => (
-                  <ListTaskTrashSkeleton key={index} />
+                  <ListTaskSkeleton key={index} />
                 ))}
               </List>
             )}
             {trashTask.length > 0 && !showSkeleton && (
               <List>
-                {trashTask.map((trash, index): any => (
+                {trashTask?.map((trash, index): any => (
                   <ListItem
                     key={index}
                     sx={getTaskItemSx(index, trashTask.length)}

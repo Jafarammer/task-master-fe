@@ -18,7 +18,7 @@ import {
   iconButtonSX,
   dialogContentSX,
   paperPropsSX,
-} from "./DeleteConfirmDialog.style";
+} from "./styles/DeleteConfirmDialog.style";
 
 type Props = {
   open: boolean;

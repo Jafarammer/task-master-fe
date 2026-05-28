@@ -4,6 +4,7 @@ import {
   fetchCompletedTask,
   fetchPendingTask,
 } from "./myTaskThunk";
+import { IApiErrorResponse } from "../../interfaces/commonInterface";
 import { IMyTaskResponse } from "../../interfaces/myTaskInterface";
 
 interface MyTaskState {
@@ -42,10 +43,13 @@ const fulFilledReducer = (
   state.error = null;
 };
 
-const rejectedReducer = (state: MyTaskState, action: any) => {
+const rejectedReducer = (
+  state: MyTaskState,
+  action: PayloadAction<IApiErrorResponse | undefined>,
+) => {
   state.loading = false;
   state.tasks = [];
-  state.error = action.payload?.message || "Failed to load data!";
+  state.error = action?.payload?.message || "Failed to load data!";
 };
 
 const myTaskSlice = createSlice({

@@ -4,9 +4,7 @@ export const loginSchema = Yup.object().shape({
   email: Yup.string()
     .email("Invalid email format")
     .required("Email is required field!"),
-  password: Yup.string()
-    .min(6, "Password min 6 characters")
-    .required("Password is required field!"),
+  password: Yup.string().required("Password is required field!"),
 });
 
 export const registerSchema = Yup.object().shape({

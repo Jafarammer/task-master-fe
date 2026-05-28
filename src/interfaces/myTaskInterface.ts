@@ -6,15 +6,16 @@ export interface IMyTaskData {
   priority: "low" | "medium" | "high";
   isCompleted: boolean;
 }
+export interface IMyTaskMetaData {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
 
 export interface IMyTaskResponse {
   data: IMyTaskData[];
-  metaData?: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
+  metaData: IMyTaskMetaData;
 }
 export interface IMyTaskPayload {
   title: string;

@@ -4,3 +4,5 @@ export { default as EmptyState } from "./EmptyState";
 export { default as DeleteConfirmDialog } from "./DeleteConfirmDialog";
 export { default as SnackbarAlert } from "./SnackbarAlert";
 export { default as ExpandText } from "./ExpandableText";
+export { default as PaginationSkeleton } from "./PaginationSkeleton";
+export { default as ListTaskSkeleton } from "./ListTaskSkeleton";

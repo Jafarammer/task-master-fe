@@ -18,9 +18,9 @@ export const fetchAllTask = createAsyncThunk<
       sortBy = "createdAt",
       order = "desc",
       query = "",
-    } = params as IApiParams;
+    } = params;
 
-    const response = await api.get("/task", {
+    const response = await api.get<IMyTaskResponse>("/task", {
       params: { page, limit, sortBy, order, query },
     });
 
@@ -45,9 +45,9 @@ export const fetchCompletedTask = createAsyncThunk<
       sortBy = "createdAt",
       order = "desc",
       query = "",
-    } = params as IApiParams;
+    } = params;
 
-    const response = await api.get("/task/completed", {
+    const response = await api.get<IMyTaskResponse>("/task/completed", {
       params: { page, limit, sortBy, order, query },
     });
     return response.data;
@@ -71,9 +71,9 @@ export const fetchPendingTask = createAsyncThunk<
       sortBy = "createdAt",
       order = "desc",
       query = "",
-    } = params as IApiParams;
+    } = params;
 
-    const response = await api.get("/task/pending", {
+    const response = await api.get<IMyTaskResponse>("/task/pending", {
       params: { page, limit, sortBy, order, query },
     });
     return response.data;

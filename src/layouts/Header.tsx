@@ -17,7 +17,7 @@ import { headerTitleSx, containerSx, toolbarSx, avatartSX } from "./styles";
 // custome components
 import { MenuOptions } from "../components";
 // type declaration
-import { MenuState } from "../types/global";
+import { TMenuState } from "../types/common";
 
 const Header = () => {
   // router
@@ -28,7 +28,7 @@ const Header = () => {
   // hooks
   const { onLogout } = useLogout();
   // useState
-  const [menu, setMenu] = useState<MenuState>({ anchorEl: null, open: false });
+  const [menu, setMenu] = useState<TMenuState>({ anchorEl: null, open: false });
   // function event
   const onSetting = () => {
     navigate("/profile");

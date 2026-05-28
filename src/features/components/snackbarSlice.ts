@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { SnackbarState } from "../../types/global";
+import { TSnackbarState } from "../../types/common";
 
-const initialState: SnackbarState = {
+const initialState: TSnackbarState = {
   open: false,
   color: "success",
   message: "",
@@ -15,7 +15,7 @@ const snackbarSlice = createSlice({
       state,
       action: PayloadAction<{
         message: string;
-        color?: SnackbarState["color"];
+        color?: TSnackbarState["color"];
       }>,
     ) => {
       state.open = true;

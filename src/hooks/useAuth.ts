@@ -4,11 +4,11 @@ import { useCookies } from "react-cookie";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import useSnackbarAlert from "./useSnackbarAlert";
 import {
-  LoginPayload,
-  RegisterPayload,
-  ForgotPasswordPayload,
-  ResetPasswordPayload,
-} from "../types/auth";
+  IRegisterPayload,
+  IForgotPasswordPayload,
+  ILoginPayload,
+  IResetPasswordPayload,
+} from "../interfaces/authInterface";
 import { validations } from "../validations";
 import {
   loginUser,
@@ -18,10 +18,10 @@ import {
 } from "../services/authService";
 
 type UseAuthReturn = {
-  formikLogin: FormikProps<LoginPayload>;
-  formikRegister: FormikProps<RegisterPayload>;
-  formikForgotPassword: FormikProps<ForgotPasswordPayload>;
-  formikResetPassword: FormikProps<ResetPasswordPayload>;
+  formikLogin: FormikProps<ILoginPayload>;
+  formikRegister: FormikProps<IRegisterPayload>;
+  formikForgotPassword: FormikProps<IForgotPasswordPayload>;
+  formikResetPassword: FormikProps<IResetPasswordPayload>;
   loading: boolean;
 };
 
@@ -36,7 +36,7 @@ const useAuth = (): UseAuthReturn => {
   // useState
   const [loading, setLoading] = useState<boolean>(false);
   // formik
-  const formikLogin = useFormik<LoginPayload>({
+  const formikLogin = useFormik<ILoginPayload>({
     initialValues: {
       email: "",
       password: "",
@@ -58,25 +58,9 @@ const useAuth = (): UseAuthReturn => {
         notify(response.message, "success");
       } catch (error: any) {
         if (error.status === 400) {
-          const msg: string = error?.response?.data?.message;
-          if (
-            /password|wrong password|incorrect password|invalid password/i.test(
-              msg,
-            )
-          ) {
-            setFieldError("password", msg);
-            return;
-          }
-          if (
-            /email|not found|no account|user not found|not registered/i.test(
-              msg,
-            )
-          ) {
-            setFieldError("email", msg);
-            return;
-          }
+          notify("Email or password invalid", "error");
         } else {
-          notify(error?.response?.data?.message || "Login failed", "error");
+          notify("Login failed", "error");
         }
       } finally {
         setLoading(false);
@@ -84,7 +68,7 @@ const useAuth = (): UseAuthReturn => {
     },
   });
 
-  const formikRegister = useFormik<RegisterPayload>({
+  const formikRegister = useFormik<IRegisterPayload>({
     initialValues: {
       fullName: "",
       email: "",
@@ -99,6 +83,7 @@ const useAuth = (): UseAuthReturn => {
           fullName: values.fullName,
           email: values.email,
           password: values.password,
+          confirmPassword: values.confirmPassword,
         };
         const response = await registerUser(payload);
         notify(response.message, "success");
@@ -114,7 +99,7 @@ const useAuth = (): UseAuthReturn => {
     },
   });
 
-  const formikForgotPassword = useFormik<ForgotPasswordPayload>({
+  const formikForgotPassword = useFormik<IForgotPasswordPayload>({
     enableReinitialize: true,
     initialValues: {
       email: "",
@@ -137,7 +122,7 @@ const useAuth = (): UseAuthReturn => {
     },
   });
 
-  const formikResetPassword = useFormik<ResetPasswordPayload>({
+  const formikResetPassword = useFormik<IResetPasswordPayload>({
     enableReinitialize: true,
     initialValues: {
       token: searchParams.get("token") ?? "",

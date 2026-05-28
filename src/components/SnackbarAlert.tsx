@@ -2,7 +2,7 @@ import { Snackbar, Alert, IconButton } from "@mui/material";
 import { Cancel } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { hideSnackbar } from "../features/components/snackbarSlice";
-import { alertSX } from "./SnackbarAlert.style";
+import { alertSX } from "./styles/SnackbarAlert.style";
 
 const SnackbarAlert = () => {
   const dispatch = useAppDispatch();
