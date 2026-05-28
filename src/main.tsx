@@ -9,6 +9,7 @@ import { store, persistor } from "./app/store";
 import App from "./App";
 import AppThemeProvider from "./AppThemeProvider";
 import { CookiesProvider } from "react-cookie";
+import "./index.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
