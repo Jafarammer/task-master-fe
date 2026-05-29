@@ -91,7 +91,7 @@ const useMyTask = (): useMyTaskReturn => {
         dispatch(fetchAllTask({ page: 1, limit: 5 }));
       } else if (tab === "completed") {
         dispatch(fetchCompletedTask({ page: 1, limit: 5 }));
-      } else {
+      } else if (tab === "pending") {
         dispatch(fetchPendingTask({ page: 1, limit: 5 }));
       }
     } catch (error: any) {
