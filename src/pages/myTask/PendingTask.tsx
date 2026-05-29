@@ -154,7 +154,7 @@ const PendingTask = ({ params, search }: Props) => {
                 <Checkbox
                   checked={task.isCompleted}
                   onChange={() =>
-                    onChecked("pending,", task.id, task.isCompleted)
+                    onChecked("pending", task.id, task.isCompleted)
                   }
                 />
               </ListItemIcon>
