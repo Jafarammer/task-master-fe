@@ -12,8 +12,9 @@ import {
   Pagination,
   Chip,
   Box,
+  Tooltip,
 } from "@mui/material";
-import { MoreVert } from "@mui/icons-material";
+import { MoreVert, CalendarTodayOutlined, Error } from "@mui/icons-material";
 import { getTaskItemSx, chipSx, fontBodySX, fontLabelSx } from "./styles";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { fetchAllTask } from "../../features/myTask/myTaskThunk";
@@ -45,6 +46,8 @@ const AllTask = ({ params, search }: Props) => {
   const { tasks, metaData, loading, error } = useAppSelector(
     (state) => state.myTasks,
   );
+  console.log("this", tasks);
+
   // hooks
   const { onSoftDeleteTask, onGetDetailTask, onUpdateStatus, onGetEditTask } =
     useMyTask();
@@ -172,15 +175,56 @@ const AllTask = ({ params, search }: Props) => {
                       variant="outlined"
                       sx={chipSx()}
                     />
-                    <Typography sx={fontBodySX()}>{task.title}</Typography>
+                    <Typography
+                      color={task.isExpired ? "error" : ""}
+                      sx={fontBodySX()}
+                    >
+                      {task.title}
+                    </Typography>
                   </Stack>
                 }
                 secondary={
-                  <Typography sx={fontBodySX()} mt={1} color="textDisabled">
-                    Due : {task.dueDate}
-                  </Typography>
+                  <Box
+                    display={"flex"}
+                    flexDirection={{ xs: "column", sm: "row" }}
+                    gap={{ xs: 0, sm: 2 }}
+                  >
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      spacing={1}
+                      mt={2}
+                    >
+                      <CalendarTodayOutlined
+                        sx={fontBodySX()}
+                        color="disabled"
+                      />
+                      <Typography sx={fontBodySX()} mt={1} color="textDisabled">
+                        Start : {task.startDate}
+                      </Typography>
+                    </Stack>
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      spacing={1}
+                      mt={2}
+                    >
+                      <CalendarTodayOutlined
+                        sx={fontBodySX()}
+                        color="disabled"
+                      />
+                      <Typography sx={fontBodySX()} mt={1} color="textDisabled">
+                        End : {task.startDate}
+                      </Typography>
+                    </Stack>
+                  </Box>
                 }
               />
+              {task.isExpired && (
+                <Tooltip title="This task has expired" placement="top">
+                  <Error color="error" sx={fontLabelSx()} />
+                </Tooltip>
+              )}
             </ListItem>
           ))}
         </List>

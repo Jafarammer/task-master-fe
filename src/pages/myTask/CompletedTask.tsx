@@ -14,7 +14,7 @@ import {
   Chip,
   Box,
 } from "@mui/material";
-import { MoreVert } from "@mui/icons-material";
+import { MoreVert, CalendarTodayOutlined } from "@mui/icons-material";
 import { getTaskItemSx, chipSx, fontBodySX, fontLabelSx } from "./styles";
 import { fetchCompletedTask } from "../../features/myTask/myTaskThunk";
 // custome hooks
@@ -179,9 +179,40 @@ const CompletedTask = ({ params, search }: Props) => {
                   </Stack>
                 }
                 secondary={
-                  <Typography sx={fontBodySX()} mt={1} color="textDisabled">
-                    Due {task.dueDate}
-                  </Typography>
+                  <Box
+                    display={"flex"}
+                    flexDirection={{ xs: "column", sm: "row" }}
+                    gap={{ xs: 0, sm: 2 }}
+                  >
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      spacing={1}
+                      mt={2}
+                    >
+                      <CalendarTodayOutlined
+                        sx={fontBodySX()}
+                        color="disabled"
+                      />
+                      <Typography sx={fontBodySX()} mt={1} color="textDisabled">
+                        Start : {task.startDate}
+                      </Typography>
+                    </Stack>
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      spacing={1}
+                      mt={2}
+                    >
+                      <CalendarTodayOutlined
+                        sx={fontBodySX()}
+                        color="disabled"
+                      />
+                      <Typography sx={fontBodySX()} mt={1} color="textDisabled">
+                        End : {task.startDate}
+                      </Typography>
+                    </Stack>
+                  </Box>
                 }
               />
             </ListItem>
