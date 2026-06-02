@@ -105,34 +105,74 @@ const Task = () => {
             gap={2}
             mt={2}
           >
-            <FormControl fullWidth>
-              <DatePicker
-                value={
-                  formik.values.dueDate ? dayjs(formik.values.dueDate) : null
-                }
-                onChange={(value) => {
-                  formik.setFieldValue(
-                    "dueDate",
-                    value ? value.format("YYYY-MM-DD") : "",
-                    true,
-                  );
-                }}
-                onAccept={() => formik.setFieldTouched("due_date", true)}
-                minDate={dayjs().startOf("day")}
-                slotProps={{
-                  textField: {
-                    size: "small",
-                    error: Boolean(
-                      formik.touched.dueDate && formik.errors.dueDate,
-                    ),
-                  },
-                }}
-                format="YYYY-MM-DD"
-              />
-              {formik.touched.dueDate && formik.errors.dueDate && (
-                <FormHelperText error>{formik.errors.dueDate}</FormHelperText>
-              )}
-            </FormControl>
+            <Stack
+              direction={{ xs: "column", sm: "column", md: "row", lg: "row" }}
+              gap={2}
+              width={"100%"}
+            >
+              {/* start date */}
+              <FormControl fullWidth>
+                <DatePicker
+                  value={
+                    formik.values.startDate
+                      ? dayjs(formik.values.startDate)
+                      : null
+                  }
+                  onChange={(value) => {
+                    formik.setFieldValue(
+                      "startDate",
+                      value ? value.format("YYYY-MM-DD") : "",
+                      true,
+                    );
+                  }}
+                  onAccept={() => formik.setFieldTouched("startDate", true)}
+                  // minDate={dayjs().startOf("day")}
+                  slotProps={{
+                    textField: {
+                      size: "small",
+                      error: Boolean(
+                        formik.touched.startDate && formik.errors.startDate,
+                      ),
+                    },
+                  }}
+                  format="YYYY-MM-DD"
+                />
+                {formik.touched.startDate && formik.errors.startDate && (
+                  <FormHelperText error>
+                    {formik.errors.startDate}
+                  </FormHelperText>
+                )}
+              </FormControl>
+              {/* end date */}
+              <FormControl fullWidth>
+                <DatePicker
+                  value={
+                    formik.values.endDate ? dayjs(formik.values.endDate) : null
+                  }
+                  onChange={(value) => {
+                    formik.setFieldValue(
+                      "endDate",
+                      value ? value.format("YYYY-MM-DD") : "",
+                      true,
+                    );
+                  }}
+                  onAccept={() => formik.setFieldTouched("endDate", true)}
+                  // minDate={dayjs().startOf("day")}
+                  slotProps={{
+                    textField: {
+                      size: "small",
+                      error: Boolean(
+                        formik.touched.endDate && formik.errors.endDate,
+                      ),
+                    },
+                  }}
+                  format="YYYY-MM-DD"
+                />
+                {formik.touched.endDate && formik.errors.endDate && (
+                  <FormHelperText error>{formik.errors.endDate}</FormHelperText>
+                )}
+              </FormControl>
+            </Stack>
 
             <FormControl fullWidth>
               <Select

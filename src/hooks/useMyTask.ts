@@ -46,8 +46,10 @@ const useMyTask = (): useMyTaskReturn => {
     initialValues: {
       title: detailTask?.title ?? "",
       description: detailTask?.description ?? "",
-      dueDate:
-        detailTask?.dueDate ?? dayjs().startOf("day").format("YYYY-MM-DD"), // ✅ STRING
+      startDate:
+        detailTask?.startDate ?? dayjs().startOf("day").format("YYYY-MM-DD"),
+      endDate:
+        detailTask?.endDate ?? dayjs().startOf("day").format("YYYY-MM-DD"),
       priority: detailTask?.priority ?? "",
     },
     validationSchema: validations.myTask,
@@ -58,7 +60,8 @@ const useMyTask = (): useMyTaskReturn => {
         const payload = {
           title: values.title,
           description: values.description,
-          dueDate: values.dueDate,
+          startDate: values.startDate,
+          endDate: values.endDate,
           priority: values.priority,
         };
         if (!id) {

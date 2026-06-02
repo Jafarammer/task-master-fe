@@ -4,7 +4,6 @@ export interface IMyTaskData {
   description: string;
   startDate: string | null;
   endDate: string | null;
-  dueDate: string;
   priority: "low" | "medium" | "high";
   isCompleted: boolean;
   isExpired: boolean;
@@ -23,7 +22,8 @@ export interface IMyTaskResponse {
 export interface IMyTaskPayload {
   title: string;
   description: string;
-  dueDate: string;
+  startDate: string;
+  endDate: string;
   priority: string;
 }
 

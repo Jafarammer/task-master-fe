@@ -214,7 +214,7 @@ const AllTask = ({ params, search }: Props) => {
                         color="disabled"
                       />
                       <Typography sx={fontBodySX()} mt={1} color="textDisabled">
-                        End : {task.startDate}
+                        End : {task.endDate}
                       </Typography>
                     </Stack>
                   </Box>

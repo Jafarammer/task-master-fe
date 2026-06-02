@@ -1,14 +1,13 @@
 import axios from "axios";
-import { getToken } from "../utils/auth";
+import { getToken, removeToken } from "../utils/auth";
 
 const api = axios.create({
-  baseURL: `${import.meta.env.VITE_API_URL}`,
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// Interceptor untuk otomatis tambah token
 api.interceptors.request.use((config) => {
   const token = getToken();
 
@@ -18,5 +17,20 @@ api.interceptors.request.use((config) => {
 
   return config;
 });
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      removeToken();
+
+      localStorage.clear();
+
+      window.location.href = "/login";
+    }
+
+    return Promise.reject(error);
+  },
+);
 
 export default api;
