@@ -12,7 +12,11 @@ import {
   Grid2,
   ButtonGroup,
 } from "@mui/material";
-import { ArrowBackIos, CalendarTodayOutlined } from "@mui/icons-material";
+import {
+  ArrowBackIos,
+  CalendarTodayOutlined,
+  Error,
+} from "@mui/icons-material";
 import {
   cardActionSX,
   iconButtonSX,
@@ -122,9 +126,39 @@ const DetailTask = () => {
                     sx={fontBodySX()}
                     color="textDisabled"
                   >
-                    Due Date: {dayjs(data?.dueDate).format("MMMM D, YYYY")}
+                    Start Date:{" "}
+                    {data?.startDate
+                      ? dayjs(data?.startDate).format("MMMM D, YYYY")
+                      : null}
                   </Typography>
                 </Stack>
+                <Stack direction="row" alignItems="center" spacing={1} my={2}>
+                  <CalendarTodayOutlined sx={fontLabelSx()} color="disabled" />
+                  <Typography
+                    fontWeight={500}
+                    sx={fontBodySX()}
+                    color="textDisabled"
+                  >
+                    End Date:{" "}
+                    {data?.endDate
+                      ? dayjs(data?.endDate).format("MMMM D, YYYY")
+                      : null}
+                  </Typography>
+                </Stack>
+
+                {data?.isExpired && (
+                  <Stack direction="row" alignItems="center" spacing={1} my={2}>
+                    <Error sx={fontLabelSx()} color="error" />
+                    <Typography
+                      fontWeight={500}
+                      sx={fontBodySX()}
+                      color="textDisabled"
+                    >
+                      Expired : This task has expired. Please complete or delete
+                      it.
+                    </Typography>
+                  </Stack>
+                )}
 
                 <Stack justifyContent={"center"} alignItems={"center"} mt={5}>
                   <ButtonGroup
