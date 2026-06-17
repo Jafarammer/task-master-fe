@@ -14,16 +14,21 @@ export const registerSchema = Yup.object().shape({
     .required("Email is required field!"),
 
   password: Yup.string()
+    .required("Password is required field!")
     .min(8, "Password must be at least 8 characters")
     .matches(/[A-Z]/, "At least 1 uppercase letter")
     .matches(/[a-z]/, "At least 1 lowercase letter")
     .matches(/[0-9]/, "At least 1 number")
-    .matches(/[@$!%*?&]/, "At least 1 special character")
-    .required("Password is required field!"),
-
+    .matches(/[@$!%*?&]/, "At least 1 special character"),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password")], "Passwords must match")
-    .required("Confirm password is required field!"),
+    .required("Confirm password is required field!")
+    .test("passwords-match", "Passwords must match", function (value) {
+      const { password } = this.parent;
+      if (!value) return true;
+      if (!password) return true;
+
+      return value === password;
+    }),
 });
 
 export const forgotPasswordSchema = Yup.object().shape({
