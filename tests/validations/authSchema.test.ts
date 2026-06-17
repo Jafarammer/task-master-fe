@@ -203,3 +203,34 @@ describe("REGISTER VALIDATION", () => {
     );
   });
 });
+
+describe("FORGOT PASSWORD VALIDATION", () => {
+  it("should pass when all fields are valid", async () => {
+    const data = {
+      email: "jhone@example.com",
+    };
+
+    const result = await validations.forgotPassword.validate(data);
+    expect(result).toEqual(data);
+  });
+
+  it("should fail when email is empty", async () => {
+    const data = {
+      email: "",
+    };
+
+    await expect(validations.forgotPassword.validate(data)).rejects.toThrow(
+      "Email is required field!",
+    );
+  });
+
+  it("should fail when email format is invalid", async () => {
+    const data = {
+      email: "invalid-email",
+    };
+
+    await expect(validations.forgotPassword.validate(data)).rejects.toThrow(
+      "Invalid email format",
+    );
+  });
+});
