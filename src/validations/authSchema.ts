@@ -39,14 +39,19 @@ export const forgotPasswordSchema = Yup.object().shape({
 
 export const resetPasswordSchema = Yup.object().shape({
   newPassword: Yup.string()
+    .required("New Password is required field!")
     .min(8, "Password must be at least 8 characters")
     .matches(/[A-Z]/, "At least 1 uppercase letter")
     .matches(/[a-z]/, "At least 1 lowercase letter")
     .matches(/[0-9]/, "At least 1 number")
-    .matches(/[@$!%*?&]/, "At least 1 special character")
-    .required("New Password is required field!"),
-
+    .matches(/[@$!%*?&]/, "At least 1 special character"),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref("newPassword")], "Passwords must match")
-    .required("Confirm Password is required field!"),
+    .required("Confirm password is required field!")
+    .test("passwords-match", "Passwords must match", function (value) {
+      const { newPassword } = this.parent;
+      if (!value) return true;
+      if (!newPassword) return true;
+
+      return value === newPassword;
+    }),
 });
