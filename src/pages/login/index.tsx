@@ -80,6 +80,7 @@ const Login = () => {
               placeholder="Email"
               size="small"
               name="email"
+              type="email"
               value={formikLogin.values.email}
               onChange={formikLogin.handleChange}
               onBlur={formikLogin.handleBlur}
@@ -106,6 +107,7 @@ const Login = () => {
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
+                        aria-label="toggle password visibility"
                         edge="end"
                         onClick={onClickShowPassword}
                         onMouseDown={onMouseDownPassword}
