@@ -4,6 +4,8 @@ import userEvent from "@testing-library/user-event";
 import Login from "../../src/pages/login";
 import { renderWithRouter } from "../utils/renderWithRouter";
 
+const mockHandleSubmit = vi.fn();
+
 vi.mock("../../src/hooks/useAuth", () => ({
   default: () => ({
     loading: false,
@@ -16,7 +18,7 @@ vi.mock("../../src/hooks/useAuth", () => ({
       touched: {},
       handleChange: vi.fn(),
       handleBlur: vi.fn(),
-      handleSubmit: vi.fn(),
+      handleSubmit: mockHandleSubmit,
     },
   }),
 }));
@@ -108,6 +110,34 @@ describe("LOGIN PAGE", () => {
       await userEvent.click(visibilityButton);
 
       expect(passwordInput).toHaveAttribute("type", "password");
+    });
+  });
+
+  describe.only("Formik Login", () => {
+    it("should render empty email value initially", () => {
+      renderWithRouter(<Login />);
+
+      const emailInput = screen.getByPlaceholderText("Email");
+      expect(emailInput).toHaveValue("");
+    });
+
+    it("should render empty password value initially", () => {
+      renderWithRouter(<Login />);
+
+      const passwordInput = screen.getByPlaceholderText("Password");
+      expect(passwordInput).toHaveValue("");
+    });
+
+    it("should call handleSubmit when form is submitted", async () => {
+      renderWithRouter(<Login />);
+
+      const loginButton = screen.getByRole("button", {
+        name: /log in/i,
+      });
+
+      await userEvent.click(loginButton);
+
+      expect(mockHandleSubmit).toHaveBeenCalledTimes(1);
     });
   });
 });
