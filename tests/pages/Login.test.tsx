@@ -6,6 +6,8 @@ import { renderWithRouter } from "../utils/renderWithRouter";
 
 const mockHandleSubmit = vi.fn();
 let mockAuth: any;
+const mockNotify = vi.fn();
+let mockLocationSearch = "";
 
 const createMockUseAuth = () => ({
   loading: false,
@@ -27,7 +29,7 @@ vi.mock("../../src/hooks/useAuth", () => ({
 }));
 
 vi.mock("../../src/hooks/useSnackbarAlert", () => ({
-  default: () => vi.fn(),
+  default: () => mockNotify,
 }));
 
 vi.mock("react-router-dom", async () => {
@@ -39,7 +41,7 @@ vi.mock("react-router-dom", async () => {
   return {
     ...actual,
     useLocation: () => ({
-      search: "",
+      search: mockLocationSearch,
     }),
   };
 });
@@ -47,6 +49,7 @@ vi.mock("react-router-dom", async () => {
 beforeEach(() => {
   vi.clearAllMocks();
   mockAuth = createMockUseAuth();
+  mockLocationSearch = "";
 });
 
 describe("LOGIN PAGE", () => {
@@ -206,6 +209,26 @@ describe("LOGIN PAGE", () => {
       });
 
       expect(loginButton).toBeDisabled();
+    });
+  });
+
+  describe("Router", () => {
+    it("should render register link", () => {
+      renderWithRouter(<Login />);
+      const registerLink = screen.getByRole("link", {
+        name: /sign up/i,
+      });
+
+      expect(registerLink).toHaveAttribute("href", "/register");
+    });
+
+    it("should render forgot password link", () => {
+      renderWithRouter(<Login />);
+      const forgotPasswordLink = screen.getByRole("link", {
+        name: /forgot your password/i,
+      });
+
+      expect(forgotPasswordLink).toHaveAttribute("href", "/forgot-password");
     });
   });
 });
