@@ -194,4 +194,18 @@ describe("LOGIN PAGE", () => {
       ).toBeInTheDocument();
     });
   });
+
+  describe("Loading State", () => {
+    it("should disabled login button when loading", () => {
+      mockAuth.loading = true;
+
+      renderWithRouter(<Login />);
+
+      const loginButton = screen.getByRole("button", {
+        name: /log in/i,
+      });
+
+      expect(loginButton).toBeDisabled();
+    });
+  });
 });
