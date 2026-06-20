@@ -5,22 +5,25 @@ import Login from "../../src/pages/login";
 import { renderWithRouter } from "../utils/renderWithRouter";
 
 const mockHandleSubmit = vi.fn();
+let mockAuth: any;
+
+const createMockUseAuth = () => ({
+  loading: false,
+  formikLogin: {
+    values: {
+      email: "",
+      password: "",
+    },
+    errors: {},
+    touched: {},
+    handleChange: vi.fn(),
+    handleBlur: vi.fn(),
+    handleSubmit: mockHandleSubmit,
+  },
+});
 
 vi.mock("../../src/hooks/useAuth", () => ({
-  default: () => ({
-    loading: false,
-    formikLogin: {
-      values: {
-        email: "",
-        password: "",
-      },
-      errors: {},
-      touched: {},
-      handleChange: vi.fn(),
-      handleBlur: vi.fn(),
-      handleSubmit: mockHandleSubmit,
-    },
-  }),
+  default: () => mockAuth,
 }));
 
 vi.mock("../../src/hooks/useSnackbarAlert", () => ({
@@ -39,6 +42,11 @@ vi.mock("react-router-dom", async () => {
       search: "",
     }),
   };
+});
+
+beforeEach(() => {
+  vi.clearAllMocks();
+  mockAuth = createMockUseAuth();
 });
 
 describe("LOGIN PAGE", () => {
@@ -113,7 +121,7 @@ describe("LOGIN PAGE", () => {
     });
   });
 
-  describe.only("Formik Login", () => {
+  describe("Formik Login", () => {
     it("should render empty email value initially", () => {
       renderWithRouter(<Login />);
 
@@ -138,6 +146,52 @@ describe("LOGIN PAGE", () => {
       await userEvent.click(loginButton);
 
       expect(mockHandleSubmit).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe("Validation Error Message", () => {
+    it("should render email validation error", () => {
+      mockAuth.formikLogin.errors = {
+        email: "Email is required field!",
+      };
+
+      mockAuth.formikLogin.touched = {
+        email: true,
+      };
+
+      renderWithRouter(<Login />);
+
+      expect(screen.getByText("Email is required field!")).toBeInTheDocument();
+    });
+
+    it("should render format email validation error", () => {
+      mockAuth.formikLogin.values = {
+        email: "invalid-email",
+      };
+      mockAuth.formikLogin.errors = {
+        email: "Invalid email format!",
+      };
+      mockAuth.formikLogin.touched = {
+        email: true,
+      };
+
+      renderWithRouter(<Login />);
+      expect(screen.getByText("Invalid email format!")).toBeInTheDocument();
+    });
+
+    it("should render password validation error", () => {
+      mockAuth.formikLogin.errors = {
+        password: "Password is required field!",
+      };
+      mockAuth.formikLogin.touched = {
+        password: true,
+      };
+
+      renderWithRouter(<Login />);
+
+      expect(
+        screen.getByText("Password is required field!"),
+      ).toBeInTheDocument();
     });
   });
 });
