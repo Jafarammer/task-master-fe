@@ -231,4 +231,25 @@ describe("LOGIN PAGE", () => {
       expect(forgotPasswordLink).toHaveAttribute("href", "/forgot-password");
     });
   });
+
+  describe.only("Query Params", () => {
+    it("should show valid activation token message from query params", () => {
+      mockLocationSearch =
+        "?status=success&message=Account%20activated%20successfully";
+      renderWithRouter(<Login />);
+      expect(mockNotify).toHaveBeenCalledWith(
+        "Account activated successfully",
+        "success",
+      );
+    });
+
+    it("should show invalid activation token message from query params", () => {
+      mockLocationSearch = "?status=error&message=Invalid%20activation%20token";
+      renderWithRouter(<Login />);
+      expect(mockNotify).toHaveBeenCalledWith(
+        "Invalid activation token",
+        "error",
+      );
+    });
+  });
 });
