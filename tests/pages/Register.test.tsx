@@ -90,6 +90,16 @@ describe("REGISTER PAGE", () => {
       expect(fullNameInput).toBeInTheDocument();
       expect(fullNameInput).toHaveAttribute("name", "confirmPassword");
     });
+
+    it("should render register button", () => {
+      renderWithRouter(<Register />);
+
+      expect(
+        screen.getByRole("button", {
+          name: /register/i,
+        }),
+      ).toBeInTheDocument();
+    });
   });
 
   describe("Password Visibility", () => {
@@ -167,6 +177,45 @@ describe("REGISTER PAGE", () => {
       await userEvent.click(visibilityButton);
 
       expect(confirmPasswordInput).toHaveAttribute("type", "password");
+    });
+  });
+
+  describe("Formik Register", () => {
+    it("should render empty full name value initially", () => {
+      renderWithRouter(<Register />);
+      const fullNameInput = screen.getByPlaceholderText("Full Name");
+      expect(fullNameInput).toHaveValue("");
+    });
+
+    it("should render empty email value initially", () => {
+      renderWithRouter(<Register />);
+      const emailInput = screen.getByPlaceholderText("Email Address");
+      expect(emailInput).toHaveValue("");
+    });
+
+    it("should render empty password value initially", () => {
+      renderWithRouter(<Register />);
+      const passwordInput = screen.getByPlaceholderText("Password");
+      expect(passwordInput).toHaveValue("");
+    });
+
+    it("should render empty confirm password value initially", () => {
+      renderWithRouter(<Register />);
+      const confirmPasswordInput =
+        screen.getByPlaceholderText("Confirm Password");
+      expect(confirmPasswordInput).toHaveValue("");
+    });
+
+    it("should call handleSubmit when form is submitted", async () => {
+      renderWithRouter(<Register />);
+
+      const registerButton = screen.getByRole("button", {
+        name: /register/i,
+      });
+
+      await userEvent.click(registerButton);
+
+      expect(mockHandleSubmit).toHaveBeenCalledTimes(1);
     });
   });
 });
