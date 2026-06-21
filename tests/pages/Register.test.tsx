@@ -55,8 +55,40 @@ beforeEach(() => {
 });
 
 describe("REGISTER PAGE", () => {
-  it("should first render", () => {
-    renderWithRouter(<Register />);
-    expect(screen.getByText("Create your account")).toBeInTheDocument();
+  describe("Render", () => {
+    it("should first render", () => {
+      renderWithRouter(<Register />);
+      expect(screen.getByText("Create your account")).toBeInTheDocument();
+    });
+
+    it("should render full name input", () => {
+      renderWithRouter(<Register />);
+      const fullNameInput = screen.getByPlaceholderText("Full Name");
+      expect(fullNameInput).toBeInTheDocument();
+      expect(fullNameInput).toHaveAttribute("name", "fullName");
+      expect(fullNameInput).toHaveAttribute("type", "text");
+    });
+
+    it("should render email input", () => {
+      renderWithRouter(<Register />);
+      const fullNameInput = screen.getByPlaceholderText("Email Address");
+      expect(fullNameInput).toBeInTheDocument();
+      expect(fullNameInput).toHaveAttribute("name", "email");
+      expect(fullNameInput).toHaveAttribute("type", "email");
+    });
+
+    it("should render password input", () => {
+      renderWithRouter(<Register />);
+      const fullNameInput = screen.getByPlaceholderText("Password");
+      expect(fullNameInput).toBeInTheDocument();
+      expect(fullNameInput).toHaveAttribute("name", "password");
+    });
+
+    it("should render confirm password input", () => {
+      renderWithRouter(<Register />);
+      const fullNameInput = screen.getByPlaceholderText("Confirm Password");
+      expect(fullNameInput).toBeInTheDocument();
+      expect(fullNameInput).toHaveAttribute("name", "confirmPassword");
+    });
   });
 });
