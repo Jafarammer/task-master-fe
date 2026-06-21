@@ -218,4 +218,17 @@ describe("REGISTER PAGE", () => {
       expect(mockHandleSubmit).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe("Loading State", () => {
+    it("should disabled register button when loading", () => {
+      mockAuth.loading = true;
+
+      renderWithRouter(<Register />);
+
+      const registerButton = screen.getByRole("button", {
+        name: /register/i,
+      });
+      expect(registerButton).toBeDisabled();
+    });
+  });
 });
