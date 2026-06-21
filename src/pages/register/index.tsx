@@ -111,6 +111,7 @@ const Register = () => {
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
+                        aria-label="toggle password visibility"
                         edge="end"
                         onClick={() => onTogglePassword("password")}
                         onMouseDown={onMousePassword}
@@ -152,6 +153,7 @@ const Register = () => {
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
+                        aria-label="toggle confirm password visibility"
                         edge="end"
                         onClick={() => onTogglePassword("confirmPassword")}
                         onMouseDown={onMousePassword}

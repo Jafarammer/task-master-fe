@@ -91,4 +91,82 @@ describe("REGISTER PAGE", () => {
       expect(fullNameInput).toHaveAttribute("name", "confirmPassword");
     });
   });
+
+  describe("Password Visibility", () => {
+    it("should show password when visibility button is clicked", async () => {
+      renderWithRouter(<Register />);
+
+      const passwordInput = screen.getByPlaceholderText("Password");
+
+      expect(passwordInput).toHaveAttribute("type", "password");
+
+      const visibilityButton = screen.getByLabelText(
+        "toggle password visibility",
+      );
+
+      await userEvent.click(visibilityButton);
+
+      expect(passwordInput).toHaveAttribute("type", "text");
+    });
+
+    it("should hide password when visibility button is clicked twice", async () => {
+      renderWithRouter(<Register />);
+
+      const passwordInput = screen.getByPlaceholderText("Password");
+
+      expect(passwordInput).toHaveAttribute("type", "password");
+
+      const visibilityButton = screen.getByLabelText(
+        "toggle password visibility",
+      );
+
+      await userEvent.click(visibilityButton);
+
+      expect(passwordInput).toHaveAttribute("type", "text");
+
+      await userEvent.click(visibilityButton);
+
+      expect(passwordInput).toHaveAttribute("type", "password");
+    });
+  });
+
+  describe("Confirm Password Visibility", () => {
+    it("should show confirm password when visibility button is clicked", async () => {
+      renderWithRouter(<Register />);
+
+      const confirmPasswordInput =
+        screen.getByPlaceholderText("Confirm Password");
+
+      expect(confirmPasswordInput).toHaveAttribute("type", "password");
+
+      const visibilityButton = screen.getByLabelText(
+        "toggle confirm password visibility",
+      );
+
+      await userEvent.click(visibilityButton);
+
+      expect(confirmPasswordInput).toHaveAttribute("type", "text");
+    });
+
+    it("should hide confirm password when visibility button is clicked twice", async () => {
+      renderWithRouter(<Register />);
+
+      const confirmPasswordInput =
+        screen.getByPlaceholderText("Confirm Password");
+
+      expect(confirmPasswordInput).toHaveAttribute("type", "password");
+
+      const visibilityButton = screen.getByLabelText(
+        "toggle confirm password visibility",
+      );
+
+      await userEvent.click(visibilityButton);
+
+      expect(confirmPasswordInput).toHaveAttribute("type", "text");
+
+      await userEvent.click(visibilityButton);
+
+      expect(confirmPasswordInput).toHaveAttribute("type", "password");
+    });
+  });
 });
