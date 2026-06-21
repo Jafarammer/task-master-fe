@@ -35,6 +35,7 @@ const ForgotPassword = () => {
         <form onSubmit={formikForgotPassword.handleSubmit}>
           <FormControl fullWidth sx={formControlSX()}>
             <TextField
+              type="email"
               name="email"
               value={formikForgotPassword.values.email}
               onChange={formikForgotPassword.handleChange}
