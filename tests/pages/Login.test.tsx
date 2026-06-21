@@ -232,7 +232,7 @@ describe("LOGIN PAGE", () => {
     });
   });
 
-  describe.only("Query Params", () => {
+  describe("Query Params", () => {
     it("should show valid activation token message from query params", () => {
       mockLocationSearch =
         "?status=success&message=Account%20activated%20successfully";
