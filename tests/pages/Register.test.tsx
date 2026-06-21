@@ -231,4 +231,16 @@ describe("REGISTER PAGE", () => {
       expect(registerButton).toBeDisabled();
     });
   });
+
+  describe("Router", () => {
+    it("should render sign in link", () => {
+      renderWithRouter(<Register />);
+
+      const loginLink = screen.getByRole("link", {
+        name: /sign in/i,
+      });
+
+      expect(loginLink).toHaveAttribute("href", "/login");
+    });
+  });
 });
