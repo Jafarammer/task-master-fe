@@ -66,6 +66,7 @@ const ResetPassword = () => {
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
+                        aria-label="toggle new password visibility"
                         edge="end"
                         onClick={() => onTogglePassword("password")}
                         onMouseDown={onMousePassword}
@@ -107,6 +108,7 @@ const ResetPassword = () => {
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
+                        aria-label="toggle confirm password visibility"
                         edge="end"
                         onClick={() => onTogglePassword("confirmPassword")}
                         onMouseDown={onMousePassword}

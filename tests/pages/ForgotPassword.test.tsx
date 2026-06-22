@@ -97,11 +97,7 @@ describe("FORGOT PASSWORD PAGE", () => {
         name: /send recovery instructions/i,
       });
 
-      screen.debug(btn);
-
       await userEvent.click(btn);
-
-      console.log(mockHandleSubmit.mock.calls);
 
       expect(mockHandleSubmit).toHaveBeenCalledTimes(1);
     });
