@@ -155,7 +155,7 @@ describe("RESET PASSWORD PAGE", () => {
     });
   });
 
-  describe.only("Formik Reset Password", () => {
+  describe("Formik Reset Password", () => {
     it("should render new password value initially", () => {
       renderWithRouter(<ResetPassword />);
 
