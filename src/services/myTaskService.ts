@@ -16,7 +16,7 @@ export const updateTask = async (
   id: string,
   payload: IMyTaskPayload,
 ): Promise<{ message: string }> => {
-  const res = await api.patch(`/task/${id}`, payload);
+  const res = await api.put(`/task/${id}`, payload);
   return res.data;
 };
 

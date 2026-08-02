@@ -1,13 +1,13 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { getToken } from "../utils/auth";
+import { getAccessToken } from "../utils/auth";
 
 type Props = {
   children: React.ReactNode;
 };
 
 const GuestRoute = ({ children }: Props): React.ReactElement | null => {
-  const token = getToken();
+  const token = getAccessToken();
 
   if (token) return <Navigate to="/my-task" replace />;
 

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useFormik, FormikProps } from "formik";
-import { useCookies } from "react-cookie";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import useSnackbarAlert from "./useSnackbarAlert";
 import {
@@ -16,6 +15,7 @@ import {
   forgotPassword,
   resetPassword,
 } from "../services/authService";
+import { setAccessToken } from "../utils/auth";
 
 type UseAuthReturn = {
   formikLogin: FormikProps<ILoginPayload>;
@@ -29,9 +29,7 @@ const useAuth = (): UseAuthReturn => {
   // router
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-
   // hooks
-  const [cookies, setCookie] = useCookies(["token"]);
   const notify = useSnackbarAlert();
   // useState
   const [loading, setLoading] = useState<boolean>(false);
@@ -42,7 +40,7 @@ const useAuth = (): UseAuthReturn => {
       password: "",
     },
     validationSchema: validations.login,
-    onSubmit: async (values, { setFieldError }): Promise<void> => {
+    onSubmit: async (values): Promise<void> => {
       try {
         setLoading(true);
         const payload = {
@@ -50,10 +48,7 @@ const useAuth = (): UseAuthReturn => {
           password: values.password,
         };
         const response = await loginUser(payload);
-        setCookie("token", response.accessToken, {
-          path: "/",
-          maxAge: 60 * 60 * 24,
-        });
+        setAccessToken(response.accessToken);
         navigate("/my-task");
         notify(response.message, "success");
       } catch (error: any) {
