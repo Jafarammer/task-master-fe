@@ -9,3 +9,12 @@ export interface IApiParams {
   order?: "asc" | "desc";
   query?: string;
 }
+
+export interface ApiErrorResponse {
+  message: string;
+}
+
+export interface ParsedApiError {
+  status?: number;
+  message: string;
+}

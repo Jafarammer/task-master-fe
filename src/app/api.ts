@@ -1,13 +1,18 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import {
   getAccessToken,
-  setAccessToken,
   removeAccessToken,
+  setAccessToken,
 } from "../utils/auth";
-import {
-  RetryRequestConfig,
-  RefreshTokenResponse,
-} from "../interfaces/authInterface";
+
+interface RetryRequestConfig extends InternalAxiosRequestConfig {
+  _retry?: boolean;
+}
+
+interface RefreshTokenResponse {
+  message: string;
+  accessToken: string;
+}
 
 const baseURL = import.meta.env.VITE_API_URL;
 
@@ -19,27 +24,20 @@ const api = axios.create({
   withCredentials: true,
 });
 
-const redirectToLogin = (): void => {
-  removeAccessToken();
-  localStorage.clear();
+const refreshApi = axios.create({
+  baseURL,
+  withCredentials: true,
+});
 
-  if (window.location.pathname !== "/login") {
-    window.location.href = "/login";
+api.interceptors.request.use((config) => {
+  const accessToken = getAccessToken();
+
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
   }
-};
 
-api.interceptors.request.use(
-  (config) => {
-    const accessToken = getAccessToken();
-
-    if (accessToken) {
-      config.headers.Authorization = `Bearer ${accessToken}`;
-    }
-
-    return config;
-  },
-  (error) => Promise.reject(error),
-);
+  return config;
+});
 
 api.interceptors.response.use(
   (response) => response,
@@ -53,37 +51,32 @@ api.interceptors.response.use(
     const status = error.response?.status;
     const requestUrl = originalRequest.url ?? "";
 
-    const isAuthenticationEndpoint =
-      requestUrl.includes("/auth/login") ||
-      requestUrl.includes("/auth/register") ||
-      requestUrl.includes("/auth/refresh-token") ||
-      requestUrl.includes("/auth/logout") ||
-      requestUrl.includes("/auth/forgot-password") ||
-      requestUrl.includes("/auth/reset-password");
+    const isAuthEndpoint = [
+      "/auth/login",
+      "/auth/refresh-token",
+      "/auth/logout",
+    ].some((endpoint) => requestUrl.includes(endpoint));
 
-    if (
-      status !== 401 &&
-      !isAuthenticationEndpoint &&
-      !originalRequest._retry
-    ) {
+    if (status === 401 && !isAuthEndpoint && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
-        const refreshResponse = await axios.post<RefreshTokenResponse>(
-          `${baseURL}/auth/refresh-token`,
-          {},
-          {
-            withCredentials: true,
-          },
+        const refreshResponse = await refreshApi.post<RefreshTokenResponse>(
+          "/auth/refresh-token",
         );
 
         const newAccessToken = refreshResponse.data.accessToken;
+
         setAccessToken(newAccessToken);
 
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+
         return api(originalRequest);
       } catch (refreshError) {
-        redirectToLogin();
+        removeAccessToken();
+
+        window.location.href = "/login";
+
         return Promise.reject(refreshError);
       }
     }

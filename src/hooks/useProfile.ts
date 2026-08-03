@@ -20,6 +20,7 @@ import {
   IUpdateProfilePasswordPayload,
 } from "../interfaces/profileInterface";
 import useLogout from "./useLogout";
+import { parseApiError } from "../utils/apiError";
 
 type useProfileReturn = {
   formikUpdateProfile: FormikProps<IUpdateProfilePayload>;
@@ -70,7 +71,8 @@ const useProfile = (): useProfileReturn => {
           onLogout();
         }
       } catch (error: any) {
-        notify(error?.response?.data?.message, "error");
+        const { message } = parseApiError(error);
+        notify(message, "error");
       } finally {
         setLoading(false);
         setIsUpdate(false);
@@ -99,7 +101,8 @@ const useProfile = (): useProfileReturn => {
           onLogout();
         }
       } catch (error: any) {
-        notify("Failed to update password", "error");
+        const { message } = parseApiError(error);
+        notify(message, "error");
       } finally {
         setLoadingUpdatePassword(false);
       }
@@ -122,7 +125,8 @@ const useProfile = (): useProfileReturn => {
       notify(response.message, "success");
       dispatch(fetchProfile());
     } catch (error: any) {
-      notify("Failed to update profile picture", "error");
+      const { message } = parseApiError(error);
+      notify(message, "error");
     } finally {
       setloadingUpdatePicture(false);
     }

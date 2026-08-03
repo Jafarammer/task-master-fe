@@ -8,6 +8,7 @@ import {
 import { fetchTrash, fetchTrashStatistics } from "../features/trash/trashthunk";
 import useSnackbarAlert from "./useSnackbarAlert";
 import { TLoadingType, TPagination } from "../types/common";
+import { parseApiError } from "../utils/apiError";
 
 type useTrashReturn = {
   search: string;
@@ -50,7 +51,8 @@ const useTrash = (): useTrashReturn => {
       );
       dispatch(fetchTrashStatistics());
     } catch (error: any) {
-      notify("Delete task failed", "error");
+      const { message } = parseApiError(error);
+      notify(message, "error");
     } finally {
       setLoading({ context: "", open: false });
     }
@@ -70,7 +72,8 @@ const useTrash = (): useTrashReturn => {
       );
       dispatch(fetchTrashStatistics());
     } catch (error: any) {
-      notify("Empty trash failed", "error");
+      const { message } = parseApiError(error);
+      notify(message, "error");
     } finally {
       setLoading({ context: "", open: false });
     }
@@ -90,7 +93,8 @@ const useTrash = (): useTrashReturn => {
       );
       dispatch(fetchTrashStatistics());
     } catch (error: any) {
-      notify("Restore task failed", "error");
+      const { message } = parseApiError(error);
+      notify(message, "error");
     } finally {
       setLoading({ context: "", open: false });
     }

@@ -16,6 +16,7 @@ import {
   resetPassword,
 } from "../services/authService";
 import { setAccessToken } from "../utils/auth";
+import { parseApiError } from "../utils/apiError";
 
 type UseAuthReturn = {
   formikLogin: FormikProps<ILoginPayload>;
@@ -52,11 +53,8 @@ const useAuth = (): UseAuthReturn => {
         navigate("/my-task");
         notify(response.message, "success");
       } catch (error: any) {
-        if (error.status === 400) {
-          notify("Email or password invalid", "error");
-        } else {
-          notify("Login failed", "error");
-        }
+        const { status, message } = parseApiError(error);
+        notify(message, "error");
       } finally {
         setLoading(false);
       }
@@ -84,10 +82,8 @@ const useAuth = (): UseAuthReturn => {
         notify(response.message, "success");
         navigate("/login");
       } catch (error: any) {
-        notify(
-          error?.response?.data?.message || "Registration failed",
-          "error",
-        );
+        const { status, message } = parseApiError(error);
+        notify(message, "error");
       } finally {
         setLoading(false);
       }
@@ -110,7 +106,8 @@ const useAuth = (): UseAuthReturn => {
         notify(response.message, "success");
         formikForgotPassword.resetForm();
       } catch (error: any) {
-        notify(error?.response?.data?.message, "error");
+        const { status, message } = parseApiError(error);
+        notify(message, "error");
       } finally {
         setLoading(false);
       }
@@ -137,7 +134,8 @@ const useAuth = (): UseAuthReturn => {
         notify(response.message, "success");
         navigate("/login");
       } catch (error: any) {
-        notify(error?.response?.data?.message, "error");
+        const { status, message } = parseApiError(error);
+        notify(message, "error");
         navigate("/login");
       } finally {
         setLoading(false);

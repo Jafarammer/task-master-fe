@@ -8,12 +8,29 @@ import {
   Container,
   Tooltip,
   IconButton,
+  Dialog,
+  DialogContent,
+  Button,
 } from "@mui/material";
+import { Cancel, DeleteOutline } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import useLogout from "../hooks/useLogout";
 import { useNavigate } from "react-router-dom";
 import { fetchProfile } from "../features/profile/profileThunk";
-import { headerTitleSx, containerSx, toolbarSx, avatartSX } from "./styles";
+import {
+  headerTitleSx,
+  containerSx,
+  toolbarSx,
+  avatartSX,
+  fontBodySX,
+  fontLabelSx,
+  logoLabelSX,
+  fontTitleSX,
+  buttonSX,
+  iconButtonSX,
+  dialogContentSX,
+  paperPropsSX,
+} from "./styles";
 // custome components
 import { MenuOptions } from "../components";
 // type declaration
@@ -29,6 +46,7 @@ const Header = () => {
   const { onLogout } = useLogout();
   // useState
   const [menu, setMenu] = useState<TMenuState>({ anchorEl: null, open: false });
+  const [confirmLogout, setConfirmLogout] = useState<boolean>(false);
   // function event
   const onSetting = () => {
     navigate("/profile");
@@ -49,6 +67,13 @@ const Header = () => {
       anchorEl: null,
       open: false,
     });
+  };
+  const openConfirmLogout = (): void => {
+    setConfirmLogout(true);
+    onCloseMenu();
+  };
+  const closeConfirmLogout = (): void => {
+    setConfirmLogout(false);
   };
   // useEffect
   useEffect(() => {
@@ -100,13 +125,78 @@ const Header = () => {
               anchorEl={menu.anchorEl}
               open={menu.open}
               onClose={onCloseMenu}
-              onLogout={onLogout}
+              onLogout={openConfirmLogout}
               onSetting={onSetting}
               onTrash={onTrash}
             />
           </Box>
         </Toolbar>
       </Container>
+      {/* modal popup */}
+      <Dialog
+        open={confirmLogout}
+        onClose={closeConfirmLogout}
+        maxWidth={"sm"}
+        fullWidth
+        PaperProps={{
+          sx: paperPropsSX(),
+        }}
+      >
+        <DialogContent sx={dialogContentSX()}>
+          {/* Close Button */}
+          <IconButton onClick={closeConfirmLogout} sx={iconButtonSX()}>
+            <Cancel color="disabled" />
+          </IconButton>
+
+          {/* Icon */}
+          <Box display="flex" justifyContent="center" mb={2}>
+            <Box sx={logoLabelSX()}>
+              <DeleteOutline color="error" sx={fontTitleSX()} />
+            </Box>
+          </Box>
+
+          {/* Title */}
+          <Typography
+            sx={fontLabelSx()}
+            fontWeight="bold"
+            textAlign="center"
+            gutterBottom
+          >
+            Logout
+          </Typography>
+
+          {/* Description */}
+          <Typography
+            textAlign="center"
+            color="textDisabled"
+            sx={fontBodySX()}
+            mb={4}
+          >
+            Are you sure, you want to logout ?
+          </Typography>
+
+          {/* Action Buttons */}
+          <Box display="flex" gap={2} justifyContent="center">
+            <Button
+              variant="contained"
+              color="inherit"
+              onClick={closeConfirmLogout}
+              sx={buttonSX()}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              variant="contained"
+              color="error"
+              onClick={onLogout}
+              sx={buttonSX()}
+            >
+              Delete
+            </Button>
+          </Box>
+        </DialogContent>
+      </Dialog>
     </AppBar>
   );
 };

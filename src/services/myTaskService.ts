@@ -8,7 +8,7 @@ import {
 export const createTask = async (
   payload: IMyTaskPayload,
 ): Promise<{ message: string }> => {
-  const res = await api.post("/task", payload);
+  const res = await api.post<{ message: string }>("/task", payload);
   return res.data;
 };
 

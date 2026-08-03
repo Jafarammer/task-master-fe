@@ -7,6 +7,7 @@ import { logoutProfile } from "../features/profile/profileSlice";
 import { logoutTaskTrash } from "../features/trash/trashSlice";
 import useSnackbarAlert from "./useSnackbarAlert";
 import { persistor } from "../app/store";
+import { parseApiError } from "../utils/apiError";
 
 type UseLogoutReturn = {
   onLogout: () => void;
@@ -25,7 +26,8 @@ const useLogout = (): UseLogoutReturn => {
       const response = await logOutUser();
       notify(response.message, "success");
     } catch (error: any) {
-      notify("Logout failed", "error");
+      const { message } = parseApiError(error);
+      notify(message, "error");
     } finally {
       removeAccessToken();
       dispatch(logOutMyTask());

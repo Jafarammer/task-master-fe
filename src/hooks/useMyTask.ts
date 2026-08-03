@@ -18,6 +18,7 @@ import {
   updateStatusTask,
   softDeleteTask,
 } from "../services/myTaskService";
+import { parseApiError } from "../utils/apiError";
 
 type useMyTaskReturn = {
   onGetDetailTask: (id: string, params: ParamsFilter) => void;
@@ -72,7 +73,8 @@ const useMyTask = (): useMyTaskReturn => {
         notify(response.message, "success");
         navigate("/my-task?filter=all");
       } catch (error: any) {
-        notify(id ? "Update task failed" : "Create task failed", "error");
+        const { message } = parseApiError(error);
+        notify(message, "error");
       } finally {
         setLoading(false);
       }
@@ -98,7 +100,8 @@ const useMyTask = (): useMyTaskReturn => {
         dispatch(fetchPendingTask({ page: 1, limit: 5 }));
       }
     } catch (error: any) {
-      notify("Update status failed", "error");
+      const { message } = parseApiError(error);
+      notify(message, "error");
     }
   };
 
@@ -114,7 +117,8 @@ const useMyTask = (): useMyTaskReturn => {
         dispatch(fetchPendingTask({ page: 1, limit: 5 }));
       }
     } catch (error: any) {
-      notify("Delete task failed", "error");
+      const { message } = parseApiError(error);
+      notify(message, "error");
     }
   };
 

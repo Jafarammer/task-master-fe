@@ -7,8 +7,7 @@ import {
   Button,
   IconButton,
 } from "@mui/material";
-import { Cancel } from "@mui/icons-material";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { Cancel, DeleteOutline } from "@mui/icons-material";
 import {
   fontBodySX,
   fontLabelSx,
@@ -56,7 +55,7 @@ const DeleteConfirmDialog: React.FC<Props> = ({
         {/* Icon */}
         <Box display="flex" justifyContent="center" mb={2}>
           <Box sx={logoLabelSX()}>
-            <DeleteOutlineIcon color="error" sx={fontTitleSX()} />
+            <DeleteOutline color="error" sx={fontTitleSX()} />
           </Box>
         </Box>
 
