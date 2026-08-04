@@ -193,6 +193,13 @@ Validation includes:
 
 ---
 
+## Related Repository
+
+Backend Repository
+
+https://github.com/jafarammer/task-master-be
+---
+
 ## License
 
 ISC

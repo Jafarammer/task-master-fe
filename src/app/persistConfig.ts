@@ -6,6 +6,7 @@ const persistConfig: PersistConfig<any> = {
   version: 1,
   storage: localforage,
   whitelist: ["profile"], // hanya auth yang dipersist karna ketika refresh page data token dll tidak hilang, jika ada data yg di refresh tidak hit api lagi tambahkan saja whitlist disini
+  blacklist: ["snackbar"],
 };
 
 export default persistConfig;
