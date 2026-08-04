@@ -1,69 +1,199 @@
-# React + TypeScript + Vite
+# Task Master Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Modern Task Management application built with React, TypeScript, Redux Toolkit, Redux Persist, Material UI, Axios, Formik, Yup, and Vite.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- User Authentication
+  - Register
+  - Login
+  - Logout
+  - Refresh Token Authentication
+  - Forgot Password
+  - Change Password
+- Protected Routes
+- Task Management (CRUD)
+- Profile Management
+- Profile Picture Upload
+- Pagination
+- Search & Filter
+- Form Validation
+- Persistent Authentication
+- Responsive UI
+- Integration Testing
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Tech Stack
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+- React
+- TypeScript
+- Vite
+- React Router DOM
+- Redux Toolkit
+- Redux Persist
+- LocalForage
+- Axios
+- Formik
+- Yup
+- Material UI
+- Day.js
+- Vitest
+- React Testing Library
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+## Installation
+
+### Clone Repository
+
+```bash
+git clone <repository-url>
+cd task-master-fe
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Install Dependencies
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+npm install
+```
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+## Environment Variables
+
+Create a `.env` file in the root directory.
+
+Example:
+
+```env
+VITE_API_URL=http://localhost:8000/api
+```
+
+---
+
+## Running the Application
+
+### Development
+
+```bash
+npm run dev
+```
+
+### Build
+
+```bash
+npm run build
+```
+
+### Preview
+
+```bash
+npm run preview
+```
+
+---
+
+## Testing
+
+This project uses:
+
+- Vitest
+- React Testing Library
+- JSDOM
+
+Run all tests:
+
+```bash
+npm test
+```
+
+Run UI Test:
+
+```bash
+npm run test:ui
+```
+
+Generate Coverage Report:
+
+```bash
+npm run test:coverage
+```
+
+---
+
+## Project Structure
+
+```text
+src/
+├── app/
+├── assets/
+├── components/
+├── hooks/
+├── interfaces/
+├── layouts/
+├── pages/
+├── routes/
+├── services/
+├── utils/
+├── validations/
+└── App.tsx
+└── main.tsx
+
+tests/
+├── features/
+├── pages/
+├── utils/
+├── validatoins/
+└── setup.ts
+
+## Authentication Flow
+
+- Login returns an Access Token and stores a Refresh Token inside an HttpOnly Cookie.
+- Every API request automatically sends the Access Token.
+- When the Access Token expires, Axios automatically requests a new Access Token using the Refresh Token.
+- If Refresh Token validation fails, the user is automatically logged out.
+
+---
+
+## State Management
+
+This project uses:
+
+- Redux Toolkit
+- Redux Persist
+- LocalForage
+
+Application state is automatically persisted across page refreshes.
+
+---
+
+## Form Validation
+
+All forms are validated using:
+
+- Formik
+- Yup
+
+Validation includes:
+
+- Register
+- Login
+- Profile
+- Task
+
+---
+
+## UI Library
+
+- Material UI
+- Emotion
+
+---
+
+## License
+
+ISC
 ```
